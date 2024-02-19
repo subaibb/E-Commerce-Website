@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html,body {
+  @apply h-full select-none font-poppins font-medium bg-default w-[100%] m-0 p-0;
+}
+@layer components {
+  .primary-btn {
+    @apply py-[1.5vh] px-[3vw] hover:bg-btnprimary rounded-2xl mb-2 flex transition duration-150 bg-[length:30px_30px] bg-no-repeat  bg-[1vw_1.2vh];
+  }   
+  .primary-btn label{       
+    @apply text-primary relative top-[0.5vh] cursor-pointer;
+  }
+  .Stats{
+    @apply bg-default rounded-2xl h-[15.7vh] w-[18.4vw] m-auto ;
+  }
+   
+  
+} 
