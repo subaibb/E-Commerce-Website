@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,14 +7,84 @@ html,body {
 }
 @layer components {
   .primary-btn {
-    @apply py-[1.5vh] px-[3vw] hover:bg-btnprimary rounded-2xl mb-2 flex transition duration-150 bg-[length:30px_30px] bg-no-repeat  bg-[1vw_1.2vh];
-  }   
+    @apply py-[1.6vh] px-[3vw] min-w-[11vw] hover:bg-btnprimary m-auto rounded-2xl transition duration-150 bg-[length:32px_32px] bg-no-repeat  bg-[0.7vw_1.2vh] flex;
+  }     
   .primary-btn label{       
-    @apply text-primary relative top-[0.5vh] cursor-pointer;
-  }
+    @apply text-primary relative top-[0.3vh] cursor-pointer;
+  } 
   .Stats{
-    @apply bg-default rounded-2xl h-[15.7vh] w-[18.4vw] m-auto ;
+    @apply bg-default rounded-2xl h-[15.7vh] w-[18.4vw] m-auto shadow-[2px_4px_4px_#68B6FF0D] relative animate-[300ms_pulse_forwards];
   }
-   
-  
+  .Stat-Pic{
+    @apply w-[5.5vw] h-[5.5vw] m-auto rounded-xl absolute top-[2.4vh] left-[1.2vw] bg-[length:60px_60px] bg-no-repeat bg-center;  
+  }
+  .label-top{
+    @apply absolute left-[8.8vw] top-[4vh] h-[4.47vh] w-[9.2vw] text-4xl text-fonts;
+  }
+  .label-bottom{
+    @apply absolute left-[8.8vw] top-[9.3vh] h-[3vh] w-[7.29vw] text-[18px] text-[#B8B7BC];
+  } 
+
+  .Label-Holder{
+    @apply  w-[70vw] h-[4vh] absolute top-[2vh] left-[1.5vw] flex;
+  }
+  .Label-Holder label{
+    @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-semibold text-[15px];
+  }   
+  .Data-Holder{
+    @apply  w-[70vw] min-h-[4vh] relative left-[0vw] flex mb-[1vh];
+  } 
+  .Data-Holder label{
+    @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px];
+  }
+
+  .DataCarrier::-webkit-scrollbar {
+    left: 2vw;
+    width: 8px;
+    position: absolute;
+}
+
+.DataCarrier::-webkit-scrollbar-track {
+    border-radius: 8px;
+    background-color: #e7e7e7;
+    border: 1px solid #cacaca;
+}
+
+.DataCarrier::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #464554;
+}
+
+.Stat-label{
+  @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[120px]; 
+}
+
+.List-1{
+  @apply w-[3.9vw] h-[10.9vh] bg-default absolute left-[66.4vw] top-[2.9vh] z-10 shadow-[2px_4px_6px_1px_#4E87A817] rounded-[3px] flex flex-col;
+
+}
+.List-1 li {
+  @apply m-auto hover:bg-[#F2F2F2] h-[3vh] w-[3.5vw] rounded-sm  transition duration-150;
+}
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    } 
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes pulse {
+    0% {
+      transform: scale(0.98);
+    }
+    70% {
+      transform: scale(1);
+      
+    }
+    100% {
+      transform: scale(0.98);
+    }
+  }
 } 

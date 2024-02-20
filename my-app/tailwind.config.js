@@ -12,6 +12,8 @@ module.exports = {
         secondary:'#464554',
         btnprimary:'#F7F5F7',
         bg:'#F4F4F5',
+        company:"#EBEBEB",
+        fonts :"#363447",
     
       }
     },
