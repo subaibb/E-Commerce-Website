@@ -1,6 +1,8 @@
 import Arrow_Up from '../../public/arrow-up.svg'
 import Arrow_Down from '../../public/arrow-down.svg'
 
+
+
 props: {
     img: {
         type: String;

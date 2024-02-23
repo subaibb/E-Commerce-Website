@@ -1,9 +1,9 @@
 
 
-export default  function List_1(): JSX.Element {
+export default  function List_1({id}): JSX.Element {
 
     return(
-        <ul className="List-1">
+        <ul id={id} className="List-1">
          <li>
             Status
          </li>

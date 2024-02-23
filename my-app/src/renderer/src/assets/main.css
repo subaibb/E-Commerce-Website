@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import "rsuite/dist/rsuite.css";
+#root{ padding: 10px}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,7 +34,7 @@ html,body {
     @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-semibold text-[15px];
   }   
   .Data-Holder{
-    @apply  w-[70vw] min-h-[4vh] relative left-[0vw] flex mb-[1vh];
+    @apply  w-[70vw] min-h-[5vh] relative left-[0vw] flex  hover:bg-[#faf9f9] transition duration-150;
   } 
   .Data-Holder label{
     @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px];
@@ -64,8 +66,93 @@ html,body {
 
 }
 .List-1 li {
-  @apply m-auto hover:bg-[#F2F2F2] h-[3vh] w-[3.5vw] rounded-sm  transition duration-150;
+  @apply m-auto  h-[3vh] w-[3.5vw] rounded-sm hover:bg-[#F2F2F2] transition duration-150;
 }
+
+.fade-in {
+ animation : fadeIn 0.2s forwards;
+}
+
+.fade-out {
+  animation : fadeOut 0.2s forwards;
+} 
+
+.button {
+  padding: 1.6vh 2.7vw;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 700ms;
+  @apply text-form;
+  font-size: 15px;
+  position: relative;
+  overflow: hidden;
+  outline: 2px solid #68B6FF;
+}
+
+.button:hover {
+  @apply text-default;
+  transform: scale(1.06);
+  outline: 2px solid #53A9F9;
+  box-shadow: 4px 5px 17px -4px #53A9F9;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  @apply bg-form;
+  transform: skewX(45deg);
+  z-index: -1;
+  transition: width 700ms;
+}
+
+.button:hover::before {
+  width: 250%;
+}
+.button:active {
+  transform: translateY(4px) scale(1.05);
+
+}
+
+form input[type="text"] {
+  @apply w-[14.1vw] h-[3.5vh] m-auto text-secondary;
+
+}
+form input[type="text"]:focus + h1 {
+  @apply bg-form;
+}
+
+form input[type="date"] {
+  @apply w-[14.1vw] h-[3.5vh] m-auto text-secondary focus:outline-none;
+  
+
+}
+form input[type="date"]:focus + h1 {
+  @apply bg-form;
+}
+
+.form-div h1{
+  @apply bg-[#E3E3E3] w-[100%] h-[0.2vh] relative top-[-1vh] transition ;
+} 
+.form-div label{
+
+  @apply text-form relative top-[1vh];
+}
+
+
+
+
+p {
+  @apply relative top-[-2vh];
+} 
+
 
   @keyframes fadeIn {
     0% {
@@ -75,6 +162,16 @@ html,body {
       opacity: 1;
     }
   }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    } 
+    100% {
+      opacity: 0;
+    }
+  }
+
   @keyframes pulse {
     0% {
       transform: scale(0.98);
@@ -85,6 +182,30 @@ html,body {
     }
     100% {
       transform: scale(0.98);
+    }
+  }
+
+  @keyframes PopIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes PopOut {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    100% {
+      opacity: 0;
+      transform: scale(0.6);
     }
   }
 } 

@@ -1,7 +1,10 @@
+//@ts-nocheck
+
 import { app, shell, BrowserWindow, ipcMain,screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -12,7 +15,9 @@ function createWindow(): void {
     ...(process.platform === 'linux' ? {  } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      nodeIntegration: true,
+      contextIsolation:false,
     }
   })
 
@@ -71,3 +76,34 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+
+ipcMain.handle('fetch-users', async (event, args) => {
+  try {
+    const result = await prisma.$queryRaw`      SELECT 
+    o.*, 
+    (o.amount * o.price) as total_price,
+    u.name as user_name,
+    c.name as company_name  -- Assuming there's a relation between Order and User
+  FROM 
+    "Order" o
+  JOIN 
+    "User" u ON o.userId = u.id
+    JOIN
+        "Company" c ON o.companyId = c.id;
+`;
+
+    return result ;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+
+
+});
+
+
+
+
+
+

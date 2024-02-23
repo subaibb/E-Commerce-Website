@@ -14,10 +14,12 @@ module.exports = {
         bg:'#F4F4F5',
         company:"#EBEBEB",
         fonts :"#363447",
+        form : "#68B6FF",
     
       }
     },
   },
-  plugins: [],
+  plugins: [
+  ],
 }
 
