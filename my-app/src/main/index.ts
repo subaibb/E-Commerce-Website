@@ -3,7 +3,7 @@
 import { app, shell, BrowserWindow, ipcMain,screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 function createWindow(): void {
   // Create the browser window.
@@ -54,7 +54,6 @@ app.whenReady().then(() => {
   })
 
   // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
 
@@ -78,9 +77,9 @@ app.on('window-all-closed', () => {
 // code. You can also put them in separate files and require them here.
 
 
-ipcMain.handle('fetch-users', async (event, args) => {
+ipcMain.handle('fetch-orders', async (event, args) => {
   try {
-    const result = await prisma.$queryRaw`      SELECT 
+    const result = await prisma.$queryRaw`SELECT 
     o.*, 
     (o.amount * o.price) as total_price,
     u.name as user_name,
@@ -90,9 +89,8 @@ ipcMain.handle('fetch-users', async (event, args) => {
   JOIN 
     "User" u ON o.userId = u.id
     JOIN
-        "Company" c ON o.companyId = c.id;
+        "Company" c ON o.companyId = c.id order by o.createdAt desc
 `;
-
     return result ;
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -101,6 +99,74 @@ ipcMain.handle('fetch-users', async (event, args) => {
 
 
 });
+
+
+ipcMain.handle('add-order', async (event, args) => {
+  // format the date 
+  const date = args.createdAt;
+  const formattedDate = new Date(date);
+  const formattedDateStr = formattedDate.toISOString();
+
+ 
+  try {
+   
+    let user = await prisma.user.findFirst({
+      where: {
+          name: args.user, // Replace with the customer's name
+      },
+  });
+  let company = await prisma.company.findFirst({
+    where: {
+      name: args.company, // Replace with the customer's name
+    },
+});
+
+  // If the user doesn't exist, create a new user
+  if (!user) {
+      // Create the new user
+      user = await prisma.user.create({
+          data: {
+              name: args.user, // Replace with the customer's name
+              // Other user properties if applicable
+          },
+      });
+  }
+
+  if (!company) {
+    // Create the new user
+    company = await prisma.company.create({
+        data: {
+            name: args.company, // Replace with the customer's name
+            // Other user properties if applicable
+        },
+    });
+}
+
+    const newOrder = await prisma.order.create({
+        data: {
+          user: {
+            connect: { id: user.id } // Connect the order to the found or newly created user by userId
+        },
+        company: {
+          connect: { id: company.id } // Connect the order to the found or newly created user by userId
+      },
+            amount: args.amount,
+            status: args.status,
+            unit: args.unit,
+            fabricType: args.address,
+            price: args.price,
+            createdAt: formattedDateStr,
+            address: "none",
+        }
+    });
+    
+} catch (error) {
+    console.error('Error creating order:', error);
+}
+
+});
+
+
 
 
 

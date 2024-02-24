@@ -1,23 +1,24 @@
 import Data_Label from "./datalabel"
 import { useQuery } from '@tanstack/react-query';
-const ipcRenderer = require('electron').ipcRenderer;
+const { ipcRenderer } = require('electron')
 
 
 
 const fetchUsers = async () => {
-  return ipcRenderer.invoke('fetch-users');
+  
+  return ipcRenderer.invoke('fetch-orders');
 };
 
 export default  function Dataholder(): JSX.Element {
 
 
-  const getOrders = useQuery({queryKey: ['orders'], queryFn: fetchUsers});
+  const getOrders =  useQuery({queryKey: ["orders"], queryFn: fetchUsers});
  
+  
   
     if (getOrders.isLoading) return <div>Loading...</div>;
     if (getOrders.isError) return <div>Error:</div>;
 
-    
 
     return (
       <>

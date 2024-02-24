@@ -20,13 +20,14 @@ model Order {
   id       String      @id @default(cuid())
   user     User        @relation(fields: [userId], references: [id])
   userId   String
-  amount  Int
+  amount  Decimal
   status  String  
   unit   String
   company company @relation(fields: [companyId], references: [id])
   companyId String
   fabricType String
-  price Int
+  price Decimal 
+  address String
   createdAt DateTime
 }
 

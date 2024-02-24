@@ -122,7 +122,7 @@ html,body {
 }
 
 form input[type="text"] {
-  @apply w-[14.1vw] h-[3.5vh] m-auto text-secondary;
+  @apply w-[14.1vw] h-[3.5vh] m-auto text-secondary focus:outline-none;
 
 }
 form input[type="text"]:focus + h1 {
@@ -134,7 +134,17 @@ form input[type="date"] {
   
 
 }
+
+form input[type="number"] {
+  @apply w-[14.1vw] h-[3.5vh] m-auto text-secondary focus:outline-none;
+  
+}
+
 form input[type="date"]:focus + h1 {
+  @apply bg-form;
+}
+
+form input[type="number"]:focus + h1 {
   @apply bg-form;
 }
 
@@ -146,11 +156,30 @@ form input[type="date"]:focus + h1 {
   @apply text-form relative top-[1vh];
 }
 
+.unit {
+  @apply w-[9.8vw] h-[3.5vh] text-secondary right-[2.2vw] relative !important;
 
+} 
+.unit-h1{
+  @apply bg-[#E3E3E3] w-[9.8vw] h-[0.2vh] relative top-[-1vh] transition  !important; 
+}
+.unit:focus + .unit-h1 {
+  @apply bg-form !important;
+}
+
+.unit-type-h1{
+  @apply bg-[#E3E3E3] w-[3.2vw] h-[0.2vh] relative top-[-2vh] transition  !important; 
+}
+.unit-type{
+  @apply w-[3.2vw] h-[3.5vh] text-secondary top-[-2.2vh]  relative focus:outline-none !important;
+}
+.unit-type:focus + .unit-type-h1 {
+  @apply bg-form !important;
+}
 
 
 p {
-  @apply relative top-[-2vh];
+  @apply relative max-w-fit max-h-[0] m-0 p-0 top-[-2vh];
 } 
 
 

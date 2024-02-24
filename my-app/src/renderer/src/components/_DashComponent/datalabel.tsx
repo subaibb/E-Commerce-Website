@@ -26,17 +26,15 @@ export default  function Data_Label({data}): JSX.Element {
     };
     const priceString = data.total_price.toString();
     const formattedPrice = `$${priceString.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-    
-
-    return (
+    return (  
       <>
      <div className="Data-Holder">
         <label>{data.user_name}</label>
-        <label>${data.price}</label>
-        <label>{data.amount}</label>
+        <label>${data.price.toString()}</label>
+        <label>{data.amount.toString()}</label>
         <label>{formattedPrice}</label>
         <label>{data.fabricType}</label>
-        <label>2024-03-02</label>
+        <label>{formatDate(data.createdAt)}</label>
         <External isStatus={data.status}/>
         <label className='flex justify-center items-center z-10'>
             <img onClick={() => handleShow("button1")} className='h-[28px] w-[28px] cursor-pointer' src={More}/>
@@ -49,3 +47,20 @@ export default  function Data_Label({data}): JSX.Element {
       
     ) 
   }
+
+
+  
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+ 
