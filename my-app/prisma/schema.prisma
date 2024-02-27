@@ -11,28 +11,28 @@ datasource db {
 }
 
 model User {
-  id       String      @id @default(cuid())
-  name     String
-  orders   Order[] 
+  id     String  @id @default(cuid())
+  name   String
+  orders Order[]
 }
 
 model Order {
-  id       String      @id @default(cuid())
-  user     User        @relation(fields: [userId], references: [id])
-  userId   String
-  amount  Decimal
-  status  String  
-  unit   String
-  company company @relation(fields: [companyId], references: [id])
-  companyId String
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  amount     Float
+  status     String
+  unit       String
+  company    company  @relation(fields: [companyId], references: [id])
+  companyId  String
   fabricType String
-  price Decimal 
-  address String
-  createdAt DateTime
+  price      Float
+  address    String
+  createdAt  DateTime
 }
 
 model company {
-  id       String      @id @default(cuid())
-  name     String
-  orders   Order[] 
+  id     String  @id @default(cuid())
+  name   String
+  orders Order[]
 }

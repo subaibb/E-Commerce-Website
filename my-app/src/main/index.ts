@@ -89,7 +89,7 @@ ipcMain.handle('fetch-orders', async (event, args) => {
   JOIN 
     "User" u ON o.userId = u.id
     JOIN
-        "Company" c ON o.companyId = c.id order by o.createdAt desc
+        "Company" c ON o.companyId = c.id order by o.createdAt desc, o.id desc
 `;
     return result ;
   } catch (error) {
@@ -167,6 +167,63 @@ ipcMain.handle('add-order', async (event, args) => {
 });
 
 
+
+ipcMain.handle('fetch-status', async (event, args) => {
+  try {
+    const result = await prisma.$queryRaw`SELECT 
+    count(*) as total_orders,
+    sum(amount * price) as total_revenue,
+    sum(case when status = 'Pending' then 1 else 0 end) as total_pending
+  FROM 
+    "Order" o
+`;
+    return result ;
+  } catch (error) {
+    console.error('Error fetching status:', error);
+    throw error;
+  }
+});
+
+
+
+ipcMain.handle('fetch-company', async (event, args) => {
+  try {
+    const result = await prisma.company.findMany();
+    return result ;
+  } catch (error) {
+    console.error('Error fetching company:', error);
+    throw error;
+  }
+});
+
+ipcMain.handle('change-status', async (event, args) => {
+  try {
+    const result = await prisma.order.update({
+      where: { id: args.id },
+      data: { status: args.status },
+    });
+    return result ;
+  } catch (error) {
+    console.error('Error changing status:', error);
+    throw error;
+  }
+});
+
+
+ipcMain.handle('remove-orders', async (event, args) => {
+  console.log(args);
+  
+  try {
+    const result = await prisma.order.delete({
+      where: { id: args },
+    });
+    return result ;
+  } catch (error) {
+    console.error('Error deleting order:', error);
+    throw error;
+  }
+  
+});
 
 
 

@@ -4,7 +4,6 @@ import Dataholder from "./dataholder"
 
 
 
-
 export default  function table(): JSX.Element {
 
 
@@ -21,8 +20,6 @@ export default  function table(): JSX.Element {
         <label>Status</label>
         <label>Action</label>
         </div>
- 
-      
         <Dataholder/>
      
 

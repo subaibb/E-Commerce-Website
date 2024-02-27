@@ -21,7 +21,7 @@ interface Order {
 const submitFormData = async (formData: FormData): Promise<void> => {
     try {
         // Send data via ipcRenderer
-       ipcRenderer.invoke('add-order', formData);
+      await ipcRenderer.invoke('add-order', formData);
     } catch (error) {   
         // Handle errors
         console.error('Mutation failed:', error);
@@ -37,18 +37,19 @@ export default  function Add_Form(): JSX.Element {
 
     const {
          register,
-            formState,handleSubmit
+            formState,
+            handleSubmit,
+            reset,
+
 
         } = useForm<Order>({
             defaultValues: {
                 user: "",
-                amount: 0,
-                address: "none",
+                address: "",
                 status: "Pending",
                 createdAt: formatDate(date),
-                price: 0,
-                company: "",
-                unit :""
+                company: "",    
+                unit :"KG"
             }
         });
         const { errors } = formState;
@@ -59,8 +60,9 @@ export default  function Add_Form(): JSX.Element {
                     throw error;
             },
             onSuccess: () => {
-                console.log('Order added');
-                queryClient.fetchQuery({queryKey: ['orders']});
+                reset();
+                queryClient.refetchQueries({queryKey: ['orders']});
+                queryClient.refetchQueries({queryKey: ['Status']});
             },
         }); 
     
