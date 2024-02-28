@@ -6,6 +6,9 @@ import {useMutation,useQueryClient} from '@tanstack/react-query';
 import {motion,AnimatePresence} from 'framer-motion';
 const { ipcRenderer } = require('electron');
 
+
+
+
 export default  function Data_Label({data}): JSX.Element {
 
   const [show, setShow] = useState(false);
@@ -25,6 +28,8 @@ export default  function Data_Label({data}): JSX.Element {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+
+  //placement of the dropdown
   const handleShow = (event) => {
     const { clientY } = event;
     if (clientY > 550) {
@@ -35,13 +40,21 @@ export default  function Data_Label({data}): JSX.Element {
     setShow(pervsetsgate => !pervsetsgate);
   };
 
-    const priceString = data.total_price.toString();
+  //price formatting
+
+    const priceString = (data.price * data.amount).toFixed(2).toString();
     const formattedPrice = `$${priceString.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+
+
+    // up or down arrow
+
+
+
     return (  
       <>
      
      <div className="Data-Holder">
-        <label>{data.user_name}</label>
+        <label>{data.user.name}</label>
         <label>${data.price.toString()}</label>
         <label>{data.amount.toString()}</label>
         <label className='total'>{formattedPrice}</label>
@@ -112,6 +125,8 @@ const Delete_Mutation = useMutation({
   onSuccess: () => {
     queryClient.refetchQueries({ queryKey: ['orders'] });
     queryClient.refetchQueries({ queryKey: ['Status'] });
+    queryClient.refetchQueries({queryKey: ['Percentage']});
+    queryClient.refetchQueries({queryKey: ['Company']});
   }
 });
   
@@ -159,6 +174,8 @@ function List_2({id,setShow,Position,setHover}): JSX.Element {
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ['orders'] });
       queryClient.refetchQueries({ queryKey: ['Status'] });
+      queryClient.refetchQueries({queryKey: ['Percentage']});
+      queryClient.refetchQueries({queryKey: ['Company']});
     }
   });
     
@@ -183,6 +200,8 @@ function List_2({id,setShow,Position,setHover}): JSX.Element {
      
   )
 }
+
+
 
 
 

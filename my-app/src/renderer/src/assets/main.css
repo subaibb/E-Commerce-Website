@@ -21,10 +21,10 @@ html,body {
     @apply w-[5.5vw] h-[5.5vw] m-auto rounded-xl absolute top-[2.4vh] left-[1.2vw] bg-[length:60px_60px] bg-no-repeat bg-center;  
   }
   .label-top{
-    @apply relative h-[4.47vh] w-[fit] text-[3.7vh] text-fonts flex m-auto;
+    @apply relative h-[4.47vh] w-[fit] text-[3.7vh] text-fonts flex m-auto transition duration-150;
   } 
   .label-bottom{
-    @apply absolute left-[8.8vw] top-[9.3vh] h-[3vh] w-[7.29vw] text-[18px] text-[#B8B7BC];
+    @apply absolute left-[8.8vw] top-[10vh] h-[3vh] w-[11vw] text-[16px] text-[#B8B7BC];
   } 
 
   .Label-Holder{

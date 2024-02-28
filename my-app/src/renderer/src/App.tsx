@@ -13,7 +13,7 @@ export default function App(): JSX.Element {
   
   return (
     <> 
-    <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary animate-[600ms_fadeIn_forwards]'>Dashboard</h2>
+    <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary animate-[400ms_fadeIn_forwards]'>Dashboard</h2>
     <Buttons isButton={1}/>
     <Background/>
     <Stats/>

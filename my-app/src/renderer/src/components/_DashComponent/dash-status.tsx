@@ -1,6 +1,6 @@
 import Dollar from '../../public/Dollar.svg';
 import completed from '../../public/Com.svg';
-import Time from '../../public/Time.svg';
+import Time from '../../public/Customers.svg';
 import Arrows from './arrow-status';
 
 
@@ -12,19 +12,26 @@ const fetchStatus = async () => {
   return await ipcRenderer.invoke('fetch-status');
 };
 
+const fetchPercaentage = async () => {
+  return await ipcRenderer.invoke('fetch-percentage');
+};
+
+
 
 export default  function Versions(): JSX.Element {
 
   const getStatus =  useQuery({queryKey: ["Status"], queryFn: fetchStatus});
-
+  const getPercentage = useQuery({queryKey: ["Percentage"], queryFn: fetchPercaentage});
   if (getStatus.isLoading) return <div>Loading...</div>;
   if (getStatus.isError) return <div>Error:</div>;
-
-  const priceString = getStatus.data[0].total_revenue.toString();
+  
+  
+  const priceString = getStatus.data.total_revenue.toString();
   const formattedPrice = `$${priceString
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     .replace(/(\.\d*)$/, '<span class="decimal">$1</span>')}`;
-  
+
+
     return (
       <div className="w-[73.9vw] h-[13.7vh] absolute left-[16.2vw] top-[14.7vh] flex">
         
@@ -32,25 +39,25 @@ export default  function Versions(): JSX.Element {
 
           <div className="Stat-Pic bg-[#EBF0FF] " style={{backgroundImage: `url(${completed})`}}/>
           <div  className='absolute h-[4vh] w-[fit] flex top-[4vh] left-[8.8vw]'>
-          <label className="label-top">{getStatus.data[0].total_orders.toString()}</label>
-          <Arrows img="up" percentage="12%"/>
+          <label className="label-top">{getStatus.data.total_orders.toString()}</label>
+          <Arrows percentage={getPercentage.data.order_percentage_change} type={"number"}/>
           </div>
           
-          <label className="label-bottom">Total Orders</label>
+          <label className="label-bottom">Orders this month</label>
           
         </div>
 
         <div className="Stats ml-auto mr-auto ">
         <div className="Stat-Pic bg-[#FFF8E9]" style={{backgroundImage: `url(${Time})`}}/> 
         <div className='absolute h-[4vh] w-[fit] flex top-[4vh] left-[8.8vw]'>
-        <label className="label-top">{getStatus.data[0].total_pending.toString()}</label>
-        <Arrows img="down" percentage="35%"/>
+        <label className="label-top">{getStatus.data.total_customers.toString()}</label>
+        <Arrows percentage={getPercentage.data.customer_percentage_change} type={"number"}/>
         </div>
         
-        <label className="label-bottom">Pending</label>
+        <label className="label-bottom">Customers this month</label>
         
 
-        </div>
+        </div>  
        
 
         <div className="Stats ml-auto">
@@ -61,13 +68,15 @@ export default  function Versions(): JSX.Element {
           <div className='absolute h-[4vh] w-[fit] flex top-[4vh] left-[8.3vw]'>
 
           <label className="label-top text-3xl" dangerouslySetInnerHTML=  {{ __html: formattedPrice }}></label>
-          <Arrows img="up" percentage="16%"/>
+          <Arrows percentage={getPercentage.data.revenuePercentageChange} type={"percentage"}/>
           </div>
           
-          <label className="label-bottom">Revenue</label>
+          <label className="label-bottom">Revenue this month</label>
           
         </div>
     
       </div>
     )
   }
+
+
