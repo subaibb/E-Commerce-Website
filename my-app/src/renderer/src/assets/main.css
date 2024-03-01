@@ -4,6 +4,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 html,body {
   @apply h-full select-none font-poppins font-medium bg-default w-[100%] m-0 p-0;
 }
@@ -21,8 +22,11 @@ html,body {
     @apply w-[5.5vw] h-[5.5vw] m-auto rounded-xl absolute top-[2.4vh] left-[1.2vw] bg-[length:60px_60px] bg-no-repeat bg-center;  
   }
   .label-top{
-    @apply relative h-[4.47vh] w-[fit] text-[3.7vh] text-fonts flex m-auto transition duration-150;
+    @apply relative h-[4.47vh] w-[fit] text-[3.7vh] text-fonts flex m-auto;
   } 
+  .label-top{
+    transition : all 0.3s;
+  }
   .label-bottom{
     @apply absolute left-[8.8vw] top-[10vh] h-[3vh] w-[11vw] text-[16px] text-[#B8B7BC];
   } 
@@ -62,19 +66,22 @@ html,body {
 }
 
 .List-1{
-  @apply w-[3.9vw] h-[10.9vh] bg-default absolute top-[2.9vh] z-[60] shadow-[2px_4px_6px_1px_#4E87A817] rounded-[3px] flex flex-col;
+  @apply w-[5vw] h-[10.9vh] bg-default absolute top-[3vh] z-[60] right-[1vw] shadow-[2px_4px_6px_1px_#4E87A817] rounded-[3px] flex flex-col ;
 
 }
 .List-2{
-  @apply w-[4.4vw] h-[10vh] bg-default absolute right-[3.6vw] z-[60] shadow-[2px_4px_6px_1px_#4E87A817] rounded-[3px] flex flex-col;
+  @apply w-[4.4vw] h-[10vh] bg-default absolute right-[6vw] z-[60] shadow-[2px_4px_6px_1px_#4E87A817] rounded-[3px] flex flex-col;
 
 }
 
 .List-1 li {
-  @apply m-auto  h-[3vh] w-[3.5vw] rounded-sm hover:bg-[#F2F2F2] transition duration-150;
+  @apply m-auto  h-[3vh] w-[4.5vw] rounded-sm hover:bg-[#F2F2F2] ml-auto  transition duration-150 text-secondary bg-[length:20px_20px] bg-no-repeat bg-left;
+}
+.List-1 li span{
+  @apply relative left-[1.2vw] flex h-[1vh] w-[1vw];
 }
 .List-2 li {
-  @apply m-auto  h-[3vh] w-[4vw] rounded-sm hover:bg-[#F2F2F2] transition duration-150 text-[13px];
+  @apply m-auto  h-[3vh] w-[4vw] rounded-sm hover:bg-[#F2F2F2] transition duration-150 text-[13px] text-secondary;
 }
 
 .fade-in {
@@ -130,6 +137,7 @@ html,body {
 
 }
 
+
 form input[type="text"] {
   @apply w-[14.1vw] h-[3.5vh] m-auto text-secondary focus:outline-none;
 
@@ -141,7 +149,6 @@ form input[type="text"]:focus + h1 {
 form input[type="date"] {
   @apply w-[14.1vw] h-[3.5vh] m-auto text-secondary focus:outline-none;
   
-
 }
 
 form input[type="number"] {
@@ -149,12 +156,12 @@ form input[type="number"] {
   
 }
 
-form input[type="date"]:focus + h1 {
+form input:focus + h1 {
   @apply bg-form;
 }
-
-form input[type="number"]:focus + h1 {
+div:focus + h1 {
   @apply bg-form;
+
 }
 
 .form-div h1{
@@ -194,6 +201,40 @@ form input[type="number"]:focus + h1 {
   @apply text-form !important;
 }
 
+.custom-autocomplete {
+  @apply w-[14.1vw] h-[3.5vh] z-30;
+}
+
+
+.Auto-Complete-Change b{
+  @apply text-form;
+}
+
+.Wrapper::-webkit-scrollbar {
+  left: 2vw;
+  width: 8px;
+  position: absolute;
+}
+
+.Wrapper::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: #e7e7e7;
+  border: 1px solid #cacaca;
+}
+
+.Wrapper::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #464554;
+}
+
+input:focus::-webkit-input-placeholder 
+{
+    color: transparent;
+}
+
+label {
+  transition: all 0.3s; /* Apply transition to color property */
+}
 
 p {
   @apply relative max-w-fit max-h-[0] m-0 p-0 top-[-2vh];
@@ -201,6 +242,24 @@ p {
 a:link {
   text-decoration: none;
 }
+[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 18px;
+  width: 18px;
+  background-image: url('../public/Cancel.svg');
+  background-size: 18px 18px;
+}
+
+.dropDown:focus{
+  border: 2px solid #49A7FF;
+}
+
+.topLabels label{
+  @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-semibold text-[15px];
+}
+
+
 
   @keyframes fadeIn {
     0% {

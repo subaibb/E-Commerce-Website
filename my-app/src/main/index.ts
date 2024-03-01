@@ -214,6 +214,7 @@ ipcMain.handle('fetch-status', async (event, args) => {
           price: true
         },
       });
+
       let currentRevenue = 0;
       thisMonthRevenue.forEach((order) => {
         const order_totals = order.amount * order.price;
@@ -420,14 +421,12 @@ lastMonthRevenue.forEach((order) => {
   const order_totals = order.amount * order.price;
   lastRevenue += order_totals;
 });
-if (lastRevenue === 0) {
-  lastRevenue = 1;
-}
+const denominator = Math.max(lastRevenue,1);
 
-
-  const orderPercentageChange = ((thisMonthOrders - lastMonthOrders))
-  const customerPercentageChange = ((Object.keys(thisMonthCustomers).length - Object.keys(lastMonthCustomers).length))
-  const revenuePercentageChange = (((currentRevenue - lastRevenue) / lastRevenue) * 100).toFixed(2); // Calculate the percentage change in revenue
+  const orderPercentageChange = ((thisMonthOrders - lastMonthOrders));
+  const customerPercentageChange = ((Object.keys(thisMonthCustomers).length - Object.keys(lastMonthCustomers).length));
+  const revenuePercentageChange = (((currentRevenue - lastRevenue / denominator * 100).toFixed(2)));
+   // Calculate the percentage change in revenue
   return {
     order_percentage_change: orderPercentageChange,
     customer_percentage_change: customerPercentageChange,

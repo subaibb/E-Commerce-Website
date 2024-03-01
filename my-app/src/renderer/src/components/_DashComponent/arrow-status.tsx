@@ -13,7 +13,6 @@ props: {
     }
 }
 export default  function Arrows({percentage,type}): JSX.Element {
-
   let img = '';
   
   if(type === 'percentage') {
@@ -25,7 +24,7 @@ export default  function Arrows({percentage,type}): JSX.Element {
   {
     checker();
   }
-
+ 
   
   function checker () {
 

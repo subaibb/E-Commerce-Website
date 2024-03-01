@@ -1,8 +1,13 @@
 import { useForm } from "react-hook-form"
 import { useMutation ,useQueryClient } from '@tanstack/react-query';
+import Autocomplete from "./AutoComplete";
+import { useState } from "react";
 const { ipcRenderer } = require('electron')
 const date = new Date();
 
+
+
+  
 
   
 
@@ -17,8 +22,10 @@ interface Order {
     company: string;
     unit: string;
     respose : boolean;
+    autocomplete: string;
 }
 const submitFormData = async (formData: FormData): Promise<void> => {
+    
     try {
         // Send data via ipcRenderer
       await ipcRenderer.invoke('add-order', formData);
@@ -32,7 +39,26 @@ const submitFormData = async (formData: FormData): Promise<void> => {
 
 
 export default  function Add_Form(): JSX.Element {
+
+    const [empty,isEmpty] = useState(false)
+
     const queryClient =  useQueryClient();
+    const ordersData:any = queryClient.getQueryData(['orders']);
+
+    const dataNamesSet: Set<string> = new Set();
+    const companyNamesSet: Set<string> = new Set();
+    const fabricTypeSet: Set<string> = new Set();
+
+    ordersData.forEach((order) => {
+        dataNamesSet.add(order.user.name);
+        companyNamesSet.add(order.company.name);
+        fabricTypeSet.add(order.fabricType);
+    });
+    const dataNames: string[] = Array.from(dataNamesSet);
+    const companyNames: string[] = Array.from(companyNamesSet);
+    const fabricType: string[] = Array.from(fabricTypeSet);
+
+    console.log(dataNames);
 
 
     const {
@@ -40,6 +66,7 @@ export default  function Add_Form(): JSX.Element {
             formState,
             handleSubmit,
             reset,
+            setValue,
 
 
         } = useForm<Order>({
@@ -49,7 +76,8 @@ export default  function Add_Form(): JSX.Element {
                 status: "Pending",
                 createdAt: formatDate(date),
                 company: "",    
-                unit :"KG"
+                unit :"Meters",
+                autocomplete: "",
             }
         });
         const { errors } = formState;
@@ -60,6 +88,7 @@ export default  function Add_Form(): JSX.Element {
                     throw error;
             },
             onSuccess: () => {
+                isEmpty(!empty);
                 reset();
                 queryClient.refetchQueries({queryKey: ['orders']});
                 queryClient.refetchQueries({queryKey: ['Status']});
@@ -71,6 +100,7 @@ export default  function Add_Form(): JSX.Element {
         
         const onSubmit = async (formData: any) => {
             try {
+                setValue('autocomplete','')
                 NewOrder.mutate(formData)
             } catch (error) {
                 console.error('Mutation failed:', error);
@@ -80,7 +110,7 @@ export default  function Add_Form(): JSX.Element {
 
     return (
       <>
-      <div className="form-div absolute w-[34.8vw] h-[39.7vh] bg-default rounded-lg left-[64.1vw] top-[8.9vh] shadow-[0px_4px_23.8px_7px_#68B6FF1C] z-10">
+      <div className="form-div absolute w-[34.8vw] h-[39.7vh] bg-default rounded-lg left-[64.1vw] top-[8.9vh] shadow-[0px_4px_23.8px_7px_#68B6FF1C] z-[1]">
         <form className="relative w-[100%] h-[100%] flex" onSubmit={handleSubmit(onSubmit)}>
 
 
@@ -89,15 +119,11 @@ export default  function Add_Form(): JSX.Element {
                 
                 
             <label >NAME</label>
-            <input type="text" {...register("user" ,{required:true, minLength:3 , pattern : /^[A-Za-z]/})} />
-            {errors.user ? (
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a longer name.</p>
-                </h1>
-
-                ) : (
-                <h1></h1>
-                )}
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="user" options={dataNames} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+          // Manually set value to the form field
+          setValue('user', value, { shouldValidate: true});
+        }}/>
+            
                             
             <label >AMOUNT</label>
 
@@ -116,16 +142,10 @@ export default  function Add_Form(): JSX.Element {
                     
                 
             <label >FABRIC</label>
-                <input type="text" {...register("address" ,{required:true, minLength:3 , pattern: /^[A-Za-z0-9]+$/ })} />
-                {errors.address ? (
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a valid address</p>
-                </h1>
-
-                ) : (
-                <h1></h1>
-                )}
-                      
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="address" options={fabricType} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+          // Manually set value to the form field
+          setValue('address', value, { shouldValidate: true});
+        }}/>
 
                       <label >DATE</label>
                 <input type="date" {...register("createdAt" ,{required:true})} />
@@ -166,20 +186,18 @@ export default  function Add_Form(): JSX.Element {
                 ) : (
                 <h1 className="unit-h1"></h1>
                 )}
+            
+            
+            
+         
            
            
                       
             <label >COMPANY</label>
-            <input type="text" {...register("company" ,{required:true, minLength:3})} />
-            {errors.company ? (
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a longer company name.</p>
-                </h1>
-
-                ) : (
-                <h1></h1>
-                )}
-                      
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="company" options={companyNames} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+          // Manually set value to the form field
+          setValue('company', value, { shouldValidate: true});
+        }}/>
 
             </div>
 

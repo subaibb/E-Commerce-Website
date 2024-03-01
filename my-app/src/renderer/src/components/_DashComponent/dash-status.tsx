@@ -31,7 +31,6 @@ export default  function Versions(): JSX.Element {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     .replace(/(\.\d*)$/, '<span class="decimal">$1</span>')}`;
 
-
     return (
       <div className="w-[73.9vw] h-[13.7vh] absolute left-[16.2vw] top-[14.7vh] flex">
         

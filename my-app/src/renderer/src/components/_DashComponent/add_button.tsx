@@ -11,7 +11,7 @@ export default  function Add_Button(): JSX.Element {
   
 
   const [show, setShow] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);      
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -37,12 +37,12 @@ export default  function Add_Button(): JSX.Element {
         New Order
       </button>
       <AnimatePresence>
-      {show && <motion.div ref={ref}
+      {show && <motion.div ref={ref} 
         initial={{ opacity: 0}}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.1 }}
         exit={{ opacity: 0 }}
-      >
+      >   
               
             <Add_Form />
               </motion.div>
