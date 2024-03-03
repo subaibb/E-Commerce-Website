@@ -20,7 +20,7 @@ export default  function Company_Holder(): JSX.Element {
   if (fetchCompany.isLoading) return <div>Loading...</div>;
   if (fetchCompany.isError) return <div>Error:</div>;
     return (
-      <div className="flex absolute w-[73.9vw] h-[20.5vh] top-[73.7vh] left-[16.2vw] animate-[500ms_fadeIn_forwards]" >
+      <div className="flex absolute w-[73.9vw] h-[20.5vh] top-[73.7vh] left-[16.2vw] animate-[400ms_slideUp_forwards]" >
         
           {fetchCompany.data.slice(0, 2).map((company: any) => (
             <Companies key={company.companyId} data={company.companyName} Revenue={(company.total_revenue)} Orders={company.total_orders} />

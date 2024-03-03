@@ -94,6 +94,7 @@ export default  function Add_Form(): JSX.Element {
                 queryClient.refetchQueries({queryKey: ['Status']});
                 queryClient.refetchQueries({queryKey: ['Percentage']});
                 queryClient.refetchQueries({queryKey: ['Company']});
+                queryClient.refetchQueries({queryKey: ['AllOrders']});   
             },
         }); 
     

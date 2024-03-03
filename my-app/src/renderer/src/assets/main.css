@@ -7,6 +7,7 @@
 
 html,body {
   @apply h-full select-none font-poppins font-medium bg-default w-[100%] m-0 p-0;
+  backface-visibility: hidden;
 }
 @layer components {
   .primary-btn {
@@ -41,7 +42,7 @@ html,body {
     @apply  w-[70vw] min-h-[5vh] relative left-[0vw] flex  hover:bg-[#faf9f9] transition duration-150;
   } 
   .Data-Holder label{
-    @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px];
+    @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px] whitespace-nowrap;
   }
 
   .DataCarrier::-webkit-scrollbar {
@@ -252,13 +253,82 @@ a:link {
 }
 
 .dropDown:focus{
-  border: 2px solid #49A7FF;
+  border-color:#49A7FF;
+  outline: none;
 }
-
+.dropDown:hover:not(:focus) {
+  border-color: #BFE0FF; /* Change the border color on hover, but not when focused */
+}
 .topLabels label{
-  @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-semibold text-[15px];
+  @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-semibold text-[16px];
+}
+.dataLabels label{
+  @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px];
+}
+.dataLabels{
+  backface-visibility: hidden;  
+  transform: translateZ(0); 
 }
 
+.ul-list-1{
+  @apply w-[8.7vw] h-[22vh] bg-default rounded-bl-[12px] rounded-br-[12px] border-2 border-[#EAEAEA] z-10 absolute top-[4vh] left-[0.6vw] flex flex-col;
+}
+.ul-list-1 li{ 
+  @apply w-[8vw] h-[3vh] text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
+}
+
+.ul-list-2{
+  @apply w-[8.7vw] h-[16vh] bg-default rounded-bl-[12px] rounded-br-[12px] border-2 border-[#EAEAEA] z-10 absolute top-[4vh] left-[10.6vw] flex flex-col;
+}
+.ul-list-2 li{ 
+  @apply w-[8vw] h-[3vh] text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
+}
+
+
+.ul-list-3{
+  @apply w-[8.7vw] h-[16vh] bg-default rounded-bl-[12px] rounded-br-[12px] border-2 border-[#EAEAEA] z-10 absolute top-[4vh] left-[20.5vw] flex flex-col;
+}
+.ul-list-3 li{ 
+  @apply w-[8vw] h-[3vh] text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
+}
+
+
+.Background::-webkit-scrollbar {
+  width: 8px;
+  position: absolute;
+}
+
+.Background::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: #e7e7e7;
+  border: 1px solid #cacaca;
+}
+
+.Background::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #464554;
+}
+.Stat-Order{
+  @apply animate-[300ms_pulse_forwards];
+}
+.Order-Table{
+  backface-visibility: hidden;  
+  transform: translateZ(0); 
+}
+
+
+
+@keyframes slideUp{
+  0%{
+    opacity: 0.5;
+    transform: translateY(10%);
+  }
+
+  100%{
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
 
 
   @keyframes fadeIn {
@@ -280,9 +350,18 @@ a:link {
     }
   }
 
+  @keyframes fadeInTable {
+    0% {
+      opacity: 0;
+    } 
+    100% {
+      opacity: 0.95;
+    }
+  }
+
   @keyframes pulse {
     0% {
-      transform: scale(0.98);
+      transform: scale(0.95);
     }
     70% {
       transform: scale(1);

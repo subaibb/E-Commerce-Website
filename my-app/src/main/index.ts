@@ -5,6 +5,8 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { PrismaClient } from '@prisma/client';
 import { get } from 'http';
+import { stat } from 'fs';
+import { s } from 'vite/dist/node/types.d-jgA8ss1A';
 const prisma = new PrismaClient();
 function createWindow(): void {
   // Create the browser window.
@@ -440,6 +442,116 @@ catch (error) {
 
 });
 
+//get all orders
+
+ipcMain.handle('all-orders', async (event, args) => {
+
+let LastConfigaration ;
+
+function getOrderBy(args) {
+  switch (args) {
+      case 1:
+          
+          LastConfigaration = [
+              { createdAt: 'desc' },
+              { id: 'desc' },
+          ];
+          return LastConfigaration;
+          
+      case 2:
+         
+          LastConfigaration = [
+              { user: { name: 'asc' } }
+          ];
+          return LastConfigaration;
+
+      // Add more cases for other status values if needed
+      default:
+          return [
+              { createdAt: 'unsorted' },
+              { id: 'unsorted' },
+              { user: { name: 'asc' } }
+          ];
+  }
+}
+
+
+
+  console.log(status);
+  try {
+    const orders = await prisma.order.findMany({
+      where: {
+        createdAt: {
+          gte: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)   // Date 90 days ago
+        }
+      },
+      orderBy: getOrderBy(status),
+      include: {
+        user: true,
+        company: true
+      },
+      
+      
+    });
+  
+    return orders;
+  }
+catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+
+});
+
+
+ipcMain.handle('overview-orders', async (event, args) => {
+  try {
+    const ninetyDaysAgo = new Date(new Date() - 90 * 24 * 60 * 60 * 1000);
+
+    // Count of all orders
+    const allOrdersCount = await prisma.order.count({
+      where: {
+        createdAt: { gte: ninetyDaysAgo }
+      }
+    });
+
+    // Count of paid orders
+    const paidOrdersCount = await prisma.order.count({
+      where: {
+        status: 'Paid',
+        createdAt: { gte: ninetyDaysAgo }
+      }
+    });
+
+    // Count of pending orders
+    const pendingOrdersCount = await prisma.order.count({
+      where: {
+        status: 'Pending',
+        createdAt: { gte: ninetyDaysAgo }
+      }
+    });
+
+    // Count of cancelled orders
+    const cancelledOrdersCount = await prisma.order.count({
+      where: {
+        status: 'Cancelled',
+        createdAt: { gte: ninetyDaysAgo }
+      }
+  });
+  
+      return {
+        allOrdersCount,
+        paidOrdersCount,
+        pendingOrdersCount,
+        cancelledOrdersCount
+      };
+}
+catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+
+});
 
 
 function formatDate(date) {

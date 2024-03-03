@@ -5,7 +5,7 @@ export default function topLabels(): JSX.Element {
     
     return (
     <>
-    <div className=" topLabels w-[68.9vw] h-[6vh] bg-slate-200 absolute top-[3vh] left-[2.4vw] flex">
+    <div className=" topLabels w-[72vw] left-[2.1vw] h-[4vh] absolute top-[3vh] flex">
         <label>Customer</label>
         <label>Unit Price</label>
         <label>Amount</label>

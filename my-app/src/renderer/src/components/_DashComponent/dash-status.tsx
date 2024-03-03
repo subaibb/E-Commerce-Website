@@ -23,8 +23,11 @@ export default  function Versions(): JSX.Element {
   const getStatus =  useQuery({queryKey: ["Status"], queryFn: fetchStatus});
   const getPercentage = useQuery({queryKey: ["Percentage"], queryFn: fetchPercaentage});
   if (getStatus.isLoading) return <div>Loading...</div>;
-  if (getStatus.isError) return <div>Error:</div>;
-  
+  if (getStatus.isError) return <div>Error:Loading Status</div>;
+
+  if (getPercentage.isLoading) return <div>Loading...</div>;
+  if (getPercentage.isError) return <div>Error:Loading Percentages</div>;
+
   
   const priceString = getStatus.data.total_revenue.toString();
   const formattedPrice = `$${priceString
