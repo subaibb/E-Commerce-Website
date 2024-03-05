@@ -267,14 +267,13 @@ a:link {
 }
 .dataLabels{
   backface-visibility: hidden;  
-  transform: translateZ(0); 
 }
 
 .ul-list-1{
   @apply w-[8.7vw] h-[22vh] bg-default rounded-bl-[12px] rounded-br-[12px] border-2 border-[#EAEAEA] z-10 absolute top-[4vh] left-[0.6vw] flex flex-col;
 }
 .ul-list-1 li{ 
-  @apply w-[8vw] h-[3vh] text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
+  @apply w-[8vw] h-[3vh] bg-default text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
 }
 
 .ul-list-2{
@@ -291,7 +290,10 @@ a:link {
 .ul-list-3 li{ 
   @apply w-[8vw] h-[3vh] text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
 }
+.customers-list li{
+  @apply w-[8vw] h-[3vh] text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
 
+}
 
 .Background::-webkit-scrollbar {
   width: 8px;
@@ -314,6 +316,22 @@ a:link {
 .Order-Table{
   backface-visibility: hidden;  
   transform: translateZ(0); 
+}
+
+.data-holder::-webkit-scrollbar {
+  width: 8px;
+  position: absolute;
+}
+
+.data-holder::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: #e7e7e7;
+  border: 1px solid #cacaca;
+}
+
+.data-holder::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #464554;
 }
 
 

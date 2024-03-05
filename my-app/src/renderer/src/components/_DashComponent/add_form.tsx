@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
-import { useMutation ,useQueryClient } from '@tanstack/react-query';
+import { useMutation ,useQuery,useQueryClient } from '@tanstack/react-query';
 import Autocomplete from "./AutoComplete";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 const { ipcRenderer } = require('electron')
 const date = new Date();
 
@@ -36,29 +36,39 @@ const submitFormData = async (formData: FormData): Promise<void> => {
     }
 };
 
+const fetchUsers = async () => {
+    return await ipcRenderer.invoke('fetch-orders');
+};
+
 
 
 export default  function Add_Form(): JSX.Element {
+    const queryClient = useQueryClient();
+    const [dataNames, setDataNames] = useState<string[]>([]); // Specify string[] as the type
+    const [companyNames, setCompanyNames] = useState<string[]>([]); // Specify string[] as the type
+    const [fabricType, setFabricType] = useState<string[]>([]); // Specify string[] as the type
 
-    const [empty,isEmpty] = useState(false)
+    const [empty, isEmpty] = useState(false);
+    const { data: ordersData, isLoading, isError } = useQuery({queryKey: ["orders"], queryFn: fetchUsers});
 
-    const queryClient =  useQueryClient();
-    const ordersData:any = queryClient.getQueryData(['orders']);
+    useEffect(() => {
+        if (!isLoading && !isError && ordersData) {
+            const dataNamesSet = new Set<string>(); // Specify string as the type
+            const companyNamesSet = new Set<string>(); // Specify string as the type
+            const fabricTypeSet = new Set<string>(); // Specify string as the type
 
-    const dataNamesSet: Set<string> = new Set();
-    const companyNamesSet: Set<string> = new Set();
-    const fabricTypeSet: Set<string> = new Set();
+            ordersData.forEach((order) => {
+                dataNamesSet.add(order.user.name);
+                companyNamesSet.add(order.company.name);
+                fabricTypeSet.add(order.fabricType);
+            });
 
-    ordersData.forEach((order) => {
-        dataNamesSet.add(order.user.name);
-        companyNamesSet.add(order.company.name);
-        fabricTypeSet.add(order.fabricType);
-    });
-    const dataNames: string[] = Array.from(dataNamesSet);
-    const companyNames: string[] = Array.from(companyNamesSet);
-    const fabricType: string[] = Array.from(fabricTypeSet);
+            setDataNames(Array.from(dataNamesSet));
+            setCompanyNames(Array.from(companyNamesSet));
+            setFabricType(Array.from(fabricTypeSet));
+        }
+    }, [ordersData, isLoading, isError]);
 
-    console.log(dataNames);
 
 
     const {
@@ -94,7 +104,8 @@ export default  function Add_Form(): JSX.Element {
                 queryClient.refetchQueries({queryKey: ['Status']});
                 queryClient.refetchQueries({queryKey: ['Percentage']});
                 queryClient.refetchQueries({queryKey: ['Company']});
-                queryClient.refetchQueries({queryKey: ['AllOrders']});   
+                queryClient.refetchQueries({queryKey: ['allOrders']});
+
             },
         }); 
     

@@ -5,12 +5,10 @@ import calendar from '../../public/Calendar.svg';
 import filters from '../../public/Filters.svg';
 import {motion,AnimatePresence } from 'framer-motion';
 import { useState,useRef,useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation,useQueryClient } from '@tanstack/react-query';
 const { ipcRenderer } = require('electron');
 
 export default function dropDown({label,img,id}): JSX.Element {
-
-
 
   const [dropDown, setDropDown] = useState(false);
   const [buttonId, setButtonId] = useState(0);
@@ -60,24 +58,64 @@ export default function dropDown({label,img,id}): JSX.Element {
     ) 
 }
 
-const fetchStatus = async () => {
-  return await ipcRenderer.invoke('all-orders',);
-}
 
 
 function DropDownList_1({setDropDown}): JSX.Element {
 
-  const ChooseStatus =useQuery({queryKey: ["Status-Query"], queryFn: fetchStatus});
+  const [style, setStyles] = useState(null);
+
+
+
+  const toggleStyle = (buttonId) => {
+    setStyles(buttonId); // Set the clicked button as active
+    // If there was a previously clicked button, reset its style
+    if (style) {
+      const buttonOld = document.getElementById(style);
+      if (buttonOld) {
+        buttonOld.style.backgroundColor = 'red'; // Replace 'defaultColor' with your default color
+      }
+    }
+
+    // Toggle style for the clicked button
+    const button = document.getElementById(buttonId);
+    if (button) 
+    {
+        button.style.backgroundColor = button.style.backgroundColor === 'red' ? 'blue' : 'red'; // Toggle background color
+    }
+};
+
+
+  const queryClient = useQueryClient();
+  
+  const Status = useMutation({
+    mutationFn: async (id) => {
+     
+       await ipcRenderer.invoke('all-orders',id);
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({queryKey: ['allOrders']});
+    }
+  });
+    
+  const ChooseStatus = (id:any) => {
+    try {
+      Status.mutate(id);
+    }
+    catch (error) {
+      console.error('Mutation failed:', error);
+    }
+  }
+  
 
   return (
   <>
   <ul className="ul-list-1">
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Default</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Name</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Company</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Total</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Fabric</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Type</li>
+      <li id='list-1' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(1); toggleStyle('list-1')}}>Default</li>
+      <li id='list-2' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(2); toggleStyle('list-2')}}>Name</li>
+      <li id='list-3' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(3); toggleStyle('list-3')}}>Company</li>
+      <li id='list-4' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(4); toggleStyle('list-4')}}>Total</li>
+      <li id='list-5' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(5); toggleStyle('list-5')}}>Fabric</li>
+      <li id='list-6' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(6); toggleStyle('list-6')}}>Type</li>
       
 
 
@@ -89,13 +127,35 @@ function DropDownList_1({setDropDown}): JSX.Element {
 
 function DropDownList_2({setDropDown}): JSX.Element {
 
+  const queryClient = useQueryClient();
+  
+  const Status = useMutation({
+    mutationFn: async (id) => {
+     
+       await ipcRenderer.invoke('all-orders',id);
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({queryKey: ['allOrders']});
+    }
+  });
+    
+  const ChooseStatus = (id:any) => {
+    try {
+      Status.mutate(id);
+    }
+    catch (error) {
+      console.error('Mutation failed:', error);
+    }
+  }
+  
+
   return (
   <>
   <ul className="ul-list-2">
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Default</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Paid</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Pending</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Cancelled</li>
+      <li onClick={()=>{setDropDown(pervstate=>(!pervstate));ChooseStatus(7);}}>Default</li>
+      <li onClick={()=>{setDropDown(pervstate=>(!pervstate));ChooseStatus(8);}}>Paid</li>
+      <li onClick={()=>{setDropDown(pervstate=>(!pervstate));ChooseStatus(9);}}>Pending</li>
+      <li onClick={()=>{setDropDown(pervstate=>(!pervstate));ChooseStatus(10);}}>Cancelled</li>
   </ul>
   </>
   
@@ -104,13 +164,35 @@ function DropDownList_2({setDropDown}): JSX.Element {
 
 function DropDownList_3({setDropDown}): JSX.Element {
 
+  const queryClient = useQueryClient();
+  
+  const Status = useMutation({
+    mutationFn: async (id) => {
+     
+       await ipcRenderer.invoke('all-orders',id);
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({queryKey: ['allOrders']});
+    }
+  });
+    
+  const ChooseStatus = (id:any) => {
+    try {
+      Status.mutate(id);
+    }
+    catch (error) {
+      console.error('Mutation failed:', error);
+    }
+  }
+  
+
   return (
   <>
   <ul className="ul-list-3">
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>Default</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>6 months ago</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>a year ago</li>
-      <li onClick={()=>{setDropDown(pervstate=>(!pervstate))}}>2 years ago</li>
+      <li onClick={()=>{setDropDown(pervstate=>(!pervstate));ChooseStatus(7);}}>Default</li>
+      <li onClick={()=>{setDropDown(pervstate=>(!pervstate));ChooseStatus(11);}}>6 months ago</li>
+      <li onClick={()=>{setDropDown(pervstate=>(!pervstate));ChooseStatus(12);}}>a year ago</li>
+      <li onClick={()=>{setDropDown(pervstate=>(!pervstate));ChooseStatus(13);}}>2 years ago</li>
   </ul>
   </>
   

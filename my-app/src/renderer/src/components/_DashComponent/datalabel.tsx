@@ -64,7 +64,7 @@ export default  function Data_Label({data}): JSX.Element {
         <label>{data.fabricType}</label>
         <label>{formatDate(data.createdAt)}</label>
         <External isStatus={data.status}/>
-        <label className='flex justify-center items-center z-100'>
+        <label className='flex justify-center items-center'>
         <img onClick={handleShow} className='h-[28px] w-[28px] cursor-pointer' src={More}/>
       
             <div ref={ref}

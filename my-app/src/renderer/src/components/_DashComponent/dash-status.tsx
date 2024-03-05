@@ -29,7 +29,7 @@ export default  function Versions(): JSX.Element {
   if (getPercentage.isError) return <div>Error:Loading Percentages</div>;
 
   
-  const priceString = getStatus.data.total_revenue.toString();
+  const priceString = getStatus.data.total_revenue.toFixed(2).toString();
   const formattedPrice = `$${priceString
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     .replace(/(\.\d*)$/, '<span class="decimal">$1</span>')}`;

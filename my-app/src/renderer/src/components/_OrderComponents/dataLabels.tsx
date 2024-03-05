@@ -5,6 +5,10 @@ import { useState,useRef,useEffect } from "react";
 import More from "../../public/More.svg";
 import {motion,AnimatePresence} from 'framer-motion';
 
+
+
+
+
 export default function dataLabels({data}): JSX.Element {
 
     const priceString = (data.price * data.amount).toFixed(2).toString();
@@ -29,16 +33,18 @@ export default function dataLabels({data}): JSX.Element {
     const [Position,setPosition] = useState(false);
 
     const handleShow = (event) => {
-        const { clientY } = event;
-        if (clientY > 550) {
-          setPosition(true);
-        } else {
-          setPosition(false);
-        }
+
+      if (event.clientY > 500) {
+        setPosition(true);
+      }
+      else {
+        setPosition(false);
+      }
+
+        
         setShow(pervsetsgate => !pervsetsgate);
       };
     
-
 
     
     return (
@@ -53,7 +59,7 @@ export default function dataLabels({data}): JSX.Element {
         <label>{data.company.name}</label>
         <label>{data.unit}</label>
         <External isStatus={data.status}/>
-        <label className='flex justify-center items-center z-100'>
+        <label className='flex justify-center items-center'>
         <img onClick={handleShow} className='h-[28px] w-[28px] cursor-pointer' src={More}/>
       
             <div ref={ref}

@@ -443,57 +443,143 @@ catch (error) {
 });
 
 //get all orders
-
+let Config;
+let TypeOfOrder;
 ipcMain.handle('all-orders', async (event, args) => {
 
-let LastConfigaration ;
 
 function getOrderBy(args) {
   switch (args) {
+    
       case 1:
           
-          LastConfigaration = [
+          Config =  [
               { createdAt: 'desc' },
               { id: 'desc' },
           ];
-          return LastConfigaration;
-          
+          break;
       case 2:
-         
-          LastConfigaration = [
+          
+        Config = [
               { user: { name: 'asc' } }
           ];
-          return LastConfigaration;
+          break;
 
-      // Add more cases for other status values if needed
-      default:
-          return [
-              { createdAt: 'unsorted' },
-              { id: 'unsorted' },
-              { user: { name: 'asc' } }
+      case 3:
+          
+          Config = [
+              { company: { name: 'desc' } }
           ];
+          break;
+          
+      case 4:
+          Config = [
+              { amount: 'asc' },
+              { price: 'asc' },
+          ];
+          break;
+      case 5:
+          
+          Config = [
+              { fabricType: 'asc' },
+          ];
+          break;
+      case 6:
+          
+          Config = [
+              { unit: 'asc' },
+          ];
+          break;
+      default:
+        if (Config == null) {
+          Config = [{ createdAt: 'desc' }, { id: 'desc' }];
+      }
+      break;
   }
 }
+getOrderBy(args);
 
+function Type(args) {
+  switch (args) {
 
+      case 7:
+          TypeOfOrder = {
+              createdAt: {
+                  gte: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)   // Date 30 days ago
+              }
+          };
+          break;
+      case 8:
+          TypeOfOrder ={
+                  status: 'Paid',
+                  createdAt: {
+                      gte: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)   // Date 90 days ago
+                  }
+          };
+          break;
 
-  console.log(status);
+      case 9:
+          TypeOfOrder = {
+              status: 'Pending',
+              createdAt: {
+                  gte: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)   // Date 90 days ago
+              }
+          };
+          break;
+
+      case 10:
+          TypeOfOrder = {
+              status: 'Cancelled',
+              createdAt: {
+                  gte: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)   // Date 90 days ago
+              }
+          };
+          break;
+
+        case 11:
+          TypeOfOrder = {
+              createdAt: {
+                  gte: new Date(new Date() - 180 * 24 * 60 * 60 * 1000)   // Date 180 days ago
+              }
+          };
+          break;
+
+          case 12:
+          TypeOfOrder = {
+              createdAt: {
+                  gte: new Date(new Date() - 365 * 24 * 60 * 60 * 1000)   // Date 365 days ago
+              }
+          };
+          break;
+  
+          case 13:
+          TypeOfOrder = {
+              createdAt: {
+                  gte: new Date(new Date() - 730 * 24 * 60 * 60 * 1000)   // Date 730 days ago
+              }
+          };
+          break;
+
+      default:
+         if (TypeOfOrder==null){
+              createdAt: {
+                  gte: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)   // Date 90 days ago
+              }
+          };
+          break;
+  }};
+  Type(args);
+
   try {
     const orders = await prisma.order.findMany({
-      where: {
-        createdAt: {
-          gte: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)   // Date 90 days ago
-        }
-      },
-      orderBy: getOrderBy(status),
+      where: TypeOfOrder,
+      orderBy:Config,
       include: {
         user: true,
         company: true
-      },
-      
-      
+      }
+
     });
-  
     return orders;
   }
 catch (error) {
