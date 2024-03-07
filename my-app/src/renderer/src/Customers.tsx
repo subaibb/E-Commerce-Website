@@ -2,6 +2,7 @@ import Buttons from './components/_DashComponent/Buttons';
 import Background from './components/_DashComponent/bg';
 import Dropdown from './components/_CustomerComponents/SortDropDown';
 import CustomerHolder from './components/_CustomerComponents/CustomerHolder';
+import PageSwitch from './components/_CustomerComponents/PageSwitch';
 export default function Customers(): JSX.Element {
  
 
@@ -11,6 +12,7 @@ export default function Customers(): JSX.Element {
       <Background/>
       <CustomerHolder/>
       <Dropdown/>
+      <PageSwitch/>
       <Buttons isButton={3}/>
       </> 
     )

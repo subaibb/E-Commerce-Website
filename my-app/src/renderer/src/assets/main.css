@@ -19,6 +19,9 @@ html,body {
   .Stats{
     @apply bg-default rounded-2xl h-[15.7vh] w-[20.4vw] shadow-[2px_4px_4px_#68B6FF0D] relative animate-[300ms_pulse_forwards];
   }
+.animate-me{
+ @apply animate-[300ms_pulse_forwards];
+}
   .Stat-Pic{
     @apply w-[5.5vw] h-[5.5vw] m-auto rounded-xl absolute top-[2.4vh] left-[1.2vw] bg-[length:60px_60px] bg-no-repeat bg-center;  
   }
@@ -333,7 +336,9 @@ a:link {
   border-radius: 8px;
   background-color: #464554;
 }
-
+.Profile-Buttons{
+  @apply relative bg-slate-300 w-[8.1vw] h-[4.5vh] rounded-[12px] text-[14px] text-secondary flex items-center justify-center;
+}
 
 
 @keyframes slideUp{

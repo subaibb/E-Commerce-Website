@@ -25,11 +25,12 @@ export default function SortDropDown(): JSX.Element {
     };
     return (
         <>
-        <button onClick={handleButtonClick} className="  dropDown w-[8.7vw] h-[4.8vh] bg-default border-2 border-[#EAEAEA] absolute left-[14.6vw] top-[12vh] rounded-[12px] transition duration-150">
+        <motion.button onClick={handleButtonClick} className=" animate-me dropDown w-[8.7vw] h-[4.8vh] bg-default border-2 border-[#EAEAEA] absolute left-[14.6vw] top-[12vh] rounded-[12px] transition duration-150"
+        >
         <img src={filters} className=' absolute h-[26px] w-[26px] top-2 left-3'/>
         <label className=" font-semibold absolute top-3 left-[2.6vw] ">Sort By</label>  
         <img src={Arrow} className='absolute h-[22px] w-[17px] left-[6.8vw] top-3'/>
-    </button>
+    </motion.button>
     <AnimatePresence>
     
     {dropDown &&
