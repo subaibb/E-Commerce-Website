@@ -1,7 +1,7 @@
 import Home from '../../public/Home.svg'
 import Orders from '../../public/Orders.svg'
 import Group from '../../public/Group.svg'
-import Money from '../../public/Money.svg'
+import Shop from '../../public/shop-repo.svg'
 import { Link } from 'react-router-dom';
 
 
@@ -21,8 +21,8 @@ export default  function Buttons({isButton}): JSX.Element {
       <Link className='w-fit h-[5.7vh] mb-auto' to={"/Customers"}>
       <button className="primary-btn" style={{ backgroundImage: `url(${Group})`,backgroundColor:isButton===3?'#F7F5F7':''  }}><label>Customers</label></button>
       </Link>
-      <Link className='w-fit h-[5.7vh] mb-auto'  to={"/Money"}>
-      <button className="primary-btn" style={{ backgroundImage: `url(${Money})`,backgroundColor:isButton===4?'#F7F5F7':''  }}><label>Money</label></button>
+      <Link className='w-fit h-[5.7vh] mb-auto'  to={"/Stores"}>
+      <button className="primary-btn" style={{ backgroundImage: `url(${Shop})`,backgroundColor:isButton===4?'#F7F5F7':''  }}><label>Stores</label></button>
       </Link>
     </div>
     </nav>

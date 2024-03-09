@@ -1,8 +1,8 @@
-import Money from '../../public/Money.svg'
-import Orders_pic from '../../public/Orders.svg'
-import Arrowbtn from '../../public/Arrow-btn.svg'
-import Setting from '../../public/Setting.svg'
-import Store_1 from '../../public/Store_1.png'
+import Money from '../../public/Money.svg';
+import Orders_pic from '../../public/Orders.svg';
+import Arrowbtn from '../../public/Arrow-btn.svg';
+import Setting from '../../public/Setting.svg';
+import Store_1 from '../../public/Store_1.png';
 import {motion,AnimatePresence} from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 
@@ -25,7 +25,7 @@ export default  function Company_Holder(): JSX.Element {
           {fetchCompany.data.slice(0, 2).map((company: any) => (
             <Companies key={company.companyId} data={company.companyName} Revenue={(company.total_revenue)} Orders={company.total_orders} />
           ))}
-        
+
       </div>
     )
   }

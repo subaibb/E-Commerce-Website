@@ -3,7 +3,7 @@ import Search from './../../public/Search.svg';
 import DataLabels from "./dataLabels";
 import { useQuery } from '@tanstack/react-query';
 import { useState,useEffect } from 'react';
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = require('electron');
 interface Order {
     id: number;
     user_name: string;

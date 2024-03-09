@@ -10,7 +10,7 @@ const queryClient = new QueryClient();
 const App = lazy(() => import('./App'));
 const Orders = lazy(() => import('./Orders'));
 const Customers = lazy(() => import('./Customers'));
-const Money = lazy(() => import('./Money'));
+const Money = lazy(() => import('./Stores'));
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode> 
@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <Route path="/" element={<App />} />
                 <Route path="/Orders" element={<Orders />} />
                 <Route path="/Customers" element={<Customers />} />
-                <Route path="/Money" element={<Money />} />
+                <Route path="/Stores" element={<Money />} />
                 
             </Routes>
             <ReactQueryDevtools />

@@ -117,7 +117,7 @@ ipcMain.handle('add-order', async (event, args) => {
   const date = args.createdAt;
   const formattedDate = new Date(date);
   const formattedDateStr = formattedDate.toISOString();
-
+console.log(args);
  
   try {
    
@@ -137,8 +137,9 @@ ipcMain.handle('add-order', async (event, args) => {
       // Create the new user
       user = await prisma.user.create({
           data: {
-              name: args.user, // Replace with the customer's name
-              // Other user properties if applicable
+              name: args.user,
+              phone:'null', // Replace with the customer's name
+              createdAt:formattedDateStr// Other user properties if applicable
           },
       });
   }
@@ -632,6 +633,24 @@ ipcMain.handle('overview-orders', async (event, args) => {
         cancelledOrdersCount
       };
 }
+catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+
+});
+
+ipcMain.handle('fetch-customers', async (event, args) => {
+  try {
+    const customers = await prisma.user.findMany({
+      include: {
+        orders: true
+      }
+    });
+
+    return customers;
+  }
+  
 catch (error) {
     console.error('Error fetching users:', error);
     throw error;

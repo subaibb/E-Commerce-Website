@@ -205,7 +205,7 @@ export default  function Add_Form(): JSX.Element {
            
            
                       
-            <label >COMPANY</label>
+            <label >STORE</label>
             <Autocomplete setInput={isEmpty} resetInput={empty} required name="company" options={companyNames} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
           // Manually set value to the form field
           setValue('company', value, { shouldValidate: true});
