@@ -23,6 +23,9 @@ const Change = async (status) => {
         queryClient.refetchQueries({queryKey: ['Company']});
         queryClient.refetchQueries({queryKey: ['allOrders']});
         queryClient.refetchQueries({queryKey: ['Overview']});
+        queryClient.refetchQueries({queryKey: ['CustomerStatus']});
+        queryClient.refetchQueries({queryKey: ['CustomerOverview']});
+        queryClient.refetchQueries({queryKey: ['Customer']});
       }
     });
       

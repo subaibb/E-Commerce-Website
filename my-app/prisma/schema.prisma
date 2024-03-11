@@ -11,11 +11,14 @@ datasource db {
 }
 
 model User {
-  id     String  @id @default(cuid())
-  name   String
-  phone  String
-  createdAt DateTime
-  orders Order[]
+  id             String    @id @default(cuid())
+  name           String
+  phone          String
+  createdAt      DateTime
+  Address        String
+  orders         Order[]
+  CompanyID      String // Define the relation name
+  UserBackground String
 }
 
 model Order {
@@ -34,7 +37,10 @@ model Order {
 }
 
 model company {
-  id     String  @id @default(cuid())
-  name   String
-  orders Order[]
+  id       String   @id @default(cuid())
+  name     String
+  phone    String
+  createdAt DateTime
+  Address  String
+  orders   Order[]
 }

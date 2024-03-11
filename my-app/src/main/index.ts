@@ -4,9 +4,6 @@ import { app, shell, BrowserWindow, ipcMain,screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { PrismaClient } from '@prisma/client';
-import { get } from 'http';
-import { stat } from 'fs';
-import { s } from 'vite/dist/node/types.d-jgA8ss1A';
 const prisma = new PrismaClient();
 function createWindow(): void {
   // Create the browser window.
@@ -113,11 +110,11 @@ catch (error) {
 
 
 ipcMain.handle('add-order', async (event, args) => {
+  const randomNumebr = Math.floor(Math.random() * 10).toString();
   // format the date 
   const date = args.createdAt;
   const formattedDate = new Date(date);
   const formattedDateStr = formattedDate.toISOString();
-console.log(args);
  
   try {
    
@@ -138,8 +135,10 @@ console.log(args);
       user = await prisma.user.create({
           data: {
               name: args.user,
-              phone:'null', // Replace with the customer's name
-              createdAt:formattedDateStr// Other user properties if applicable
+              phone:"null", // Replace with the customer's name
+              createdAt:formattedDateStr,
+              UserBackground:randomNumebr,
+              Address:"null", // Other user properties if applicable
           },
       });
   }
@@ -148,7 +147,10 @@ console.log(args);
     // Create the new user
     company = await prisma.company.create({
         data: {
-            name: args.company, // Replace with the customer's name
+            name: args.company,
+            phone:"null",
+            createdAt:formattedDateStr,
+            Address:"null",// Replace with the customer's name
             // Other user properties if applicable
         },
     });
@@ -168,7 +170,7 @@ console.log(args);
             fabricType: args.address,
             price: args.price,
             createdAt: formattedDateStr,
-            address: "none",
+            address: "null",
         },
     });
     
@@ -448,7 +450,6 @@ let Config;
 let TypeOfOrder;
 ipcMain.handle('all-orders', async (event, args) => {
 
-
 function getOrderBy(args) {
   switch (args) {
     
@@ -499,7 +500,6 @@ function getOrderBy(args) {
   }
 }
 getOrderBy(args);
-
 function Type(args) {
   switch (args) {
 
@@ -640,12 +640,51 @@ catch (error) {
 
 });
 
+let CustomerConfig;
+
 ipcMain.handle('fetch-customers', async (event, args) => {
+
+
+  function Type (args) {
+
+  switch (args) {
+    case 1:
+        CustomerConfig =  [
+          { createdAt: 'desc' },
+          { id: 'desc' },
+        ];
+        break;
+
+    case 2:
+      CustomerConfig = [
+          { name: 'asc' }
+        ];
+        break;
+    case 3:
+       CustomerConfig = [
+        {
+          orders: {
+            _count: 'desc'
+          }
+        }
+      ];
+        break;
+    default:
+      if (CustomerConfig == null) {
+        CustomerConfig = [{ createdAt: 'desc' }, { id: 'desc' }];
+    }
+    break;
+}
+  }
+
+Type(args);
   try {
     const customers = await prisma.user.findMany({
       include: {
         orders: true
-      }
+      },
+      orderBy: CustomerConfig
+      
     });
 
     return customers;
@@ -658,6 +697,330 @@ catch (error) {
 
 });
 
+ipcMain.handle('CustomerOrders', async (event, args) => {
+  try {
+   const CustomerOrders = await prisma.order.findMany({
+      where: {
+        userId: args,
+        createdAt: {
+          gte: new Date(new Date() - 180 * 24 * 60 * 60 * 1000) // Date 180 days ago
+        }
+      },
+      include: {
+        user: true,
+        company: true
+      },
+      orderBy: [
+        {
+           createdAt: 'desc',
+        },
+        {
+           id: 'desc',
+        }
+      ],
+    });
+    return CustomerOrders;
+  }
+  
+catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+
+});
+
+
+ipcMain.handle('get-customer', async (event, args) => {
+
+
+  try {
+    const customer = await prisma.user.findFirst({
+      where: {
+        id: args
+      }
+    });
+    return customer;
+  }
+  
+catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+});
+
+
+
+ipcMain.handle('fetch-overview', async (event, args) => {
+  try {
+   const CustomerPaidOrders = await prisma.order.aggregate({
+    where: {
+      userId: args,
+      status: "Paid",
+      createdAt: {
+        gte: new Date(new Date() - 90 * 24 * 60 * 60 * 1000) // Date 90 days ago  
+      }
+    },
+    _count: true
+    
+    });
+    const CustomerPendingOrders = await prisma.order.aggregate({
+      where: {
+        userId: args,
+        status: "Pending",
+        createdAt: {
+          gte: new Date(new Date() - 90 * 24 * 60 * 60 * 1000) // Date 90 days ago
+        }
+      },
+      _count: true
+      
+      });
+    return {
+      CustomerPaidOrders,
+      CustomerPendingOrders
+    };
+  }
+  
+catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+
+});
+
+ipcMain.handle('customer-status', async (event, args) => {
+
+  const currentMonth  = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  const lastThreeMonths = new Date(new Date().getFullYear(), new Date().getMonth() - 3, 1);
+  const nextThreeMonths    = new Date(new Date().getFullYear(), new Date().getMonth() + 3, 1);
+ 
+
+  try {
+
+ const AllOrdersCurrentRevenue = await prisma.order.findMany({
+    where: {
+      userId: args,
+      createdAt: {
+        gte: currentMonth, // Start of current month
+        lt: nextThreeMonths // Start of next month
+      },
+     status:{ not: 'Cancelled' },
+
+      
+      
+    },
+    select: {
+      amount: true,
+      price: true
+    },
+  });
+
+  const AllOrdersLastRevenue = await prisma.order.findMany({
+    where: {
+      userId: args,
+      createdAt: {
+        gte: lastThreeMonths, // Start of last month
+        lt: currentMonth // End of last month
+      },
+      status:{ not: 'Cancelled' },
+    },
+    select: {
+      amount: true,
+      price: true
+    },
+  });
+
+   const PaidOrdersCurrentRevenue = await prisma.order.findMany({
+      where: {
+        userId: args,
+        createdAt: {
+          gte: currentMonth, // Start of current month
+          lt: nextThreeMonths // Start of next month
+        },
+        
+        status: 'Paid'
+      },
+      select: {
+        amount: true,
+        price: true
+      },
+
+  });
+  const PaidOrdersLastRevenue = await prisma.order.findMany({
+    where: {
+      userId: args,
+      createdAt: {
+        gte: lastThreeMonths, // Start of last month
+        lt: currentMonth // End of last month
+      },
+      
+      status: 'Paid'
+    },
+    select: {
+      amount: true,
+      price: true
+    },
+  });
+
+  const PendingOrdersCurrentRevenue = await prisma.order.findMany({
+    where: {
+      userId: args,
+      createdAt: {
+        gte: currentMonth, // Start of current month
+        lt: nextThreeMonths // Start of next month
+      },
+      
+      status: 'Pending',
+      
+    },
+    select: {
+      amount: true,
+      price: true
+    },
+  });
+
+  const PendingOrdersLastRevenue = await prisma.order.findMany({
+    where: {
+      userId: args,
+      createdAt: {
+        gte: lastThreeMonths, // Start of last month
+        lt: currentMonth // End of last month
+      },
+      
+      status: 'Pending'
+    },
+    select: {
+      amount: true,
+      price: true
+    },
+  });
+
+  const ThisMonthAmount = await prisma.order.findMany({
+    where: {
+      userId: args,
+      createdAt: {
+        gte: currentMonth, // Start of current month
+        lt: nextThreeMonths // Start of next month
+      },
+      status:"Paid",
+      
+    },
+    select: {
+      amount: true,
+      status:"Paid",
+    },
+  });
+
+  const LastMonthAmount = await prisma.order.findMany({
+    where: {
+      userId: args,
+      createdAt: {
+        gte: lastThreeMonths, // Start of last month
+        lt: currentMonth // End of last month
+      },
+      status:"Paid",
+      
+    },
+    select: {
+      amount: true,
+    },
+  });
+
+
+
+// Calculate the percentage change in revenue
+
+//All orders
+
+let AllRevenue = 0;
+let lastRevenue = 0;
+AllOrdersCurrentRevenue.forEach((order) => {
+  const order_totals = order.amount * order.price;
+  AllRevenue += order_totals;
+});
+
+AllOrdersLastRevenue.forEach((order) => {
+  const order_totals = order.amount * order.price;
+  lastRevenue += order_totals;
+});
+
+//Paid orders
+let PaidRevenue = 0;
+let lastPaidRevenue = 0;
+PaidOrdersCurrentRevenue.forEach((order) => {
+  const order_totals = order.amount * order.price;
+  PaidRevenue += order_totals;
+});
+
+PaidOrdersLastRevenue.forEach((order) => {
+  const order_totals = order.amount * order.price;
+  lastPaidRevenue += order_totals;
+});
+
+//Pending orders  
+
+let PendingRevenue = 0;
+let lastPendingRevenue = 0;
+PendingOrdersCurrentRevenue.forEach((order) => {
+  const order_totals = order.amount * order.price;
+  PendingRevenue += order_totals;
+});
+
+PendingOrdersLastRevenue.forEach((order) => {
+  const order_totals = order.amount * order.price;
+  lastPendingRevenue += order_totals;
+});
+
+
+
+let TotalAmount=0;
+ThisMonthAmount.forEach((order) => {
+  TotalAmount += order.amount;
+});
+let LastAmount=0;
+LastMonthAmount.forEach((order) => {
+  LastAmount += order.amount;
+});
+
+
+
+
+
+// Calculate the percentage change in revenue
+
+
+
+const AllOrderPercentageChange = (((AllRevenue - lastRevenue / lastRevenue) * 100).toFixed(2));
+const PaidOrderPercentageChange = (((PaidRevenue - lastPaidRevenue / lastPaidRevenue) * 100).toFixed(2));
+const PendingOrderPercentageChange = (((PendingRevenue - lastPendingRevenue / lastPendingRevenue) * 100).toFixed(2));
+const TotalAmountPercentageChange = (((TotalAmount - LastAmount / LastAmount) * 100).toFixed(2));
+
+
+AllRevenue = AllRevenue.toFixed(2);
+PaidRevenue = PaidRevenue.toFixed(2);
+PendingRevenue = PendingRevenue.toFixed(2);
+TotalAmount = TotalAmount.toFixed(2);
+      return {
+        
+        AllOrderPercentageChange,
+        PaidOrderPercentageChange,
+        PendingOrderPercentageChange,
+        TotalAmountPercentageChange,
+        AllRevenue,
+        PaidRevenue,
+        PendingRevenue,
+        TotalAmount,
+      };
+
+
+
+  }
+  
+catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+
+});
 
 function formatDate(date) {
   const day = date.getDate();

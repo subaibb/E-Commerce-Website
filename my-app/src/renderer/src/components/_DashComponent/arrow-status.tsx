@@ -14,6 +14,10 @@ props: {
 }
 export default  function Arrows({percentage,type}): JSX.Element {
   let img = '';
+
+  if (percentage.length > 4) {
+    percentage = percentage.slice(0,4);
+}
   
   if(type === 'percentage') {
     checker();

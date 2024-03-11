@@ -18,12 +18,15 @@ function List_1({id,setShow,Position,setHover}): JSX.Element {
       await ipcRenderer.invoke('remove-orders', id);
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['orders'] });
-      queryClient.refetchQueries({ queryKey: ['Status'] });
+      queryClient.refetchQueries({queryKey: ['orders'] });
+      queryClient.refetchQueries({queryKey: ['Status'] });
       queryClient.refetchQueries({queryKey: ['Percentage']});
       queryClient.refetchQueries({queryKey: ['Company']});
       queryClient.refetchQueries({queryKey: ['allOrders']});
       queryClient.refetchQueries({queryKey: ['Overview']});
+      queryClient.refetchQueries({queryKey: ['CustomerStatus']});
+      queryClient.refetchQueries({queryKey: ['CustomerOverview']});
+      queryClient.refetchQueries({queryKey: ['Customer']});
     }
   });
     

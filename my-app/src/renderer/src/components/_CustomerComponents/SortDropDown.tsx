@@ -2,6 +2,8 @@ import filters from '../../public/Filters.svg';
 import Arrow from '../../public/dropDown.svg';
 import { useState,useRef,useEffect } from 'react';
 import {motion,AnimatePresence} from 'framer-motion';
+import { useMutation,useQueryClient } from '@tanstack/react-query';
+const ipcRenderer = require('electron').ipcRenderer;
 
 export default function SortDropDown(): JSX.Element {
     const ref = useRef<HTMLDivElement>(null);
@@ -53,12 +55,37 @@ export default function SortDropDown(): JSX.Element {
 
 
 function DropDown ({setDropDown}): JSX.Element {
+
+  const queryClient = useQueryClient();
+
+
+  const ChangeStatusMutation = useMutation({
+    mutationFn: async (value:number) => {
+      await ipcRenderer.invoke('fetch-customers', value);
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: ['CustomerData'] });
+    }
+  });
+
+  const handleButtonClick = (value:number) => {
+    try {
+      ChangeStatusMutation.mutate(value);
+    }
+    catch (error) {
+      console.error('Mutation failed:', error);
+    }
+  };
+
+
+
+
     return (
         <>
        <ul className='customers-list w-[8.7vw] h-[13vh] bg-default rounded-[12px] border-2 border-[#EAEAEA] left-[14.6vw] top-[17vh] absolute flex flex-col'>
-              <li  onClick={()=>{setDropDown(pervstate=>(!pervstate));}}>Name</li>
-              <li  onClick={()=>{setDropDown(pervstate=>(!pervstate));}}>Orders</li>
-              <li  onClick={()=>{setDropDown(pervstate=>(!pervstate));}}>Date</li>
+              <li  onClick={()=>{setDropDown((pervstate:boolean)=>(!pervstate)); handleButtonClick(1)}}>Default</li>
+              <li  onClick={()=>{setDropDown((pervstate:boolean)=>(!pervstate)); handleButtonClick(2)}}>Name</li>
+              <li  onClick={()=>{setDropDown((pervstate:boolean)=>(!pervstate)); handleButtonClick(3)}}>Orders</li>
        </ul>
         </>
     )

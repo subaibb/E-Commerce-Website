@@ -15,6 +15,7 @@ module.exports = {
         company:"#EBEBEB",
         fonts :"#363447",
         form : "#68B6FF",
+        lowerLabels:"#B8B7BC",
     
       }
     },

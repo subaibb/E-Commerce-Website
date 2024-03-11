@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState,useEffect,useContext } from "react";
-import  {PageContext}  from "../../Customers";
+import  {PageContext}  from "../../main";
 const { ipcRenderer } = require('electron');
 
 type PageContextType = {
@@ -44,7 +44,7 @@ function Button ({PageNumber,setPageSwitch,Page}): JSX.Element {
     const handleclick = () => {
         setPageSwitch(PageNumber);
     }
-    console.log(Page);
+    Page;
     return (
         <button onClick={handleclick} className=" bg-[#96C7FF] h-6 w-6 relative rounded-full text-default ml-1 mr-1 font-normal"><span className="relative top-[0.1vh]">{PageNumber}</span></button>
         )
