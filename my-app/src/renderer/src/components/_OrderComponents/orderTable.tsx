@@ -33,7 +33,6 @@ export default function orderTable({opacity,scale}:orderTableProps): JSX.Element
 
 
   const [orders, setOrders] = useState<Order[]>([]);
-  console.log(orders);
  
 ;
   const getOrders = useQuery<Order[], Error>({queryKey: ['allOrders'], queryFn: fetchOrders});

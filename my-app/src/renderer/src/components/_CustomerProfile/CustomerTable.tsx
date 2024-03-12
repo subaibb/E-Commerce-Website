@@ -56,7 +56,7 @@ function TopLabels(): JSX.Element {
 }
 function DataCarrier({data}): JSX.Element {
     return (
-       <div className="CustomerDataCarrier left-[0.2vw] lowLabels w-[58.5vw] h-[50vh] absolute bottom-[3vh] flex flex-col overflow-auto ">
+       <div className="CustomerDataCarrier left-[0.4vw] lowLabels w-[58.5vw] h-[50vh] absolute bottom-[3vh] flex flex-col overflow-auto ">
      
          {data.map((order: Order) => (
               <DataLabels key={order.id} data={order}/>

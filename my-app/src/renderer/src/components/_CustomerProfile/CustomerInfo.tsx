@@ -37,7 +37,7 @@ export default function CustomerInfo({data}): JSX.Element {
 
             <div className="relative m-auto flex flex-col h-[6vh] w-[10vw]">
             <label className="text-lowerLabels text-[15px]">Store</label>
-            <label className="text-primary top-1 relative text-[15px]" >null</label>
+            <label className="text-primary top-1 relative text-[15px]" >{data.StoreName}</label>
             </div>
             
             <div className="relative m-auto flex flex-col h-[6vh] w-[10vw]">

@@ -1,23 +1,14 @@
 import './assets/main.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ReactDOM from 'react-dom/client';
 import {lazy,Suspense}from 'react';
 import { QueryClient,QueryClientProvider} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { createContext } from 'react';
-import { useState } from 'react';
 
-type PageContextType = {
-  Page: number;
-  setPageSwitch: (value: number) => void;
-};
+import { createRoot } from 'react-dom/client';
+import React from 'react';
 
 
-export const PageContext = createContext<PageContextType>({  
-  Page: 1,
-  setPageSwitch: (value: number) => {value},
-  
-});
+
 
 
 const queryClient = new QueryClient();
@@ -27,12 +18,11 @@ const Customers = lazy(() => import('./Customers'));
 const Money = lazy(() => import('./Stores'));
 const CustomerProfile = lazy(() => import('./CustomerProfile'));
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
-
+const root = document.getElementById('root') as HTMLElement;
 function Main(): JSX.Element {
-  const [Page, setPageSwitch] = useState<number>(1);
+  
 return (
-<PageContext.Provider value={{Page, setPageSwitch}}>
+  <React.StrictMode>
     <QueryClientProvider client={queryClient}>
           <Router>
             <Suspense>
@@ -45,11 +35,11 @@ return (
             </Routes>
             <ReactQueryDevtools />
             </Suspense>
-
         </Router>
       </QueryClientProvider>
-      </PageContext.Provider>
+      </React.StrictMode>
 )
 }
-root.render(<Main />)
+createRoot(root).render(<Main />);
+
 

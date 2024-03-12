@@ -13,7 +13,6 @@ export default function StasHolder({id}): JSX.Element {
     }); 
     if (GetStatus.isLoading) return <div>Loading...</div>
     if (GetStatus.isError) return <div>Error</div>
-    console.log(GetStatus.data);
 
   return (
     <div className=" absolute w-[77.9vw] h-[17.4vh] top-[11.3vh] left-[14.8vw] flex">

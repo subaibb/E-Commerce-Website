@@ -1,7 +1,7 @@
 import CustomerLabel from './CustomerLabel';
 import { useQuery } from '@tanstack/react-query';
 import { useContext,useState } from 'react';
-import { PageContext } from '../../main';
+import { PageContext } from '../../Customers';
 import SearchBar from './../_OrderComponents/searchbar';
 const { ipcRenderer } = require('electron');
 

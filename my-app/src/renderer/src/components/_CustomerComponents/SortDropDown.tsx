@@ -5,7 +5,7 @@ import {motion,AnimatePresence} from 'framer-motion';
 import { useMutation,useQueryClient } from '@tanstack/react-query';
 const ipcRenderer = require('electron').ipcRenderer;
 
-export default function SortDropDown(): JSX.Element {
+export default function SortDropDown({Type}): JSX.Element {
     const ref = useRef<HTMLDivElement>(null);
 
     
@@ -42,7 +42,7 @@ export default function SortDropDown(): JSX.Element {
      exit={{opacity:0}}
      transition={{duration:0.07}}
     >
-    <DropDown setDropDown={setDropDown}/>
+    <DropDown setDropDown={setDropDown} Type={Type}/>
     </motion.div>
     }
     </AnimatePresence>
@@ -54,13 +54,15 @@ export default function SortDropDown(): JSX.Element {
 
 
 
-function DropDown ({setDropDown}): JSX.Element {
+function DropDown ({setDropDown,Type}): JSX.Element {
 
   const queryClient = useQueryClient();
 
 
   const ChangeStatusMutation = useMutation({
     mutationFn: async (value:number) => {
+      Type === 1 ?
+      await ipcRenderer.invoke('fetch-stores', value):
       await ipcRenderer.invoke('fetch-customers', value);
     },
     onSuccess: () => {

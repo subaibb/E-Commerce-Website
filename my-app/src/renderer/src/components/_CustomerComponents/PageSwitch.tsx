@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState,useEffect,useContext } from "react";
-import  {PageContext}  from "../../main";
+import  {PageContext}  from "../../Customers";
 const { ipcRenderer } = require('electron');
 
 type PageContextType = {

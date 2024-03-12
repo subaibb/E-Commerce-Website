@@ -138,7 +138,9 @@ ipcMain.handle('add-order', async (event, args) => {
               phone:"null", // Replace with the customer's name
               createdAt:formattedDateStr,
               UserBackground:randomNumebr,
-              Address:"null", // Other user properties if applicable
+              Address:"null",
+              StoreName:"null",
+              CompanyID:"null" // Other user properties if applicable
           },
       });
   }
@@ -151,7 +153,7 @@ ipcMain.handle('add-order', async (event, args) => {
             phone:"null",
             createdAt:formattedDateStr,
             Address:"null",// Replace with the customer's name
-            // Other user properties if applicable
+                            // Other user properties if applicable
         },
     });
 }
@@ -196,14 +198,13 @@ ipcMain.handle('fetch-status', async (event, args) => {
           _all: true,
         },
         where: {
-          AND: [
-            { createdAt: { gte: lastMonthDate} },
-            { createdAt: { lte: today } },
-            { OR: [{ status: 'Paid' }, { status: 'Pending' }] },
-          ],
+          createdAt: {
+            gte: currentMonth, // Start of current month
+            lt: nextMonth // Start of next month
+          },OR: [{ status: 'Paid' }, { status: 'Pending' }]
         },
       });
-
+      console.log(result);
 
       const thisMonthRevenue = await prisma.order.findMany({
         where: {
@@ -426,11 +427,11 @@ lastMonthRevenue.forEach((order) => {
   const order_totals = order.amount * order.price;
   lastRevenue += order_totals;
 });
-const denominator = Math.max(lastRevenue,1);
+
 
   const orderPercentageChange = ((thisMonthOrders - lastMonthOrders));
   const customerPercentageChange = ((Object.keys(thisMonthCustomers).length - Object.keys(lastMonthCustomers).length));
-  const revenuePercentageChange = (((currentRevenue - lastRevenue / denominator * 100).toFixed(2)));
+  const revenuePercentageChange = (((currentRevenue - lastRevenue / lastRevenue * 100).toFixed(2)));
    // Calculate the percentage change in revenue
   return {
     order_percentage_change: orderPercentageChange,
@@ -1020,6 +1021,73 @@ catch (error) {
     throw error;
   }
 
+});
+
+ipcMain.handle("add-customer", async (event, args) => {
+
+  args.address = args.address || "null";
+  args.phone = args.phone || "null";
+  args.company = args.company || "null";  
+  const currentDateISO = new Date().toISOString();
+  const UserBackground = Math.floor(Math.random() * 10).toString();
+  try {
+    const result = await prisma.user.create({
+      data: {
+        name: args.user,
+        phone: args.phone,
+        Address: args.address,
+        createdAt: currentDateISO,
+        UserBackground: UserBackground,
+        StoreName: args.company,
+        CompanyID:"Null"
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw error;
+  }
+});
+
+ipcMain.handle("fetch-All", async (event, args) => {
+  try {
+    const users = await prisma.user.findMany();
+    const companies = await prisma.company.findMany();
+    const fabricType = await prisma.order.findMany({
+      distinct: ['fabricType'],
+      select: {
+        fabricType: true
+      }
+    });
+    return {
+      users,
+      companies,
+      fabricType
+    };
+    }
+    catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+}
+);
+
+
+ipcMain.handle("fetch-customer-name", async (event, args) => {
+  try {
+    const result = await prisma.user.findFirst({
+      where: {
+        id: args
+      },
+      select: {
+        name: true
+      }
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
 });
 
 function formatDate(date) {

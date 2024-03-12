@@ -3,22 +3,45 @@ import Background from './components/_DashComponent/bg';
 import Dropdown from './components/_CustomerComponents/SortDropDown';
 import CustomerHolder from './components/_CustomerComponents/CustomerHolder';
 import PageSwitch from './components/_CustomerComponents/PageSwitch';
+import CustomerForm from './components/_CustomerComponents/CustomerForm';
+import { createContext } from 'react';
+import { useState } from 'react';
+import AddButton from './components/_CustomerComponents/AddCustomer';
+export const FormContext = createContext({
+  form: false,
+  setForm: (value: boolean) => {value},
+});
+
+type PageContextType = {
+  Page: number;
+  setPageSwitch: (value: number) => void;
+};
 
 
+export const PageContext = createContext<PageContextType>({  
+  Page: 1,
+  setPageSwitch: (value: number) => {value},
+  
+});
 
 export default function Customers(): JSX.Element {
-  
- 
+  const [Page, setPageSwitch] = useState<number>(1);
+  const [form, setForm] = useState(false);
 
     return (
       <>
+     <PageContext.Provider value={{Page, setPageSwitch}}> 
+      <FormContext.Provider value={{form, setForm}}>
       <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary'>Customers</h2>
       <Background/>
       <CustomerHolder/>
-      <Dropdown/>
+      <Dropdown Type={2}/>
       <PageSwitch/>
       <Buttons isButton={3}/>
-      
+      <CustomerForm/>
+      <AddButton/>
+      </FormContext.Provider>
+      </PageContext.Provider>
       </> 
     )
   }

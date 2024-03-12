@@ -19,6 +19,7 @@ model User {
   orders         Order[]
   CompanyID      String // Define the relation name
   UserBackground String
+  StoreName      String
 }
 
 model Order {

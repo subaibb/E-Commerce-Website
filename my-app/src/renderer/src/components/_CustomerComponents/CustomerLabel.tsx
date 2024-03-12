@@ -3,7 +3,17 @@ import ManageButton from "./ManageButton"
 import LabelCounters from "./LabelCounters"
 import CustomerPhoto from "./CustomerPhoto"
 import {motion} from "framer-motion"
-export default function CustomerLabel({delay,customer}): JSX.Element {
+
+type Customer = {
+    id: string;
+    name: string;
+    phone: string;
+    createdAt: Date;
+    orders: any;
+    UserBackground: string;
+  };
+
+export default function CustomerLabel({delay,customer}:{delay:number,customer:Customer}):JSX.Element {
 
     return (
         <motion.div className="Customer-Label relative w-[18vw] h-[33vh]  bg-default rounded-xl shadow-[2px_4px_4px_#68B6FF0D]"
@@ -24,7 +34,7 @@ export default function CustomerLabel({delay,customer}): JSX.Element {
             
             <div className=" relative w-[12.7vw] h-[5vh] top-[3vh] left-[2.6vw] items-center justify-center flex flex-col">
             <label className="p-[1vw] relative text-[17px] text-secondary font-normal ">{customer.name}</label> 
-            <label className=" text-[#aba9a9]">0544249195</label>
+            <label className=" text-[#aba9a9]">{customer.phone}</label>
             </div>
             <div className="relative top-[7.8vh] left-[4%] w-[92%] h-[5vh] flex">
                 <ProfileButton id={customer.id}/>

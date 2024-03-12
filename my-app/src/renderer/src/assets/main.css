@@ -268,7 +268,7 @@ a:link {
   @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-semibold text-[16px];
 }
 .dataLabels label{
-  @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px];
+  @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[15px];
 }
 .dataLabels{
   backface-visibility: hidden;  
@@ -358,8 +358,34 @@ a:link {
   border-radius: 8px;
   background-color: #464554;
 }
+.CustomerForm-h1{ 
+  @apply  w-[14.1vw] h-[0.2vh] relative top-[-1vh] transition  !important; 
 
-
+}
+.Back-Button{
+  @apply bg-[length:35px_35px] h-[100%] px-6 bg-no-repeat border-2 border-[#F4F4F5] rounded-xl bg-center transition duration-[350ms] ml-auto;
+}
+.Back-Button:hover{ 
+  @apply bg-[#464554] ;
+  background-image: url('../public/Back-White.svg') !important;
+}
+.Add-Button{  
+  @apply bg-[length:40px_40px] h-[100%] w-[8.91vw] bg-no-repeat border-2 border-[#F4F4F5] rounded-xl transition duration-[350ms] mr-auto bg-left text-lg text-center;
+  background-image: url('../public/Add.svg');
+  text-indent : 1.3vw;
+} 
+.Add-Button:hover{ 
+  @apply bg-[#464554] ;
+  background-image: url('../public/Add-White.svg') !important;
+  color: #FFFFFF;
+  
+} 
+.Add-Button:active{
+  transform: translateY(3px)!important;
+}
+.Back-Button:active{
+  transform: translateY(3px)!important;
+}
 @keyframes slideUp{
   0%{
     opacity: 0.5;
