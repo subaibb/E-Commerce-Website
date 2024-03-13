@@ -20,25 +20,26 @@ export default  function Company_Holder(): JSX.Element {
   if (fetchCompany.isLoading) return <div>Loading...</div>;
   if (fetchCompany.isError) return <div>Error:</div>;
     return (
-      <div className="flex absolute w-[73.9vw] h-[20.5vh] top-[73.7vh] left-[16.2vw] animate-[400ms_slideUp_forwards]" >
+      <div className="flex absolute w-[75.5vw] h-[20.5vh] top-[73.7vh] left-[14.6vw] animate-[400ms_slideUp_forwards]" >
         
-          {fetchCompany.data.slice(0, 2).map((company: any) => (
-            <Companies key={company.companyId} data={company.companyName} Revenue={(company.total_revenue)} Orders={company.total_orders} />
+          {fetchCompany.data.slice(0, 2).map((company: any,index:number) => (
+            <Companies key={company.companyId} data={company.companyName} Revenue={(company.total_revenue)} Orders={company.total_orders} style={index === 0 ? "mr-auto" : "ml-auto"}
+             />
           ))}
 
       </div>
-    )
+    ) 
   }
   
 
-  const Companies = ({data,Revenue,Orders}) => {
+  const Companies = ({data,Revenue,Orders,style}) => {
     const priceString = (Revenue).toFixed(0).toString();
     const formattedPrice = `$${priceString.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 
     return (
      
       <AnimatePresence>
-      <motion.div className=" w-[32.8vw] h-[20.5vh] bg-default m-auto rounded-2xl top-[2.7] relative shadow-[2px_4px_4px_#68B6FF0D]"
+      <motion.div className={` w-[32.8vw] h-[20.5vh] bg-default rounded-2xl ${style} top-[2.7] relative shadow-[2px_4px_4px_#68B6FF0D]`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}

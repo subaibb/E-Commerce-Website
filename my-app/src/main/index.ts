@@ -110,7 +110,7 @@ catch (error) {
 
 
 ipcMain.handle('add-order', async (event, args) => {
-  const randomNumebr = Math.floor(Math.random() * 10).toString();
+  const randomNumebr = Math.floor(Math.random() * 11).toString();
   // format the date 
   const date = args.createdAt;
   const formattedDate = new Date(date);
@@ -204,7 +204,6 @@ ipcMain.handle('fetch-status', async (event, args) => {
           },OR: [{ status: 'Paid' }, { status: 'Pending' }]
         },
       });
-      console.log(result);
 
       const thisMonthRevenue = await prisma.order.findMany({
         where: {
@@ -682,12 +681,20 @@ Type(args);
   try {
     const customers = await prisma.user.findMany({
       include: {
-        orders: true
+        orders: {
+          where: {
+            createdAt: {
+              gte: new Date(new Date() - 180 * 24 * 60 * 60 * 1000) // Date 180 days ago
+            },
+            status: {
+              not: 'Cancelled'
+            }
+          },
+        }
       },
-      orderBy: CustomerConfig
-      
+      orderBy: CustomerConfig,
+    
     });
-
     return customers;
   }
   
@@ -1029,7 +1036,7 @@ ipcMain.handle("add-customer", async (event, args) => {
   args.phone = args.phone || "null";
   args.company = args.company || "null";  
   const currentDateISO = new Date().toISOString();
-  const UserBackground = Math.floor(Math.random() * 10).toString();
+  const UserBackground = Math.floor(Math.random() * 11).toString();
   try {
     const result = await prisma.user.create({
       data: {
@@ -1089,6 +1096,53 @@ ipcMain.handle("fetch-customer-name", async (event, args) => {
     throw error;
   }
 });
+
+ipcMain.handle("fetch-stores", async (event, args) => {
+  try {
+    const result = await prisma.company.findMany();
+    return result;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+});
+
+ipcMain.handle("fetch-top-customers", async (event, args) => {
+  try {
+    const result = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        UserBackground: true,
+        orders: {
+          select: {
+            amount: true,
+            price: true,
+          },
+        },
+        // Other user fields you need
+        _count: {
+          select: { orders: true }, // Count non-cancelled orders within 30 days
+        },
+      },
+      where: {
+        // Your existing user filters (if any)
+        orders: {
+          some: { // Use "some" operator to check for at least one matching order
+            createdAt: { gte: new Date(new Date() - 30 * 24 * 60 * 60 * 1000) }, // Date 30 days ago
+            status: { not: 'Cancelled' }, // Exclude cancelled orders
+          },
+        },
+      },
+      take: 4, // Limit results to 4 users
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+});
+
 
 function formatDate(date) {
   const day = date.getDate();

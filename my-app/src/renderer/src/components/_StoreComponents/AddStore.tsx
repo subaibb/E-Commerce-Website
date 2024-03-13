@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { FormContext } from "../../Customers"
 import {motion} from 'framer-motion';
 
-export default function AddButton (): JSX.Element {
+export default function AddStore (): JSX.Element {
     
         const {form, setForm} = useContext(FormContext);
         form;
@@ -13,12 +13,12 @@ export default function AddButton (): JSX.Element {
     
         return (
             <>
-            <motion.button onClick={handleClick} className="Add-Customer absolute top-[3vh] left-[78vw]"
+            <motion.button onClick={handleClick} className="Add-Store absolute top-[3vh] left-[78vw]"
             initial={{opacity: 0, transform: 'translateY(20%)'}}
             animate={{opacity: 1, transform: 'translateY(0%)'}}
             transition={{duration:0.2}}
             >
-            New Customer
+            New Store
             </motion.button>
             
             </>

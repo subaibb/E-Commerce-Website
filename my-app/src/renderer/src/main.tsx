@@ -17,7 +17,7 @@ const Orders = lazy(() => import('./Orders'));
 const Customers = lazy(() => import('./Customers'));
 const Money = lazy(() => import('./Stores'));
 const CustomerProfile = lazy(() => import('./CustomerProfile'));
-
+const StoreProfile = lazy(() => import('./StoreProfile'));
 const root = document.getElementById('root') as HTMLElement;
 function Main(): JSX.Element {
   
@@ -32,6 +32,7 @@ return (
                 <Route path="/Customers" element={<Customers />} />
                 <Route path="/Stores" element={<Money />} />
                 <Route path="/CustomerProfile/:id" element={<CustomerProfile />} />
+                <Route path="/StoreProfile/:id" element={<StoreProfile />} />
             </Routes>
             <ReactQueryDevtools />
             </Suspense>

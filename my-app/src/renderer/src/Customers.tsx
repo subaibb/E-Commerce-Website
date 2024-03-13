@@ -30,9 +30,10 @@ export default function Customers(): JSX.Element {
 
     return (
       <>
-     <PageContext.Provider value={{Page, setPageSwitch}}> 
+     
       <FormContext.Provider value={{form, setForm}}>
-      <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary'>Customers</h2>
+      <PageContext.Provider value={{Page, setPageSwitch}}> 
+      <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary animate-[400ms_fadeIn_forwards]'>Customers</h2>
       <Background/>
       <CustomerHolder/>
       <Dropdown Type={2}/>
@@ -40,8 +41,9 @@ export default function Customers(): JSX.Element {
       <Buttons isButton={3}/>
       <CustomerForm/>
       <AddButton/>
-      </FormContext.Provider>
       </PageContext.Provider>
+      </FormContext.Provider>
+      
       </> 
     )
   }

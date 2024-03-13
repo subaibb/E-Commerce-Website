@@ -62,7 +62,6 @@ export default  function Data_Label({data}): JSX.Element {
         <label>{data.amount.toString()}</label>
         <label className='total'>{formattedPrice}</label>
         <label>{data.fabricType}</label>
-        <label>{formatDate(data.createdAt)}</label>
         <External isStatus={data.status}/>
         <label className='flex justify-center items-center'>
         <img onClick={handleShow} className='h-[28px] w-[28px] cursor-pointer' src={More}/>
@@ -119,17 +118,3 @@ export default  function Data_Label({data}): JSX.Element {
 
 
 
-  
-  function formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}

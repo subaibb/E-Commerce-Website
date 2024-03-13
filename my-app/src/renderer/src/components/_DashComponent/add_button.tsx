@@ -30,12 +30,19 @@ export default  function Add_Button(): JSX.Element {
 
     return (
       <>
-      <button onClick={()=>{
+      <div className="absolute top-[3vh] left-[78vw] w-[fit] h-[fit]">
+      <motion.button onClick={()=>{
         handleShow();
       }}      
-      className=" button absolute top-[1.3vh] left-[78vw]">
+      className=" Add-Order "
+      initial={{opacity: 0, transform: 'translateY(20%)'}}
+      animate={{opacity: 1, transform: 'translateY(0%)'}}
+      transition={{duration:0.2}}
+      >
         New Order
-      </button>
+      </motion.button>
+      </div>
+      
       <AnimatePresence>
       {show && <motion.div ref={ref} 
         initial={{ opacity: 0}}

@@ -1,10 +1,9 @@
 import Search from './../../public/Search.svg';
-import { useState } from 'react';
 import { useEffect } from 'react';
+import {motion} from 'framer-motion';
+  const searchBar = ({data,setOrders,searchTerm,setSearchTerm}) => { 
 
-  const searchBar = ({data,setOrders}) => { 
-
-    const [searchTerm, setSearchTerm] = useState('');
+   
   
   
     useEffect(() => {
@@ -49,11 +48,11 @@ import { useEffect } from 'react';
 
     return (
     <>
-      <div className="w-[18.6vw] h-[4vh] bg-default rounded-[8px]">
+      <motion.div className="animate-me w-[18.6vw] h-[4vh] bg-default rounded-[8px]">
         <img src={Search} className='absolute h-7 w-7 top-1 left-1' />
         <input onChange={handleSearch}  className="bg-default w-[16.2vw] h-[3.4vh] absolute top-[0.3vh] left-[1.96vw] focus:outline-none text-secondary " type="search" placeholder='Search anything...'  />
 
-      </div> 
+      </motion.div> 
     </>
     
     ) 

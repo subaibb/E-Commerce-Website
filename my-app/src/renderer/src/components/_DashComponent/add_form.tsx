@@ -113,6 +113,7 @@ export default  function Add_Form(): JSX.Element {
                 queryClient.refetchQueries({queryKey: ['Company']});
                 queryClient.refetchQueries({queryKey: ['allOrders']});
                 queryClient.refetchQueries({queryKey: ['fetch-All']});
+                queryClient.refetchQueries({queryKey: ['TopCustomers']});
 
             },
         }); 
@@ -213,7 +214,7 @@ export default  function Add_Form(): JSX.Element {
            
            
                       
-            <label >STORE</label>
+            <label >COMPANY</label>
             <Autocomplete setInput={isEmpty} resetInput={empty} required name="company" options={companyNames} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
           // Manually set value to the form field
           setValue('company', value, { shouldValidate: true});
@@ -232,7 +233,7 @@ export default  function Add_Form(): JSX.Element {
             ,transitionDuration:"0.2s"
             ,padding:"1.6vh 2.7vw"}} type="submit" value='ADD'/>
 
-            <div className=" absolute left-[30vw] top-[16.9vh] h-[3.5vh] w-fit ">
+            <div className=" absolute left-[30vw] top-[16.7vh] h-[3.5vh] w-fit ">
             <input className="unit-type" {...register("unit" ,{required:true ,maxLength:6})} />
             <h1 className="unit-type-h1"></h1> 
             </div>  

@@ -126,6 +126,7 @@ useEffect(() => {
             reset();
             setForm(false);
             queryClient.invalidateQueries({queryKey: ["CustomerData"]});
+            queryClient.invalidateQueries({queryKey: ["getActivePage"]});
         },
     }); 
        const onSubmit = async (formData: any) => {
@@ -150,7 +151,7 @@ useEffect(() => {
             <label className="relative right-[3.6vw] w-[7vw]">PHONE NUMBER</label>
             <input type="text" {...register("phone")}/>
             <h1 className="CustomerForm-h1"></h1>
-            <label className="relative right-[3.6vw] w-[7vw]">STORE</label>
+            <label className="relative right-[3.6vw] w-[7vw]">COMPANY</label>
             <Autocomplete setInput={isEmpty} resetInput={empty} required name="company" options={companyNames} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
                 setValue('company',value);
             }}/>

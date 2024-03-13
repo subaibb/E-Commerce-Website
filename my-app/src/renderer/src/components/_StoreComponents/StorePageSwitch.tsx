@@ -1,28 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState,useEffect,useContext } from "react";
-import  {PageContext}  from "../../Customers";
+import  {PageContext}  from "../../Stores";
 const { ipcRenderer } = require('electron');
 
 type PageContextType = {
-    Page: number;
+    Page: number;   
     setPageSwitch: (value: number) => void;
   };
 
-export default function PageSwitch(): JSX.Element {
+export default function StorePageSwitch(): JSX.Element {
 
     const [activePage, setActivePage] = useState<number>(1);
     const { Page, setPageSwitch } = useContext<PageContextType>(PageContext);
     const Customerdata = useQuery({
         queryKey: ['getActivePage'],
         queryFn: async () => {
-            const data = await ipcRenderer.invoke('fetch-customers');
+            const data = await ipcRenderer.invoke('fetch-company');
             return data;
         },
     });
 
     useEffect(() => {
         if (Customerdata.isSuccess) {
-            const pages = Math.ceil(Customerdata.data.length / 8);
+            const pages = Math.ceil(Customerdata.data.length / 6);
             setActivePage(pages);
         }
     }, [Customerdata.isSuccess, Customerdata.data]);
@@ -31,7 +31,7 @@ export default function PageSwitch(): JSX.Element {
     return (
                 <div className="w-auto h-[4vh] p-2 left-[14.6vw] bottom-[2.5vh] absolute bg-default justify-center items-center rounded-xl flex animate-me shadow-[2px_4px_4px_#68B6FF0D]">
                     {Customerdata.isSuccess && Array.from({ length: activePage }, (_, i) => (
-                 <Button PageNumber={i+1} key={i} setPageSwitch={setPageSwitch} Page={Page} style={i+1===Page ? "bg-[#96C7FF] text-default" : "text-primary"}/>
+                 <Button PageNumber={i+1} key={i} setPageSwitch={setPageSwitch} Page={Page} style={i+1===Page ? "bg-[#61AC68] text-default" : "text-primary"}/>
                     ))}
 
                     

@@ -35,7 +35,7 @@ export default  function Dataholder(): JSX.Element {
     return (
       <>
     
-      <div className='DataCarrier w-[71vw] max-h-[21vh] h-[21vh] absolute top-[7vh] flex overflow-auto flex-col'>
+      <div className='DataCarrier w-[47vw] max-h-[21vh] h-[21vh] absolute top-[7vh] flex overflow-auto flex-col'>
         {getOrders.data.map((order:Order) => (
           <Data_Label data={order} key={order.id} />
         ))}

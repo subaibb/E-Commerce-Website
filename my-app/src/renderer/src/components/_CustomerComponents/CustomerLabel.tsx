@@ -2,7 +2,7 @@ import ProfileButton from "./ProfileButton"
 import ManageButton from "./ManageButton"
 import LabelCounters from "./LabelCounters"
 import CustomerPhoto from "./CustomerPhoto"
-import {motion} from "framer-motion"
+import {motion,AnimatePresence} from "framer-motion"
 
 type Customer = {
     id: string;
@@ -16,6 +16,7 @@ type Customer = {
 export default function CustomerLabel({delay,customer}:{delay:number,customer:Customer}):JSX.Element {
 
     return (
+        <AnimatePresence>
         <motion.div className="Customer-Label relative w-[18vw] h-[33vh]  bg-default rounded-xl shadow-[2px_4px_4px_#68B6FF0D]"
         initial={{scale:0.9, opacity:0}}
         animate={{scale:1, opacity:1}}
@@ -32,17 +33,18 @@ export default function CustomerLabel({delay,customer}:{delay:number,customer:Cu
             </div>
           
             
-            <div className=" relative w-[12.7vw] h-[5vh] top-[3vh] left-[2.6vw] items-center justify-center flex flex-col">
-            <label className="p-[1vw] relative text-[17px] text-secondary font-normal ">{customer.name}</label> 
-            <label className=" text-[#aba9a9]">{customer.phone}</label>
+            <div className="Customer-Card-Label-Holder relative w-[12.7vw] h-[8vh] top-[4vh] left-[2.6vw] flex flex-col">
+            <label className="Customer-Card-Label-1">{customer.name}</label> 
+            <label className="Customer-Card-Label-2">{customer.phone}</label>
             </div>
-            <div className="relative top-[7.8vh] left-[4%] w-[92%] h-[5vh] flex">
+            <div className="relative top-[5vh] left-[4%] w-[92%] h-[5vh] flex">
                 <ProfileButton id={customer.id}/>
                 <ManageButton/>
             </div>
         
              
         </motion.div>
+        </AnimatePresence>
     )
 }
 

@@ -35,7 +35,7 @@ export default  function Versions(): JSX.Element {
     .replace(/(\.\d*)$/, '<span class="decimal">$1</span>')}`;
 
     return (
-      <div className="w-[73.9vw] h-[13.7vh] absolute left-[16.2vw] top-[14.7vh] flex">
+      <div className="w-[78.5vw] h-[13.7vh] absolute left-[14.6vw] top-[14.7vh] flex">
         
         <div className="Stats mr-auto">
 

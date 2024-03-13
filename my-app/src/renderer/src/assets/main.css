@@ -14,7 +14,7 @@ html,body {
     @apply py-[1.6vh] px-[3vw] min-w-[11vw] hover:bg-btnprimary m-auto rounded-2xl transition duration-150 bg-[length:32px_32px] bg-no-repeat  bg-[0.7vw_1.2vh] flex;
   }     
   .primary-btn label{       
-    @apply text-primary relative top-[0.3vh] cursor-pointer;
+    @apply text-primary relative text-[16px] top-[0.3vh] cursor-pointer;
   } 
   .Stats{
     @apply bg-default rounded-2xl h-[15.7vh] w-[20.4vw] shadow-[2px_4px_4px_#68B6FF0D] relative animate-[300ms_pulse_forwards];
@@ -36,17 +36,36 @@ html,body {
   } 
 
   .Label-Holder{
-    @apply  w-[70vw] h-[4vh] absolute top-[2vh] left-[1.5vw] flex;
+    @apply  w-[46vw] h-[4vh] absolute top-[2vh] left-[1vw] flex;
   }
+
   .Label-Holder label{
-    @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-semibold text-[15px];
+    @apply w-[6vw] h-[3vh] text-fonts text-lg text-center m-auto font-semibold text-[15px];
+  }
+  .Customer-Dash label{
+    @apply w-[9vw] h-[3vh] text-fonts text-lg text-center m-auto font-semibold text-[15px];
+  }
+  .Customer-Label label{
+    @apply w-[6vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px];
+
   }   
   .Data-Holder{
-    @apply  w-[70vw] min-h-[5vh] relative left-[0vw] flex  hover:bg-[#faf9f9] transition duration-150;
+    @apply  w-[46vw] min-h-[5vh] relative left-[0vw] flex  hover:bg-[#faf9f9] transition duration-150;
   } 
   .Data-Holder label{
-    @apply w-[8vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px] whitespace-nowrap;
+    @apply w-[6vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px] whitespace-nowrap;
   }
+
+  .Data-Holder-CustomerCard label{
+    @apply min-w-[9vw] h-[3vh] text-fonts text-lg text-center m-auto font-medium text-[14px] whitespace-nowrap;
+  }
+  .Data-Holder-CustomerCard-Label-Order{
+    min-width: 2.5vw !important;
+  }
+  .Data-Holder-CustomerCard-Label-Total{
+    min-width: 4vw !important;
+  }
+
 
   .DataCarrier::-webkit-scrollbar {
     left: 2vw;
@@ -363,14 +382,14 @@ a:link {
 
 }
 .Back-Button{
-  @apply bg-[length:35px_35px] h-[100%] px-6 bg-no-repeat border-2 border-[#F4F4F5] rounded-xl bg-center transition duration-[350ms] ml-auto;
+  @apply bg-[length:35px_35px] h-[100%] px-6 bg-no-repeat border-2 border-[#F4F4F5] rounded-xl bg-center transition-all duration-[300ms] ml-auto;
 }
 .Back-Button:hover{ 
   @apply bg-[#464554] ;
   background-image: url('../public/Back-White.svg') !important;
 }
 .Add-Button{  
-  @apply bg-[length:40px_40px] h-[100%] w-[8.91vw] bg-no-repeat border-2 border-[#F4F4F5] rounded-xl transition duration-[350ms] mr-auto bg-left text-lg text-center;
+  @apply bg-[length:40px_40px] h-[100%] w-[8.91vw] bg-no-repeat border-2 border-[#F4F4F5] rounded-xl transition-all duration-[300ms] mr-auto bg-left text-lg text-center;
   background-image: url('../public/Add.svg');
   text-indent : 1.3vw;
 } 
@@ -385,6 +404,62 @@ a:link {
 }
 .Back-Button:active{
   transform: translateY(3px)!important;
+}
+.Add-Customer{
+  @apply bg-[length:40px_40px] h-[5vh] w-[12vw] bg-no-repeat border-2 border-[#F4F4F5] rounded-xl transition-all duration-[300ms] mr-auto bg-left text-lg text-center;
+  background-image: url('../public/Add.svg');
+  text-indent : 1.3vw;
+}
+.Add-Customer:hover{ 
+  @apply bg-[#464554] ;
+  background-image: url('../public/Add-White.svg') !important;
+  color: #FFFFFF;
+  
+}
+.Add-Customer:active{
+  transform: translateY(3px)!important;
+}
+
+.Add-Order{
+  @apply bg-[length:40px_40px] h-[5vh] w-[12vw] text-[#49A7FF] bg-no-repeat border-2 border-[#F4F4F5] rounded-xl transition-all duration-[300ms] mr-auto bg-left text-lg text-center;
+  background-image: url('../public//Add-Blue.svg');
+  text-indent : 1.3vw;
+}
+.Add-Order:hover{ 
+  @apply bg-[#49A7FF] ;
+  background-image: url('../public/Add-White.svg') !important;
+  color: #FFFFFF;
+  
+}
+.Add-Order:active{
+  transform: translateY(3px)!important;
+}
+
+.Add-Store{
+  @apply bg-[length:40px_40px] h-[5vh] w-[12vw] text-[#61AC68] bg-no-repeat border-2 border-[#F4F4F5] rounded-xl transition-all duration-[300ms] mr-auto bg-left text-lg text-center;
+  background-image: url('../public//Add-Green.svg');
+  text-indent : 1.3vw;
+}
+.Add-Store:hover{ 
+  @apply bg-[#61AC68] ;
+  background-image: url('../public/Add-White.svg') !important;
+  color: #FFFFFF;
+
+}
+.Add-Store:active{
+  transform: translateY(3px)!important;
+}
+.Customer-Card-Label-1{
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  width: 12vw !important;
+  color: #464554 !important;
+}
+.Customer-Card-Label-2{
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  width: 12vw !important;
+  color: #B8B7BC !important;
 }
 @keyframes slideUp{
   0%{
