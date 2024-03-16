@@ -1,27 +1,31 @@
 import { useForm } from "react-hook-form"
 import { useMutation ,useQuery,useQueryClient } from '@tanstack/react-query';
-import Autocomplete from "./AutoComplete";
+import Autocomplete from "@renderer/components/_DashComponent/AutoComplete";
 import { useState,useEffect } from "react";
+import { useContext } from "react";
+import { ShowContextAllOrders } from "@renderer/Orders"; 
+import { AllDataContext } from "@renderer/Orders";
 const { ipcRenderer } = require('electron')
-const date = new Date();
 
-interface Order {
-    user: string;
-    amount: number;
-    address: string;
-    status: string;
-    createdAt: string;
-    price: number;
-    company: string;
-    unit: string;
-    respose : boolean;
-    autocomplete: string;
+type DataType  = {
+    User:string,
+    Company:string,
+    Amount:number,
+    Price:number,
+    FabricType:string,
+    Unit:string,
+    Status:string,
+    CreatedAt:string,
+    OrderID?:string,
 }
+  
 const submitFormData = async (formData: FormData): Promise<void> => {
     
     try {
         // Send data via ipcRenderer
-      await ipcRenderer.invoke('add-order', formData);
+
+      
+      await ipcRenderer.invoke('edit-order', formData);
     } catch (error) {   
         // Handle errors
         console.error('Mutation failed:', error);
@@ -35,14 +39,31 @@ const fetchAll = async () => {
 
 
 
-export default  function Add_Form(): JSX.Element {
+export default  function editForm(): JSX.Element {
+
+
+    const {AllData} = useContext(AllDataContext); 
+    useEffect(() => {   
+        if (AllData === undefined) {
+            return;
+        }
+        setValue('Amount', AllData.Amount);
+        setValue('Price', AllData.Price);
+        setValue('CreatedAt', formatDate(AllData.CreatedAt));
+        setValue('User', AllData.User);
+        setValue('Company', AllData.Company);
+        setValue('FabricType', AllData.FabricType);
+        setValue('Unit', AllData.Unit);
+        setValue('Status', AllData.Status);
+        setValue('OrderID', AllData.OrderID);
+    }, [AllData]);
+
     const queryClient = useQueryClient();
     const [dataNames, setDataNames] = useState<string[]>([]); // Specify string[] as the type
     const [companyNames, setCompanyNames] = useState<string[]>([]); // Specify string[] as the type
     const [fabricType, setFabricType] = useState<string[]>([]); // Specify string[] as the type
-
     const [empty, isEmpty] = useState(false);
-
+    const {setVisiableAll} = useContext(ShowContextAllOrders);
     const GetAllData =  useQuery({queryKey: ["fetch-All"], queryFn: fetchAll});
     useEffect(() => {
 
@@ -86,15 +107,17 @@ export default  function Add_Form(): JSX.Element {
             setValue,
 
 
-        } = useForm<Order>({
-            defaultValues: {
-                user: "",
-                address: "",
-                status: "Pending",
-                createdAt: formatDate(date),
-                company: "",    
-                unit :"Meters",
-                autocomplete: "",
+        } = useForm<DataType>({
+            defaultValues: 
+            {
+                User: '',
+                Company: '',
+                Amount: 0,
+                Price: 0,
+                FabricType: '',
+                Unit: '',
+                Status: '',
+                CreatedAt: '',
             }
         });
         const { errors } = formState;
@@ -105,6 +128,7 @@ export default  function Add_Form(): JSX.Element {
                     throw error;
             },
             onSuccess: () => {
+                setVisiableAll(false);
                 isEmpty(!empty);
                 reset();
                 queryClient.refetchQueries({queryKey: ['orders']});
@@ -123,9 +147,17 @@ export default  function Add_Form(): JSX.Element {
         const onSubmit = async (formData: any) => {
             try {
 
-                const trimmedData:any = trimObjectValues(formData);
-                setValue('autocomplete','')
-                NewOrder.mutate(trimmedData)
+                const formattedForData = trimObjectValues(formData);
+                const Keys1 = Object.keys(formattedForData);
+
+                for (const key of Keys1) {
+                    if (formattedForData[key] !== AllData[key]) {
+                        NewOrder.mutate(formData)
+                    }
+                  }
+                  setVisiableAll(false);
+                  isEmpty(!empty);
+                    reset();
             } catch (error) {
                 console.error('Mutation failed:', error);
             }
@@ -143,16 +175,16 @@ export default  function Add_Form(): JSX.Element {
                 
                 
             <label >NAME</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="user" options={dataNames} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="User" options={dataNames} placeholder="" value={AllData.User|| ""} register={register} errors={errors} validationSchema={{required:true,minLength:{value: 3}}} onChange={(value) => {
           // Manually set value to the form field
-          setValue('user', value, { shouldValidate: true});
+          setValue('User', value, { shouldValidate: true});
         }}/>
             
                             
             <label >AMOUNT</label>
 
-            <input type="number" step=".01"{...register("amount" ,{required:true ,valueAsNumber:true})} />
-            {errors.amount ? (
+            <input type="number" step=".01"{...register("Amount" ,{required:true ,valueAsNumber:true})} />
+            {errors.Amount ? (
                 <h1 style={{ backgroundColor:"#FF6D6D"}}>
                     <p className="text-[12px] text-[#FF6D6D]">Please insert a proper amount</p>
                 </h1>
@@ -166,14 +198,14 @@ export default  function Add_Form(): JSX.Element {
                     
                 
             <label >FABRIC</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="address" options={fabricType} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="FabricType" options={fabricType} placeholder="" value={AllData.FabricType || ""} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
           // Manually set value to the form field
-          setValue('address', value, { shouldValidate: true});
+          setValue('FabricType', value, { shouldValidate: true});
         }}/>
 
                       <label >DATE</label>
-                <input type="date" {...register("createdAt" ,{required:true})} />
-                {errors.createdAt ? (
+                <input type="date" {...register("CreatedAt" ,{required:true})} />
+                {errors.CreatedAt ? (
                 <h1 style={{ backgroundColor:"#FF6D6D"}}>
                     <p className="text-[12px] text-[#FF6D6D]">Please type a proper address</p>
                 </h1>
@@ -190,8 +222,9 @@ export default  function Add_Form(): JSX.Element {
             <div className="form-box-2 relative h-[23.7vh] w-[14.1vw] flex flex-col ml-auto mr-auto top-[3.8vh]">
 
             <label >STATUS</label>
-                <input type="text" {...register("status" ,{required:true})}/>
-                {errors.status ? (  
+                <input type="text"  {...register('Status', {required:true,pattern: {value: /^\S(?:.*\S)?$/,
+                message: 'Invalid input, leading or trailing spaces are not allowed',},})}/>
+                {errors.Status ? (  
                 <h1 style={{ backgroundColor:"#FF6D6D"}}>
                     <p className="text-[12px] text-[#FF6D6D]">Please type a proper state</p>
                 </h1>
@@ -201,8 +234,8 @@ export default  function Add_Form(): JSX.Element {
                 )}
                       
             <label >UNIT PRICE</label>
-            <input className="unit" type="number" step=".01" {...register("price" ,{required:true , valueAsNumber:true})} />
-            {errors.price ? (
+            <input className="unit" type="number" step=".01" {...register("Price" ,{required:true , valueAsNumber:true})} />
+            {errors.Price ? (
                 <h1 className="unit-h1 " style={{ backgroundColor:"#FF6D6D"}}>
                     <p className="text-[12px] text-[#FF6D6D]">Please insert a value.</p>
                 </h1>
@@ -218,14 +251,14 @@ export default  function Add_Form(): JSX.Element {
            
                       
             <label >COMPANY</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="company" options={companyNames} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="Company" options={companyNames} placeholder="" value={AllData.Company || ""} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
           // Manually set value to the form field
-          setValue('company', value, { shouldValidate: true});
+          setValue('Company', value, { shouldValidate: true});
         }}/>
 
             </div>
 
-            <input style={{backgroundColor: formState.isValid?'#68B6FF':'#d6d7d8'
+            <input style={{backgroundColor: formState.isValid?'#febf19':'#d6d7d8'
             ,pointerEvents: formState.isValid?'auto':'none'
             , position:"absolute"
             ,top:"29.9vh"
@@ -234,10 +267,10 @@ export default  function Add_Form(): JSX.Element {
             ,color:"#FEFEFE"
             ,fontSize:"16px"
             ,transitionDuration:"0.2s"
-            ,padding:"1.6vh 2.7vw"}} type="submit" value='ADD'/>
+            ,padding:"1.6vh 2.7vw"}} type="submit" value='UPDATE'/>
 
             <div className=" absolute left-[30vw] top-[16.7vh] h-[3.5vh] w-fit ">
-            <input className="unit-type" {...register("unit" ,{required:true ,maxLength:6})} />
+            <input className="unit-type" {...register("Unit" ,{required:true ,maxLength:6})} />
             <h1 className="unit-type-h1"></h1> 
             </div>  
                            

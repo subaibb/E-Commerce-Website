@@ -27,12 +27,12 @@ export default  function Company_Holder(): JSX.Element {
   if (fetchCompanys.isLoading) return <div></div>;
   if (fetchCompanys.isError) return <div>Error:</div>;
 
-  console.log ();
+  console.log (fetchCompanys.data);
 
     return (
       <div className="flex absolute w-[78.5vw] h-[20.5vh] top-[73.7vh] left-[14.8vw] animate-[400ms_slideUp_forwards] justify-between" >
-        {fetchCompanys.data.updatedMainArray.slice(0,2).map((company,index) => (
-          <Companies   backgroundColor={company.CompanyBackground} id={company.id} key={company.id} data={company.name} Revenue={CalculateRevenue(fetchCompanys.data.updatedMainArray[index].orders)} Orders={fetchCompanys.data.CompanyOrder[index].orders.length} style={`animate-[${index*100}ms_slideUp_forwards]`} />
+        {fetchCompanys.data.slice(0,2).map((company,index) => (
+          <Companies   backgroundColor={company.StoreBackground} id={company.companyId} key={company.companyId} data={company.storeName} Revenue={company.totalPaid} Orders={company.notCancelledOrdersCount} style={`animate-[${index*100}ms_slideUp_forwards]`} />
         ))
         }
           
@@ -83,12 +83,4 @@ export default  function Company_Holder(): JSX.Element {
     </motion.div>
     </AnimatePresence>  
     )
-  }
-
-  const CalculateRevenue = (orders) => {
-    let total = 0;
-    orders.forEach(order => {
-      total += parseInt(order.total);
-    });
-    return total;
   }

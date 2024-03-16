@@ -4,7 +4,6 @@ import { app, shell, BrowserWindow, ipcMain,screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { PrismaClient } from '@prisma/client';
-import {faker} from '@faker-js/faker';
 
 const prisma = new PrismaClient();
 function createWindow(): void {
@@ -95,7 +94,7 @@ const nextSixMonths    = new Date(new Date().getFullYear(), new Date().getMonth(
 
 
 //generate random customers 
-
+/*
 function RandomCustomer() {
   Array.from({ length: 100 }, async () => {
     const randomNumebr = Math.floor(Math.random() * 11).toString();
@@ -122,7 +121,7 @@ function RandomCustomer() {
   )};
 
 
-
+*/
 
 ipcMain.handle('fetch-orders', async (event, args) => {
  
@@ -161,8 +160,8 @@ ipcMain.handle('add-order', async (event, args) => {
   // format the date 
   const date = args.createdAt;
   const formattedDate = new Date(date);
-  const formattedDateStr = formattedDate.toISOString();
- 
+  const formattedDateOrder= formattedDate.toISOString();
+  const formattedDateStr = new Date().toISOString();
   try {
    
     let user = await prisma.user.findFirst({
@@ -218,7 +217,7 @@ ipcMain.handle('add-order', async (event, args) => {
             unit: args.unit,
             fabricType: args.address,
             price: args.price,
-            createdAt: formattedDateStr,
+            createdAt: formattedDateOrder,
             address: "null",
         },
     });
@@ -386,28 +385,28 @@ ipcMain.handle('fetch-top-company', async (event, args) => {
 
   try {
    
-    const Company = await prisma.company.findMany({
+    const companies = await prisma.company.findMany({
       include: {
+        
         orders: {
           where: {
             createdAt: {
-             gte :thirtyDaysAgo  // Date 30 days ago
+              gte : ninetyDaysAgo  // Date 90 days ago
             },
-            status:"Paid",
+            status :{
+              not: 'Cancelled',
+            }
           },
           select: {
             amount: true,
             price: true,
-            
+            status: true,
           },
         },
-        
-        // Other user fields you need
-      
         _count: {
           select: {orders: true },
-           // Count non-cancelled orders within 30 days
         },
+        
         
       },
       orderBy: [
@@ -420,59 +419,48 @@ ipcMain.handle('fetch-top-company', async (event, args) => {
      ],
     });
 
-    const CompanyOrder = await prisma.company.findMany({
-      include: {
-        orders: {
-          where: {
-            createdAt: {
-              gte : thirtyDaysAgo  // Date 30 days ago
-            },
-            status: {
-              not: 'Cancelled'
-            }
-          },
-        },
-        
+    const companyCounts: { 
+      companyId: string, 
+      storeName: string,
+      paidOrdersCount: number,
+      notCancelledOrdersCount: number,
+      totalPaid: number,
+      StoreBackground : string,
+    }[] = [];
 
-
-      },
-      orderBy: [
-        {
-           createdAt: 'desc',
-        },
-        {
-           id: 'desc',
+    // Iterate through each company
+    companies.forEach(company => {
+      const companyId = company.id;
+      const storeName = company.name; 
+      const StoreBackground = company.CompanyBackground;
+      // Initialize counts for the current company
+      let paidOrdersCount = 0;
+      let notCancelledOrdersCount = 0;
+      let totalPaid = 0;
+    
+      // Iterate through each order of the current company
+      company.orders.forEach(order => {
+        if (order.status === "Paid") {
+          // Increment count of paid orders for the current company
+          paidOrdersCount++;
+    
+          // Calculate total for the paid order and add it to the totalPaid
+          totalPaid += order.amount * order.price;
         }
-     ],
-    });
-    
-    
-
-    const updatedMainArray = Company.map(obj => {
-      const updatedOrders = obj.orders.map(order => ({
-        ...order,
-        total: (order.amount * order.price).toFixed(2),
-      }));
-      return { ...obj, orders: updatedOrders };
-    });
-    let totalRevenue = 0;
-
-
-    updatedMainArray.forEach((company) => {
-      company.orders.forEach((order) => {
-        const order_totals = order.amount * order.price;
-        totalRevenue += order_totals;
+        if (order.status !== "Cancelled") {
+          // Increment count of not cancelled orders for the current company
+          notCancelledOrdersCount++;
+        }
       });
+    
+      // Add the counts to the companyCounts array
+      companyCounts.push({ companyId, storeName, paidOrdersCount, notCancelledOrdersCount, totalPaid, StoreBackground});
     });
 
-    updatedMainArray.sort((a, b) => {
-      return b.orders.length - a.orders.length;
-    });
+    //sort according to orders 
+    companyCounts.sort((a, b) => b.paidOrdersCount - a.paidOrdersCount);
 
-    return {
-      updatedMainArray,
-      CompanyOrder,
-    };
+    return companyCounts;
   }
 
   
@@ -571,6 +559,8 @@ ipcMain.handle('fetch-percentage', async (event, args) => {
   });
 
   //Revenue this month
+
+
 
 const thisMonthRevenue = await prisma.order.findMany({
   where: {
@@ -726,7 +716,7 @@ function Type(args) {
         case 11:
           TypeOfOrder = {
               createdAt: {
-                  gte: ninetyDaysAgo  // Date 180 days ago
+                  gte: sexMonthsAgo  // Date 180 days ago
               }
           };
           break;
@@ -2052,6 +2042,7 @@ ipcMain.handle("fetch-order",async (event, args) => {
       }
     });
     return {
+      OrderID:result?.id,
       User:result?.user.name,
       Company:result?.company.name,
       Amount:result?.amount,
@@ -2059,10 +2050,110 @@ ipcMain.handle("fetch-order",async (event, args) => {
       FabricType:result?.fabricType,
       Unit:result?.unit,
       Status:result?.status,
-      CreatedAt:result?.createdAt
+      CreatedAt:formatDate(result?.createdAt),
     }
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error;
   }
 });
+
+ipcMain.handle("edit-order", async (event, args) => {
+
+  const randomNumebr = Math.floor(Math.random() * 11).toString();
+
+  const dateStr = args.CreatedAt;
+  const formattedDate = new Date(dateStr);
+  const formattedDateOrder = formattedDate.toISOString();
+
+  const CurrentDate = new Date();
+  const formattedDateStr = new Date(CurrentDate).toISOString();
+
+  try {
+
+    let user = await prisma.user.findFirst({
+      where: {
+          name: args.User, // Replace with the customer's name
+      },
+  });
+  let company = await prisma.company.findFirst({
+    where: {
+      name: args.Company, // Replace with the customer's name
+    },
+});
+
+  // If the user doesn't exist, create a new user
+  if (!user) {
+      // Create the new user
+      user = await prisma.user.create({
+          data: {
+              name: args.User,
+              phone:"null", // Replace with the customer's name
+              createdAt:formattedDateStr,
+              UserBackground:randomNumebr,
+              Address:"null",
+              StoreName:"null",
+              CompanyID:"null" // Other user properties if applicable
+          },
+      });
+  }
+
+  if (!company) {
+    // Create the new user
+    company = await prisma.company.create({
+        data: {
+            name: args.Company,
+            phone:"null",
+            createdAt:formattedDateStr,
+            Address:"null",
+            CompanyBackground :randomNumebr,       // Replace with the customer's name
+                            // Other user properties if applicable
+        },
+    });
+}
+
+    const result = await prisma.order.update({
+      where: {
+        id: args.OrderID
+      },
+      data: {
+        amount: args.Amount,
+        price: args.Price,
+        fabricType: args.FabricType,
+        unit: args.Unit,
+        status: args.Status,
+        user :{
+          connect: {id: user.id}
+        },
+        company: {
+          connect: {id: company.id}
+        },
+        createdAt: formattedDateOrder,
+      }
+    });
+   
+    return result;
+    
+     
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+});
+
+
+function formatDate(date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+  if (month.length < 2) 
+      month = '0' + month;
+  if (day.length < 2) 
+      day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
+

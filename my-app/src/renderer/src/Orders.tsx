@@ -3,10 +3,66 @@ import Status from './components/_OrderComponents/status'
 import OrderTable from './components/_OrderComponents/orderTable'
 import Add_Button from './components/_DashComponent/add_button'
 import OrderReveiw from './components/_OrderComponents/orderreveiw'
-import {  useState,useRef,useEffect } from 'react';
+import EditBox from './components/_OrderComponents/EditBox'
+import {createContext } from 'react'
+import {useState,useRef,useEffect } from 'react';
+
+
+type ShowType = {
+  Allvisiable: boolean;
+  setVisiableAll: (value: boolean) => void;
+};
+
+
+
+type DataType = {
+  User:string,
+  Company:string,
+  Amount:number,
+  Price:number,
+  FabricType:string,
+  Unit:string,
+  Status:string,
+  CreatedAt:string,
+  OrderID?:string,
+}
+
+type AllDataContextType = {
+  AllData: DataType;
+  setAllData: (value: any) => void;
+};
+export const AllDataContext = createContext<AllDataContextType>({
+  AllData: {User:'', Company:'', Amount:0, Price:0, FabricType:'', Unit:'', Status:'', CreatedAt:''},
+  setAllData: (value: any) => {value},
+})
+
+export const ShowContextAllOrders = createContext<ShowType>({
+  Allvisiable: false,
+  setVisiableAll: (value: boolean) => {value},
+})
+
 
 
 export default function Orders(): JSX.Element {
+
+
+  const [Allvisiable, setVisiableAll] = useState(false);
+  const [AllData, setAllData] = useState<any>({
+    User:'',
+    Company:'',
+    Amount:0,
+    Price:0,
+    FabricType:'',
+    Unit:'',
+    Status:'',
+    CreatedAt:'',
+  });
+  useEffect(() => {
+    setAllData({User:'', Company:'', Amount:0, Price:0, FabricType:'', Unit:'', Status:'', CreatedAt:''});
+  },[Allvisiable]);
+  
+
+
 
   const [scale, setScale] = useState(0.95);
   const [statscale, setStatscale] = useState(1);
@@ -96,6 +152,8 @@ export default function Orders(): JSX.Element {
 
     return (
       <>
+     <AllDataContext.Provider value={{AllData, setAllData}}>
+    <ShowContextAllOrders.Provider value={{Allvisiable, setVisiableAll}}>
       <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary animate-[400ms_fadeIn_forwards] '>Orders</h2>
       <div className=" h-[89.7vh] w-[81.9vw] bg-bg left-[12.2vw] top-[3.9vh] relative rounded-3xl ">
         <div onScroll={handleScroll} id='my-div' ref={elementRef} className=' Background  w-[99.6%] h-[97%] overflow-auto absolute top-[1vh]'>
@@ -107,7 +165,10 @@ export default function Orders(): JSX.Element {
       </div>
       
       <Add_Button/>
+      <EditBox/>
       <Buttons/>
+      </ShowContextAllOrders.Provider>
+      </AllDataContext.Provider>
       </> 
     )
   }

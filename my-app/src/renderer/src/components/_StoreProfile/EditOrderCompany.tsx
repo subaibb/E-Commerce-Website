@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form"
 import { useMutation ,useQuery,useQueryClient } from '@tanstack/react-query';
-import Autocomplete from "./AutoComplete";
+import Autocomplete from "../_DashComponent/AutoComplete";
 import { useState,useEffect } from "react";
+import { DataContextCompany,ShowContextCompany } from "@renderer/StoreProfile";
 import { useContext } from "react";
-import { ShowContext } from '../../App';
-import { DataContext } from "../../App";
 const { ipcRenderer } = require('electron')
+const date = new Date();
 
 type DataType  = {
     User:string,
@@ -18,13 +18,14 @@ type DataType  = {
     CreatedAt:string,
     OrderID?:string,
 }
-  
 const submitFormData = async (formData: FormData): Promise<void> => {
+
+
+    
     
     try {
+        console.log(formData);
         // Send data via ipcRenderer
-
-      
       await ipcRenderer.invoke('edit-order', formData);
     } catch (error) {   
         // Handle errors
@@ -39,32 +40,32 @@ const fetchAll = async () => {
 
 
 
-export default  function editForm(): JSX.Element {
-
-
-    const {Data} = useContext(DataContext); 
-    useEffect(() => {   
-        if (Data === undefined) {
-            return;
-        }
-        setValue('Amount', Data.Amount);
-        setValue('Price', Data.Price);
-        setValue('CreatedAt', formatDate(Data.CreatedAt));
-        setValue('User', Data.User);
-        setValue('Company', Data.Company);
-        setValue('FabricType', Data.FabricType);
-        setValue('Unit', Data.Unit);
-        setValue('Status', Data.Status);
-        setValue('OrderID', Data.OrderID);
-    }, [Data]);
-
+export default  function CustomerAddForm(): JSX.Element {
     const queryClient = useQueryClient();
-    const [dataNames, setDataNames] = useState<string[]>([]); // Specify string[] as the type
-    const [companyNames, setCompanyNames] = useState<string[]>([]); // Specify string[] as the type
+    const [CustomerNames,setCustomerNames] = useState<string[]>([]);
     const [fabricType, setFabricType] = useState<string[]>([]); // Specify string[] as the type
+    const {DataCompany} = useContext(DataContextCompany);
     const [empty, isEmpty] = useState(false);
-    const {setVisiable} = useContext(ShowContext);
+    const {isCompanyVisible} = useContext(ShowContextCompany);
     const GetAllData =  useQuery({queryKey: ["fetch-All"], queryFn: fetchAll});
+
+
+    useEffect(() => {   
+        if (DataCompany === undefined) {
+            return;
+        }-
+        setValue('Amount', DataCompany.Amount);
+        setValue('Price', DataCompany.Price);
+        setValue('CreatedAt', formatDate(DataCompany.CreatedAt));
+        setValue('User', DataCompany.User);
+        setValue('Company', DataCompany.Company);
+        setValue('FabricType', DataCompany.FabricType);
+        setValue('Unit', DataCompany.Unit);
+        setValue('Status', DataCompany.Status);
+        setValue('OrderID', DataCompany.OrderID);
+    }, [DataCompany]);
+
+
     useEffect(() => {
 
         const data = GetAllData.data as { 
@@ -74,28 +75,23 @@ export default  function editForm(): JSX.Element {
             // Add other properties as needed 
           };
 
-        if (GetAllData.isSuccess && GetAllData.data!==undefined) {
-            const dataNamesSet = new Set<string>(); // Specify string as the type
-            const companyNamesSet = new Set<string>(); // Specify string as the type
+          if (GetAllData.isSuccess && GetAllData.data!==undefined) {
+            const customerNamesSet = new Set<string>(); // Specify string as the type
             const fabricTypeSet = new Set<string>(); // Specify string as the type
-            data.users.forEach((user) => {
-                dataNamesSet.add(user.name);
-            });
 
-            data.companies.forEach((company) => {
-                companyNamesSet.add(company.name);
-            }
-            );
-
-            data.fabricType.forEach((fabric) => {
-                fabricTypeSet.add(fabric.fabricType);
-
-            });
-            setDataNames(Array.from(dataNamesSet));
-            setCompanyNames(Array.from(companyNamesSet));
-            setFabricType(Array.from(fabricTypeSet));
+        data.users.forEach((user) => {
+            customerNamesSet.add(user.name);
         }
-    }, [GetAllData.isSuccess, GetAllData.data]);
+        );
+
+        data.fabricType.forEach((fabric) => {
+            fabricTypeSet.add(fabric.fabricType);
+
+        });
+        setCustomerNames(Array.from(customerNamesSet));
+        setFabricType(Array.from(fabricTypeSet));
+    }
+}, [GetAllData.isSuccess, GetAllData.data]);
 
 
 
@@ -108,8 +104,7 @@ export default  function editForm(): JSX.Element {
 
 
         } = useForm<DataType>({
-            defaultValues: 
-            {
+            defaultValues: {
                 User: '',
                 Company: '',
                 Amount: 0,
@@ -117,8 +112,14 @@ export default  function editForm(): JSX.Element {
                 FabricType: '',
                 Unit: '',
                 Status: '',
-                CreatedAt: '',
-            }
+                CreatedAt: formatDate(date),
+            },
+            mode: 'onBlur',
+            reValidateMode: 'onChange',
+            criteriaMode: 'firstError',
+            shouldFocusError: true,
+            shouldUnregister: true,
+            
         });
         const { errors } = formState;
 
@@ -128,18 +129,12 @@ export default  function editForm(): JSX.Element {
                     throw error;
             },
             onSuccess: () => {
-                setVisiable(false);
                 isEmpty(!empty);
                 reset();
-                queryClient.refetchQueries({queryKey: ['orders']});
-                queryClient.refetchQueries({queryKey: ['Status']});
-                queryClient.refetchQueries({queryKey: ['Percentage']});
-                queryClient.refetchQueries({queryKey: ['Company']});
-                queryClient.refetchQueries({queryKey: ['allOrders']});
-                queryClient.refetchQueries({queryKey: ['fetch-All']});
-                queryClient.refetchQueries({queryKey: ['TopCustomers']});
+                queryClient.refetchQueries({queryKey: ['GetStoreStatus']});
+                queryClient.refetchQueries({queryKey: ['CompanyOrdersFetching']});
                 queryClient.refetchQueries({queryKey: ['GetStoreInfo']});
-
+                queryClient.refetchQueries({queryKey: ['GetAnalytics']});
             },
         }); 
     
@@ -151,36 +146,33 @@ export default  function editForm(): JSX.Element {
                 const Keys1 = Object.keys(formattedForData);
 
                 for (const key of Keys1) {
-                    if (formattedForData[key] !== Data[key]) {
+                    if (formattedForData[key] !== DataCompany[key]) {
                         NewOrder.mutate(formData)
                     }
                   }
-                  setVisiable(false);
+                  isCompanyVisible(false);
                   isEmpty(!empty);
                     reset();
             } catch (error) {
                 console.error('Mutation failed:', error);
             }
         };
-        
 
     return (
       <>
-      <div className="form-div absolute w-[34.8vw] h-[39.7vh] bg-default rounded-lg left-[64.1vw] top-[8.9vh] shadow-[0px_4px_23.8px_7px_#68B6FF1C] z-[1]">
+      <div className="form-div absolute w-[34.8vw] h-[39.7vh] bg-default rounded-lg right-[3vw] bottom-[51vh] shadow-[0px_4px_23.8px_7px_#68B6FF1C] z-[999]">
         <form className="relative w-[100%] h-[100%] flex" onSubmit={handleSubmit(onSubmit)}>
 
 
 
-            <div className="form-box-1 relative h-[32.1vh] w-[14.1vw]  flex flex-col mr-auto ml-auto top-[3.5vh]">
-                
-                
+            <div className="form-box-1 relative h-[23.7vh] w-[14.1vw]  flex flex-col mr-auto ml-auto top-[3.5vh]">
+
             <label >NAME</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="User" options={dataNames} placeholder="" value={Data.User} register={register} errors={errors} validationSchema={{required:true,minLength:{value: 3}}} onChange={(value) => {
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="User" options={CustomerNames} placeholder="" value={DataCompany.User || ""} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
           // Manually set value to the form field
           setValue('User', value, { shouldValidate: true});
         }}/>
-            
-                            
+                 
             <label >AMOUNT</label>
 
             <input type="number" step=".01"{...register("Amount" ,{required:true ,valueAsNumber:true})} />
@@ -198,12 +190,21 @@ export default  function editForm(): JSX.Element {
                     
                 
             <label >FABRIC</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="FabricType" options={fabricType} placeholder="" value={Data.FabricType || ""} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="FabricType" options={fabricType} placeholder="" value={DataCompany.FabricType} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
           // Manually set value to the form field
           setValue('FabricType', value, { shouldValidate: true});
         }}/>
 
-                      <label >DATE</label>
+                      
+
+               
+        
+
+            </div>
+
+            <div className="form-box-2 relative h-[23.7vh] w-[14.1vw] flex flex-col ml-auto mr-auto top-[3.8vh]">
+
+            <label >DATE</label>
                 <input type="date" {...register("CreatedAt" ,{required:true})} />
                 {errors.CreatedAt ? (
                 <h1 style={{ backgroundColor:"#FF6D6D"}}>
@@ -213,26 +214,7 @@ export default  function editForm(): JSX.Element {
                 ) : (
                 <h1></h1>
                 )}
-
-               
-        
-
-            </div>
-
-            <div className="form-box-2 relative h-[23.7vh] w-[14.1vw] flex flex-col ml-auto mr-auto top-[3.8vh]">
-
-            <label >STATUS</label>
-                <input type="text"  {...register('Status', {required:true,pattern: {value: /^\S(?:.*\S)?$/,
-                message: 'Invalid input, leading or trailing spaces are not allowed',},})}/>
-                {errors.Status ? (  
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a proper state</p>
-                </h1>
-                    
-                ) : (
-                <h1></h1>
-                )}
-                      
+            
             <label >UNIT PRICE</label>
             <input className="unit" type="number" step=".01" {...register("Price" ,{required:true , valueAsNumber:true})} />
             {errors.Price ? (
@@ -243,26 +225,25 @@ export default  function editForm(): JSX.Element {
                 ) : (
                 <h1 className="unit-h1"></h1>
                 )}
-            
-            
-            
-         
-           
-           
-                      
-            <label >COMPANY</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="Company" options={companyNames} placeholder="" value={Data.Company || ""} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
-          // Manually set value to the form field
-          setValue('Company', value, { shouldValidate: true});
-        }}/>
-
+        
+            <label >STATUS</label>
+                <input type="text" {...register("Status" ,{required:true})}/>
+                {errors.Status ? (  
+                <h1 style={{ backgroundColor:"#FF6D6D"}}>
+                    <p className="text-[12px] text-[#FF6D6D]">Please type a proper state</p>
+                </h1>
+                    
+                ) : (
+                <h1></h1>
+                )}
+          
             </div>
 
             <input style={{backgroundColor: formState.isValid?'#febf19':'#d6d7d8'
             ,pointerEvents: formState.isValid?'auto':'none'
             , position:"absolute"
             ,top:"29.9vh"
-            , left:"23vw"
+            , left:"25vw"
             ,borderRadius:"8px"
             ,color:"#FEFEFE"
             ,fontSize:"16px"

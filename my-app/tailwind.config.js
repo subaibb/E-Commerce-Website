@@ -17,6 +17,7 @@ module.exports = {
         form : "#68B6FF",
         lowerLabels:"#B8B7BC",
         companyForm:"#61AC68",
+        dark : "#38343c",
     
       }
     },

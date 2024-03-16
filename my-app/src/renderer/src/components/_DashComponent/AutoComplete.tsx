@@ -38,9 +38,13 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
 
   const autocomplete = useRef<HTMLDivElement>(null);
 
-  const [optionsData, setOptionsData] = useState(value ? [value] : []);
+  const [optionsData, setOptionsData] = useState('' ? [''] : []);
   const [query, setQuery] = useState<string>(value);
   const [isShow, setIsShow] = useState<boolean>(false);
+
+  useEffect(() => {
+    setQuery(value);
+  }, [value]);
 
   useEffect(() => {
     if (resetInput) {

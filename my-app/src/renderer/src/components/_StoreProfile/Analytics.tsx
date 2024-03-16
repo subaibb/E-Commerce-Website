@@ -1,5 +1,7 @@
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
+import Comment from './../../public/Comment.svg';
+import { useState } from "react";
 const {ipcRenderer} = require('electron');
 
 type AnalyticsProps = {
@@ -18,13 +20,11 @@ type AnalyticsProps = {
 }
 
 export default function Analytics({id}): JSX.Element {
-    console.log(id);
     const GetAnalytics = useQuery({queryKey:['GetAnalytics',id],queryFn: async () => {
         return await ipcRenderer.invoke('fetch-analytics',id)
     }});
     if (GetAnalytics.isLoading) return <div></div>
     if (GetAnalytics.isError) return <div>Error</div>
-
     
     return (
         <>
@@ -88,7 +88,7 @@ function AnalyticLines (): JSX.Element{
 }
 function Line (){
     return (
-        <div className="dashed-line mb-[30px]"></div>
+        <div className="dashed-line mb-[3vh]"></div>
     )
 }
 
@@ -118,47 +118,97 @@ function StaticHolder ({data}:{data:AnalyticsProps}):JSX.Element{
 
 
     return (
-        <div className="w-[52.4vw] h-[35.1vh] absolute left-[4.9vw] top-[5vh] flex ">
-            <Static heightGreen={(data.FiveMonthsAgoPaid/606)} heightGray={(data.FiveMonthsAgoPending/606)} />
-            <Static heightGreen={(data.FourMonthsAgoPaid/606)} heightGray={(data.FourMonthsAgoPending/606)} />
-            <Static heightGreen={(data.ThreeMonthsAgoPaid/606)}heightGray= {(data.ThreeMonthsAgoPending/606)} />
-            <Static heightGreen={(data.TwoMonthsAgoPaid/606)}  heightGray={(data.TwoMonthsAgoPending/606)} />
-            <Static heightGreen={(data.LastMonthPaid/606)}     heightGray={(data.LastMonthPending/606)} />
-            <Static heightGreen={(data.ThisMonthPaid/606)}     heightGray={(data.ThisMonthPending/606)} />
+        <div className="w-[52.4vw] h-[35.1vh] absolute left-[4.9vw] top-[5.1vh] flex  ">
+            <Static dataGreen={data.FiveMonthsAgoPaid} heightGreen={(data.FiveMonthsAgoPaid/606)}   dataGray={data.FiveMonthsAgoPending}   heightGray={(data.FiveMonthsAgoPending/606)} />
+            <Static dataGreen={data.FourMonthsAgoPaid} heightGreen={(data.FourMonthsAgoPaid/606)}   dataGray={data.FourMonthsAgoPending}   heightGray={(data.FourMonthsAgoPending/606)} />
+            <Static dataGreen={data.ThreeMonthsAgoPaid} heightGreen={(data.ThreeMonthsAgoPaid/606)} dataGray={data.ThreeMonthsAgoPending}   heightGray= {(data.ThreeMonthsAgoPending/606)} />
+            <Static dataGreen={data.TwoMonthsAgoPaid} heightGreen={(data.TwoMonthsAgoPaid/606)}     dataGray={data.TwoMonthsAgoPending}   heightGray={(data.TwoMonthsAgoPending/606)} />
+            <Static dataGreen={data.LastMonthPaid} heightGreen={(data.LastMonthPaid/606)}           dataGray={data.LastMonthPending}   heightGray={(data.LastMonthPending/606)} />
+            <Static dataGreen={data.ThisMonthPaid} heightGreen={(data.ThisMonthPaid/606)}           dataGray={data.ThisMonthPending}   heightGray={(data.ThisMonthPending/606)} />
         </div>
     )
 }
-function Static ({heightGreen,heightGray}):JSX.Element{
+function Static ({heightGreen,heightGray,dataGreen,dataGray}):JSX.Element{
     const FormatGreenheight = Math.min(330, heightGreen);
     const FormatGrayheight = Math.min(330, heightGray);
+    const [show, setShow] = useState(false);
+    const [showSecond, setShowSecond] = useState(false);
 
     return (
-        <div className="w-[5.6vw] h-[35.1vh] relative mr-auto flex">
-            <AnalyticGreenBar height={FormatGreenheight} />
-            <AnalyticLightGreenBar height={FormatGrayheight} />
+        <div className="w-[5.6vw] h-[35.1vh] relative mr-auto flex justify-items-end items-end justify-between">
+          
+           <div className="w-[2vw] h-[5h] relative">
+           <AnimatePresence>
+            {
+                show && <CommentAnalytic data={dataGreen}  position="-1.7vw" />
+            }
+           </AnimatePresence>   
+           <AnalyticGreenBar setShow={setShow} height={FormatGreenheight}  />
+           </div>
+           <div className="w-[2vw] h-[5h] relative">
+           <AnimatePresence>
+             {
+                showSecond && <CommentAnalytic data={dataGray} position="-1.7vw" />
+             }
+             </AnimatePresence> 
+           <AnalyticLightGreenBar setShowSecond={setShowSecond} height={FormatGrayheight}  />
+           
+           </div>
+           
+            
         </div>
     )   
 }
-function AnalyticGreenBar ({height}):JSX.Element{
+function AnalyticGreenBar ({height,setShow}):JSX.Element{
     return (
-        <motion.div className={`absolute w-[2.4vw] bg-[#45C49C] rounded-t-xl rounded-tr-xl bottom-0 mr-auto`}
+        
+        <motion.div className={`w-[2.4vw] bg-[#45C49C] rounded-t-xl rounded-tr-xl relative `}
         initial={{height:0}}
         animate={{height:height}}
         transition={{duration:0.5,delay:0.2}}
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
         >
            
         </motion.div>
+      
+       
     )
 }
-function AnalyticLightGreenBar ({height}):JSX.Element{
+function AnalyticLightGreenBar ({height,setShowSecond}):JSX.Element{
     
     return (
-        <motion.div className={`absolute ${height} w-[2.4vw] bg-[#C7EDE1] rounded-t-xl rounded-tr-xl bottom-0 right-0`}
+        
+        <motion.div className={`${height} w-[2.4vw] bg-[#C7EDE1] rounded-t-xl rounded-tr-xl bottom-0 right-0 relative `}
         initial={{height:0}}
         animate={{height:height}}
         transition={{duration:0.5,delay:0.3}}
+        onMouseEnter={() => setShowSecond(true)}
+        onMouseLeave={() => setShowSecond(false)}
         >
-           
+            </motion.div>
+    )
+}
+
+function CommentAnalytic ({position,data}){
+ data= `$${data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+    return (
+
+        
+        <motion.div className={`w-[6vw] h-[6vh] relative flex justify-center items-center`} style={{
+            backgroundImage: `url(${Comment})`,
+            backgroundSize: 'contain',  
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            left: `${position}`
+    
+        }}
+        initial={{opacity:0,scale:0.8}}
+        animate={{opacity:1,scale:1}}
+        transition={{duration:0.1}}
+        exit={{opacity:0,scale:0.8}}
+        >
+      <label className="text-default">{data}</label>      
         </motion.div>
     )
 }

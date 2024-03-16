@@ -46,6 +46,7 @@ const [show,setShow] = useState(false);
         initial={{opacity: 0, transform: 'translateY(20%)'}}
         animate={{opacity: 1, transform: 'translateY(0%)'}}
         exit={{opacity: 0, transform: 'translateY(20%)'}}
+        transition={{duration:0.1}}
         >
         <CustomerAddForm name={GetCustomer.data.name}/>
         </motion.div>

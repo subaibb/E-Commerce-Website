@@ -6,8 +6,15 @@ import Company from './components/_DashComponent/company'
 import Arrow from './components/_DashComponent/Arrows'
 import Labels from './components/_DashComponent/labels'
 import Add_Button from './components/_DashComponent/add_button'
-import EditForm from './components/_DashComponent/Edit_Form'
-import { createContext, useState } from 'react'
+import { createContext, useState,useEffect } from 'react'
+import EditBox from './components/_DashComponent/EditBox'
+
+type ShowType = {
+  visiable: boolean;
+  setVisiable: (value: boolean) => void;
+};
+
+
 
 type DataType = {
   User:string,
@@ -18,6 +25,7 @@ type DataType = {
   Unit:string,
   Status:string,
   CreatedAt:string,
+  OrderID?:string,
 }
 
 type DataContextType = {
@@ -29,16 +37,36 @@ export const DataContext = createContext<DataContextType>({
   setData: (value: any) => {value},
 })
 
+export const ShowContext = createContext<ShowType>({
+  visiable: false,
+  setVisiable: (value: boolean) => {value},
+})
 
 
 
 
 export default function App(): JSX.Element {
+  const [visiable, setVisiable] = useState(false);
+  const [Data, setData] = useState<any>({
+    User:'',
+    Company:'',
+    Amount:0,
+    Price:0,
+    FabricType:'',
+    Unit:'',
+    Status:'',
+    CreatedAt:'',
+  });
+  useEffect(() => {
+    setData({User:'', Company:'', Amount:0, Price:0, FabricType:'', Unit:'', Status:'', CreatedAt:''});
+  },[visiable]);
+  
 
-  const [Data, setData] = useState<any>({});
+
   return (
     <> 
     <DataContext.Provider value={{Data, setData}}>
+    <ShowContext.Provider value={{visiable, setVisiable}}>
     <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary animate-[400ms_fadeIn_forwards]'>Dashboard</h2>
     <Buttons/>
     <Background/>
@@ -46,13 +74,13 @@ export default function App(): JSX.Element {
     <Table/>
     <Company/>
     <Labels/>
+    <Arrow/>
     <Add_Button/>
-    <Arrow/>  
-    <EditForm/>
+    <EditBox/>
+    </ShowContext.Provider>
     </DataContext.Provider>
     </>
   )
 }
-
 
 

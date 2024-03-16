@@ -58,9 +58,9 @@ export default function DataLabels({data}:{data:Order}): JSX.Element {
     return (
         <div className="dataLabels Scroll w-[54.4vw] min-h-[5vh] h-[5vh] flex hover:bg-[#faf9f9] transition duration-150 relative">
             <label className=" text-nowrap">{data.user.name}</label>
-            <label>{data.price}</label>
+            <label>${data.price}</label>
             <label>{data.amount}</label>
-            <label>{Total}</label>
+            <label className=" total">{Total}</label>
             <label>{data.fabricType}</label>
             <label>{formatDate(data.createdAt)}</label>
             <label>{data.unit}</label>

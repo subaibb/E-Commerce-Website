@@ -45,9 +45,9 @@ export default function DataLabels({data}): JSX.Element {
     const formattedPrice = `$${priceString.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
     return (
         <div className="dataLabels w-[58vw] h-[5vh] min-h-[5vh] relative flex hover:bg-[#faf9f9] transition duration-150">
-            <label>{data.price}</label>
+            <label>${data.price}</label>
             <label>{data.amount}</label>
-            <label>{formattedPrice}</label>
+            <label className=" total">{formattedPrice}</label>
             <label>{data.fabricType}</label>
             <label>{formatDate(data.createdAt)}</label>
             <label>{data.company.name}</label>
