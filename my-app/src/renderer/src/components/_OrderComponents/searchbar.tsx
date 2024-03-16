@@ -7,7 +7,7 @@ import {motion} from 'framer-motion';
   
   
     useEffect(() => {
-      const results = data?.filter(order =>
+      const results = data.filter(order =>
         Object.values(order).some(val => {
           if (typeof val === 'object' && val !== null) {
             // If the value is an object, check its nested properties
@@ -19,7 +19,7 @@ import {motion} from 'framer-motion';
           return val?.toString().toLowerCase().includes(searchTerm);
         })
       );
-      setOrders(results ?? []);
+      setOrders(results);
     },[data, searchTerm]);
    
     

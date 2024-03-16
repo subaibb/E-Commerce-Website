@@ -8,8 +8,10 @@ export default function CustomerOverview({id}): JSX.Element {
         const result = await ipcRenderer.invoke('fetch-overview',id);
         return result;
     }});
-    if (GetCustomerOrders.isLoading) return <div>Loading...</div>
+    if (GetCustomerOrders.isLoading) return <div></div>
     if (GetCustomerOrders.isError) return <div>Error</div>
+
+    console.log(GetCustomerOrders.data);
     return (
         <motion.div className="relative w-full h-[18.8vh] bg-default rounded-[14px] shadow-[2px_4px_4px_#68B6FF0D]"
         initial={{scale:0.9, opacity:0}}

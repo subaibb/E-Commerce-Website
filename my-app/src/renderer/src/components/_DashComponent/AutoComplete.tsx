@@ -60,6 +60,8 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   };
 
   const handleClickOutSide = (e: MouseEvent) => {
+    errors;
+    required;
     if (autocomplete.current && !autocomplete.current.contains(e.target as Node)) {
       setIsShow(false);
     }

@@ -15,6 +15,7 @@ type Customer = {
 
 export default function CustomerLabel({delay,customer}:{delay:number,customer:Customer}):JSX.Element {
 
+
     return (
         <AnimatePresence>
         <motion.div className="Customer-Label relative w-[18vw] h-[33vh]  bg-default rounded-xl shadow-[2px_4px_4px_#68B6FF0D]"

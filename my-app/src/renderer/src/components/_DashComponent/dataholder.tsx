@@ -27,9 +27,8 @@ export default  function Dataholder(): JSX.Element {
 
   const getOrders =  useQuery({queryKey: ["orders"], queryFn: fetchUsers});
  
-  
-    if (getOrders.isLoading) return <div>Loading...</div>;
-    if (getOrders.isError) return <div>Error:</div>;
+  if (getOrders.isLoading) return <div></div>;
+  if (getOrders.isError) return <div>Error:</div>;
 
 
     return (

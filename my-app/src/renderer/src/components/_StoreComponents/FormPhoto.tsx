@@ -4,7 +4,11 @@ type CustomerPhotoProps = {
     Name: string;
 }
 
-export default function CustomerPic({ColorID,Name}: CustomerPhotoProps) {
+export default function StorePic({ColorID,Name}: CustomerPhotoProps) {
+
+
+
+
 
     const ColorMap = {
         '1':{BackgroundColor:"#D8E6FF",textColor:"#5790FF"},
@@ -24,8 +28,8 @@ export default function CustomerPic({ColorID,Name}: CustomerPhotoProps) {
 
 
     return (
-        <div style={{backgroundColor:BackgroundColor}} className="relative w-[1.43vw] h-[2.525vh] rounded-full flex justify-center items-center mr-2 ml-2">
-                <h2 style={{color:textColor}} className="  text-xl">{Name.split(' ')[0][0].toUpperCase()}</h2>
+        <div style={{backgroundColor:BackgroundColor}} className="w-[8.58vw] h-[15.15vh] rounded-xl relative mb-auto mt-auto flex justify-center items-center">
+                <h2 style={{color:textColor}} className="  text-8xl">{Name.split(' ')[0][0]?.toUpperCase()}</h2>
             </div> 
     )
 }

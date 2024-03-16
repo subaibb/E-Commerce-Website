@@ -43,5 +43,6 @@ model company {
   phone    String
   createdAt DateTime
   Address  String
+  CompanyBackground String
   orders   Order[]
 }

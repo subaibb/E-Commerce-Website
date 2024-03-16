@@ -107,7 +107,7 @@ export default function Orders(): JSX.Element {
       </div>
       
       <Add_Button/>
-      <Buttons isButton={2}/>
+      <Buttons/>
       </> 
     )
   }

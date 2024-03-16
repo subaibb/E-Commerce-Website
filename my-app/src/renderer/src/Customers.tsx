@@ -38,7 +38,7 @@ export default function Customers(): JSX.Element {
       <CustomerHolder/>
       <Dropdown Type={2}/>
       <PageSwitch/>
-      <Buttons isButton={3}/>
+      <Buttons/>
       <CustomerForm/>
       <AddButton/>
       </PageContext.Provider>

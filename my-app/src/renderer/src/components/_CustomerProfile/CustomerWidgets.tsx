@@ -10,7 +10,7 @@ export default function CustomerWidgets({id}): JSX.Element {
         const result = await ipcRenderer.invoke('get-customer',id);
         return result;
     }});
-    if (GetCustomerInfo.isLoading) return <div>Loading...</div>
+    if (GetCustomerInfo.isLoading) return <div></div>
     if (GetCustomerInfo.isError) return <div>Error</div>
 
     return (

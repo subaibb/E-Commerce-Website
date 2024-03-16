@@ -184,10 +184,26 @@ form input[type="number"] {
 form input:focus + h1 {
   @apply bg-form;
 }
+
 div:focus + h1 {
   @apply bg-form;
+}
+.company-form input:focus +h1{
+  @apply bg-companyForm;
+}
+.CompanyForm input:focus + h1{
+  @apply bg-companyForm !important;
+}
+
+.company-form input[type="text"]:focus +h1 {
+   @apply bg-companyForm;
 
 }
+.company-form input[type="number"]:focus + h1 {
+  @apply bg-companyForm;
+}
+
+
 
 .form-div h1{
   @apply bg-[#E3E3E3] w-[100%] h-[0.2vh] relative top-[-1vh] transition ;
@@ -197,6 +213,15 @@ div:focus + h1 {
   @apply text-form relative top-[1vh];
 }
 
+
+.form-company h1{
+  @apply bg-[#E3E3E3] w-[100%] h-[0.2vh] relative top-[-1vh] transition ;
+} 
+.form-company label{
+
+  @apply text-companyForm relative top-[1vh];
+}
+
 .unit {
   @apply w-[9.8vw] h-[3.5vh] text-secondary right-[2.2vw] relative !important;
 
@@ -204,9 +229,16 @@ div:focus + h1 {
 .unit-h1{
   @apply bg-[#E3E3E3] w-[9.8vw] h-[0.2vh] relative top-[-1vh] transition  !important; 
 }
+.unit-h2{
+  @apply   bg-[#E3E3E3] w-[9.8vw] h-[0.2vh] relative top-[-1vh] transition  !important; 
+}
 .unit:focus + .unit-h1 {
   @apply bg-form !important;
 }
+.unit:focus + .unit-h2 {
+  @apply bg-companyForm !important;
+}
+
 
 .unit-type-h1{
   @apply bg-[#E3E3E3] w-[3.2vw] h-[0.2vh] relative top-[-2vh] transition  !important; 
@@ -215,6 +247,20 @@ div:focus + h1 {
   @apply w-[3.2vw] h-[3.5vh] text-secondary top-[-2.2vh]  relative focus:outline-none !important;
 }
 .unit-type:focus + .unit-type-h1 {
+  @apply bg-form !important;
+}
+
+.unit-type-h2{
+  @apply bg-[#E3E3E3] w-[3.2vw] h-[0.2vh] relative top-[-2vh] transition  !important; 
+}
+.unit-type-1:focus + .unit-type-h2 {
+  @apply bg-companyForm !important;
+}
+
+.unit-type-1{
+  @apply w-[3.2vw] h-[3.5vh] text-secondary top-[-2.2vh]  relative focus:outline-none !important;
+}
+.unit-type-1:focus + .unit-type-h1 {
   @apply bg-form !important;
 }
 
@@ -294,14 +340,14 @@ a:link {
 }
 
 .ul-list-1{
-  @apply w-[8.7vw] h-[22vh] bg-default rounded-bl-[12px] rounded-br-[12px] border-2 border-[#EAEAEA] z-10 absolute top-[4vh] left-[0.6vw] flex flex-col;
+  @apply w-[8.7vw] h-[22vh] bg-default rounded-[12px]  border-2 border-[#EAEAEA] z-10 absolute top-[5.4vh] left-[0.6vw] flex flex-col;
 }
 .ul-list-1 li{ 
   @apply w-[8vw] h-[3vh] bg-default text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
 }
 
 .ul-list-2{
-  @apply w-[8.7vw] h-[16vh] bg-default rounded-bl-[12px] rounded-br-[12px] border-2 border-[#EAEAEA] z-10 absolute top-[4vh] left-[10.6vw] flex flex-col;
+  @apply w-[8.7vw] h-[16vh] bg-default rounded-[12px] border-2 border-[#EAEAEA] z-10 absolute top-[5.4vh] left-[10.6vw] flex flex-col;
 }
 .ul-list-2 li{ 
   @apply w-[8vw] h-[3vh] text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
@@ -309,7 +355,7 @@ a:link {
 
 
 .ul-list-3{
-  @apply w-[8.7vw] h-[16vh] bg-default rounded-bl-[12px] rounded-br-[12px] border-2 border-[#EAEAEA] z-10 absolute top-[4vh] left-[20.5vw] flex flex-col;
+  @apply w-[8.7vw] h-[16vh] bg-default rounded-[12px] border-2 border-[#EAEAEA] z-10 absolute top-[5.4vh] left-[20.5vw] flex flex-col;
 }
 .ul-list-3 li{ 
   @apply w-[8vw] h-[3vh] text-[14px] text-secondary m-auto hover:bg-[#F2F2F2] transition duration-150 flex items-center justify-center rounded-sm font-semibold;
@@ -379,7 +425,10 @@ a:link {
 }
 .CustomerForm-h1{ 
   @apply  w-[14.1vw] h-[0.2vh] relative top-[-1vh] transition  !important; 
+}
 
+.CompanyForm-h1{ 
+  @apply  w-[14.1vw] h-[0.2vh] relative top-[-2.8vh] transition  !important; 
 }
 .Back-Button{
   @apply bg-[length:35px_35px] h-[100%] px-6 bg-no-repeat border-2 border-[#F4F4F5] rounded-xl bg-center transition-all duration-[300ms] ml-auto;
@@ -387,6 +436,9 @@ a:link {
 .Back-Button:hover{ 
   @apply bg-[#464554] ;
   background-image: url('../public/Back-White.svg') !important;
+}
+.Back-Button:active{
+  transform: translateY(3px)!important;
 }
 .Add-Button{  
   @apply bg-[length:40px_40px] h-[100%] w-[8.91vw] bg-no-repeat border-2 border-[#F4F4F5] rounded-xl transition-all duration-[300ms] mr-auto bg-left text-lg text-center;
@@ -402,9 +454,7 @@ a:link {
 .Add-Button:active{
   transform: translateY(3px)!important;
 }
-.Back-Button:active{
-  transform: translateY(3px)!important;
-}
+
 .Add-Customer{
   @apply bg-[length:40px_40px] h-[5vh] w-[12vw] bg-no-repeat border-2 border-[#F4F4F5] rounded-xl transition-all duration-[300ms] mr-auto bg-left text-lg text-center;
   background-image: url('../public/Add.svg');
@@ -460,6 +510,87 @@ a:link {
   font-weight: 500 !important;
   width: 12vw !important;
   color: #B8B7BC !important;
+}
+.Analytic-Amounts label{
+  @apply w-[2.2vw] h-[3.2vh] text-[#727272] flex justify-center items-center;
+}
+
+.dashed-line{
+  border-style: dashed;
+  border-width: 1px; 
+  border-color: #F1F1F1; 
+  
+}
+.Month-Analytic label{
+  @apply w-[5.6vw] h-[3.2vh] text-[#727272] flex justify-center items-center mr-auto;
+
+}
+
+
+.ScrollTable::-webkit-scrollbar {
+  left: 2vw;
+  width: 8px;
+  position: absolute;
+}
+
+.ScrollTable::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: #e7e7e7;
+  border: 1px solid #cacaca;
+}
+
+.ScrollTable::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #464554;
+}
+
+.Back-Store{
+  @apply bg-[length:35px_35px] h-[100%] px-6 bg-no-repeat border-2 border-[#F4F4F5] rounded-xl bg-center transition-all duration-[300ms] ml-auto;
+}
+.Back-Store:hover{ 
+  @apply bg-[#61AC68] ;
+  background-image: url('../public/Back-White.svg') !important;
+}
+.Back-Store:active{
+  transform: translateY(3px)!important;
+}
+
+.Add-Order-Store{  
+  @apply bg-[length:40px_40px] h-[100%] w-[8.91vw] text-[#61AC68] bg-no-repeat border-2 border-[#F4F4F5] rounded-xl transition-all duration-[300ms] mr-auto bg-left text-lg text-center;
+  background-image: url('../public/Add-Green.svg');
+  text-indent : 1.3vw;
+} 
+.Add-Order-Store:hover{ 
+  @apply bg-[#61AC68] ;
+  background-image: url('../public/Add-White.svg') !important;
+  color: #FFFFFF;
+  
+} 
+.Add-Order-Store:active{
+  transform: translateY(3px)!important;
+}
+
+.CompanyFormLabels{
+  @apply text-companyForm !important;
+}
+
+.loader {
+  width: 45px;
+  aspect-ratio: 1;
+  --c:no-repeat linear-gradient(#49A7FF 0 0);
+  background: var(--c), var(--c), var(--c);
+  animation: 
+    l15-1 1s infinite,
+    l15-2 1s infinite;
+
+}
+@keyframes l15-1 {
+ 0%,100% {background-size:20% 100%}
+ 33%,66% {background-size:20% 40%}
+}
+@keyframes l15-2 {
+ 0%,33%   {background-position: 0    0,50% 100%,100% 100%}
+ 66%,100% {background-position: 100% 0,0   100%,50%  100%}
 }
 @keyframes slideUp{
   0%{

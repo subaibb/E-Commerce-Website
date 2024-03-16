@@ -36,9 +36,6 @@ export default function orderTable({opacity,scale}:orderTableProps): JSX.Element
  
 ;
   const getOrders = useQuery<Order[], Error>({queryKey: ['allOrders'], queryFn: fetchOrders});
-  
-    // Render loading message if data is loading
-    if (getOrders.isLoading) return <div>Loading...</div>;
     // Render error message if there's an error fetching orders
     if (getOrders.isError) return <div>Error: Unable to fetch orders</div>;
     // Render orders data here

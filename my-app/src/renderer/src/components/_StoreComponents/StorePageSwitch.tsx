@@ -12,25 +12,23 @@ export default function StorePageSwitch(): JSX.Element {
 
     const [activePage, setActivePage] = useState<number>(1);
     const { Page, setPageSwitch } = useContext<PageContextType>(PageContext);
-    const Customerdata = useQuery({
-        queryKey: ['getActivePage'],
+    const CompanyData = useQuery({
+        queryKey: ['getActiveStorePage'],
         queryFn: async () => {
-            const data = await ipcRenderer.invoke('fetch-company');
+            const data = await ipcRenderer.invoke('fetch-company-count');
             return data;
         },
     });
 
     useEffect(() => {
-        if (Customerdata.isSuccess) {
-            const pages = Math.ceil(Customerdata.data.length / 6);
-            setActivePage(pages);
+        if (CompanyData.isSuccess) {
+            const pages = Math.ceil(CompanyData.data / 6);
+            setActivePage(pages);   
         }
-    }, [Customerdata.isSuccess, Customerdata.data]);
-
-
+    }, [CompanyData.isSuccess, CompanyData.data]);
     return (
                 <div className="w-auto h-[4vh] p-2 left-[14.6vw] bottom-[2.5vh] absolute bg-default justify-center items-center rounded-xl flex animate-me shadow-[2px_4px_4px_#68B6FF0D]">
-                    {Customerdata.isSuccess && Array.from({ length: activePage }, (_, i) => (
+                    {CompanyData.isSuccess && Array.from({ length: activePage }, (_, i) => (
                  <Button PageNumber={i+1} key={i} setPageSwitch={setPageSwitch} Page={Page} style={i+1===Page ? "bg-[#61AC68] text-default" : "text-primary"}/>
                     ))}
 

@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { FormContext } from "../../Customers"
+import { FormContext } from "../../Stores"
 import {motion} from 'framer-motion';
 
 export default function AddStore (): JSX.Element {

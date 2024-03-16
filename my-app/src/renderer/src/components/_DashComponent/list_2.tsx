@@ -17,8 +17,8 @@ const Change = async (status) => {
     
       mutationFn: Change,
       onSuccess: () => {
-        queryClient.refetchQueries({ queryKey: ['orders'] });
-        queryClient.refetchQueries({ queryKey: ['Status'] });
+        queryClient.refetchQueries({queryKey: ['orders'] });
+        queryClient.refetchQueries({queryKey: ['Status'] });
         queryClient.refetchQueries({queryKey: ['Percentage']});
         queryClient.refetchQueries({queryKey: ['Company']});
         queryClient.refetchQueries({queryKey: ['allOrders']});
@@ -26,6 +26,12 @@ const Change = async (status) => {
         queryClient.refetchQueries({queryKey: ['CustomerStatus']});
         queryClient.refetchQueries({queryKey: ['CustomerOverview']});
         queryClient.refetchQueries({queryKey: ['Customer']});
+        queryClient.refetchQueries({queryKey: ['TopCustomers']});
+        queryClient.refetchQueries({queryKey: ['GetStoreStatus']});
+        queryClient.refetchQueries({queryKey: ['CompanyOrdersFetching']});
+        queryClient.refetchQueries({queryKey: ['GetStoreInfo']});
+        queryClient.refetchQueries({queryKey: ['Companyfetching']});
+        queryClient.refetchQueries({queryKey: ['GetAnalytics']});
       }
     });
       

@@ -19,9 +19,10 @@ export default function FormPhoto({ColorID,Name}: CustomerPhotoProps) {
         '7':{BackgroundColor:"#f1f1d2",textColor:"#c4c348"},
         '8':{BackgroundColor:"#fee9e4",textColor:"#f48167"},
         '9':{BackgroundColor:"#d8f8e8",textColor:"#32bf75"},
-        '10':{BackgroundColor:"#FFF2D8",textColor:"#FFBC57"}
+        '10':{BackgroundColor:"#FFF2D8",textColor:"#FFBC57"},
+        '11':{BackgroundColor:"#E6EEE7",textColor:"#61AC68"},
     }
-    const {BackgroundColor, textColor} = ColorMap[ColorID] || ColorMap['10'];
+    const {BackgroundColor, textColor} = ColorMap[ColorID] || ColorMap['11'];
 
 
 

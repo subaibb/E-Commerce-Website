@@ -11,25 +11,25 @@ export default function StasHolder({id}): JSX.Element {
         return result;
     }
     }); 
-    if (GetStatus.isLoading) return <div>Loading...</div>
+    if (GetStatus.isLoading) return <div></div>
     if (GetStatus.isError) return <div>Error</div>
 
   return (
     <div className=" absolute w-[77.9vw] h-[17.4vh] top-[11.3vh] left-[14.8vw] flex">
         <div className="w-[fit] h-[fit] mr-auto">
-        <Stats delay={0.08} location={1} percentage={GetStatus.data.AllOrderPercentageChange} totals={GetStatus.data.AllRevenue} label={"Total Orders"} />
+        <Stats delay={0.08} location={1} percentage={GetStatus.data.AllOrderPercentageChange} totals={GetStatus.data.formattedAllRevenue} label={"Total Orders"} />
         </div>
 
         <div className="w-[fit] h-[fit] mr-auto ml-auto"> 
-        <Stats delay={0.12} location={2} percentage={GetStatus.data.PaidOrderPercentageChange} totals={GetStatus.data.PaidRevenue} label={"Paid Orders"} />   
+        <Stats delay={0.12} location={2} percentage={GetStatus.data.PaidOrderPercentageChange} totals={GetStatus.data.formattedPaidRevenue} label={"Paid Orders"} />   
         </div>
 
         <div className="w-[fit] h-[fit] mr-auto ml-auto"> 
-        <Stats delay={0.18} location={3} percentage={GetStatus.data.PendingOrderPercentageChange} totals={GetStatus.data.PendingRevenue} label={"Pending Orders"} />
+        <Stats delay={0.18} location={3} percentage={GetStatus.data.PendingOrderPercentageChange} totals={GetStatus.data.formattedPendingRevenue} label={"Pending Orders"} />
         </div>
 
         <div className="w-[fit] h-[fit] ml-auto"> 
-        <Stats delay={0.22} location={4} percentage={GetStatus.data.TotalAmountPercentageChange} totals={GetStatus.data.TotalAmount} label={"Sold Quantity"} />
+        <Stats delay={0.22} location={4} percentage={GetStatus.data.TotalAmountPercentageChange} totals={GetStatus.data.formattedTotalAmount} label={"Sold Quantity"} />
         </div>
     </div>
   );

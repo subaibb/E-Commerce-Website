@@ -1,6 +1,5 @@
 
 import {motion,AnimatePresence} from 'framer-motion';
-import Store_1 from '../../public/Store_1.png';
 import Money from '../../public/Money.svg';
 import Orders_pic from '../../public/Orders.svg';
 import Arrowbtn from '../../public/Arrow-btn.svg';
@@ -10,13 +9,16 @@ import { PageContext } from '../../Stores';
 import { useContext,useState } from 'react';
 import SearchBar from '../_OrderComponents/searchbar';
 import { Link } from 'react-router-dom';
+import StorePic from '../_StoreProfile/StorePhoto';
 const { ipcRenderer } = require('electron');
 
 type StoreObject = {
   companyId: string;
-  companyName: string;
-  total_orders: number;
-  total_revenue: number;
+  notCancelledOrdersCount: number;
+  paidOrdersCount: number;
+  storeName: string;
+  totalPaid: number;
+  StoreBackground: string;
 };
 
 
@@ -28,10 +30,11 @@ export default function StoreHolder(): JSX.Element {
     const GetStores = useQuery({queryKey:['GetStores'],queryFn:async () => {
         return await ipcRenderer.invoke('fetch-company');
     }});
-        if (GetStores.isLoading) return <div>Loading...</div>;
+
+
+        if (GetStores.isLoading) return <div></div>;
         if (GetStores.isError) return <div>Error: Unable to fetch stores</div>;
- 
-    return (
+    return (  
         <>  
         <div className='w-fit h-fit absolute left-[74.8vw] top-[13vh]'>
        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} data={GetStores.data} setOrders={setStores} />
@@ -39,14 +42,15 @@ export default function StoreHolder(): JSX.Element {
         
         <div className=" absolute w-[78.8vw] h-[72vh] top-[20vh] left-[14.2vw] grid grid-cols-2 gap-x-[13.8vw]">
            
-                 {searchTerm.length > 1 ?
-                  Stores.slice((Page-1)*6,Page*6).map((store,index) => (
-                    <Store key={store.companyId} id={store.companyId} data={store.companyName} Revenue={(store.total_revenue)} Orders={store.total_orders} delay={index*0.1}/>
-                  )):
-                 GetStores.data.length !== 0 && GetStores.data.slice((Page-1)*6,Page*6).map((store,index) => (
-                 <Store key={store.companyId} id={store.companyId} data={store.companyName} Revenue={(store.total_revenue)} Orders={store.total_orders} delay={index*0.1}/>
+                 {setStores.length > 0 ? Stores.slice((Page-1)*6,Page*6).map((store,index) => (
+
+                  <Store key={store.companyId} data={store.storeName} backgroundColor={store.StoreBackground}  Revenue={store.totalPaid} Orders={store.notCancelledOrdersCount} delay={index*0.1} id={store.companyId}/>
+                  )) :
+                  GetStores.data.updatedMainArray.slice((Page-1)*6,Page*6).map((store,index) => (
+                  
+                 <Store key={store.companyId} data={store.storeName} backgroundColor={store.StoreBackground}  Revenue={store.totalPaid} Orders={store.notCancelledOrdersCount} delay={index*0.1} id={store.companyId}/>
                 ))
-           }
+           }  
         </div>
         </>
         
@@ -54,7 +58,10 @@ export default function StoreHolder(): JSX.Element {
 }
 
 
-const Store = ({data,Revenue,Orders,delay,id}) => {
+const Store = ({data,Revenue,Orders,delay,id,backgroundColor}) => {
+
+  Revenue = Revenue || 0;
+
     const priceString = (Revenue).toFixed(0).toString();
     const formattedPrice = `$${priceString.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
     return (
@@ -68,9 +75,10 @@ const Store = ({data,Revenue,Orders,delay,id}) => {
         
       <h2 className="text-2xl font-medium text-secondary absolute left-[9.2vw] top-[3.2vh]">{data}</h2>
 
-        <div className="h-[11.2vh] w-[6.2vw] bg-company rounded-xl relative left-[1.6vw] top-[3.2vh] ">
-          <img src={Store_1} />
-        </div>
+      <div className='left-[1.6vw] top-[3.2vh] absolute'>
+      <StorePic Name={data} ColorID={backgroundColor} />
+      </div>
+        
         <div className="h-[3.6vh] w-[2vw] bg-company rounded-xl absolute left-[9.2vw] top-[7.8vh] bg-[length:32px_32px] bg-no-repeat bg-center"style={{ backgroundImage: `url(${Money})` }} />
 
         <label className="text-secondary absolute left-[11.8vw] top-[7.5vh] text-[14px] font-medium">Revenue</label>
@@ -87,3 +95,4 @@ const Store = ({data,Revenue,Orders,delay,id}) => {
     </AnimatePresence>  
     )
   }
+

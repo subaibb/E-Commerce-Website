@@ -18,17 +18,15 @@ const fetchPercaentage = async () => {
 
 
 
-export default  function Versions(): JSX.Element {
+export default  function DashStatus(): JSX.Element {
 
   const getStatus =  useQuery({queryKey: ["Status"], queryFn: fetchStatus});
   const getPercentage = useQuery({queryKey: ["Percentage"], queryFn: fetchPercaentage});
   if (getStatus.isLoading) return <div>Loading...</div>;
-  if (getStatus.isError) return <div>Error:Loading Status</div>;
-
   if (getPercentage.isLoading) return <div>Loading...</div>;
+  if (getStatus.isError) return <div>Error:Loading Status</div>;
   if (getPercentage.isError) return <div>Error:Loading Percentages</div>;
-
-  
+   
   const priceString = getStatus.data.total_revenue.toFixed(2).toString();
   const formattedPrice = `$${priceString
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')

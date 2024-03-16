@@ -16,7 +16,7 @@ export default function CustomerHolder(): JSX.Element {
         const result = ipcRenderer.invoke('fetch-customers');
         return result;
     }});
-    if (CustomerData.isLoading) return <div>Loading...</div>;
+    if (CustomerData.isLoading) return <div></div>;
     if (CustomerData.isError) return <div>Error: Unable to fetch customers</div>;
     
     return (

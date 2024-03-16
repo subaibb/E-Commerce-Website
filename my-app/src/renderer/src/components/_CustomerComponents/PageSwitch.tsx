@@ -26,7 +26,7 @@ export default function PageSwitch(): JSX.Element {
             setActivePage(pages);
         }
     }, [Customerdata.isSuccess, Customerdata.data]);
-
+    
 
     return (
                 <div className="w-auto h-[4vh] p-2 left-[14.6vw] bottom-[2.5vh] absolute bg-default justify-center items-center rounded-xl flex animate-me shadow-[2px_4px_4px_#68B6FF0D]">
