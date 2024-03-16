@@ -4,6 +4,8 @@ out
 .DS_Store
 *.log*
 
+.env
+.db
 
 # Contentlayer
 .contentlayer
