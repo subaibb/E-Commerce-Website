@@ -41,7 +41,7 @@ export default  function Buttons(): JSX.Element {
       <button onClick={handleclick(3)} className="primary-btn" style={{ backgroundImage: Button===3? ` url(${GroupClicked})` : ` url(${Group})`,backgroundColor:Button===3?'#F7F5F7':''  }}><label>Customers</label></button>
       </Link>
       <Link className='w-fit h-[5.7vh] mb-auto'  to={"/Stores"}>
-      <button onClick={handleclick(4)} className="primary-btn" style={{ backgroundImage: Button===4? ` url(${ShopClicked})` : ` url(${Shop})`,backgroundColor:Button===4?'#F7F5F7':''  }}><label>Stores</label></button>
+      <button onClick={handleclick(4)} className="primary-btn" style={{ backgroundImage: Button===4? ` url(${ShopClicked})` : ` url(${Shop})`,backgroundColor:Button===4?'#F7F5F7':''  }}><label>Companies</label></button>
       </Link>
     </div>
     </nav>

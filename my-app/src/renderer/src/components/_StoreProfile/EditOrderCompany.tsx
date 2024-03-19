@@ -24,7 +24,7 @@ const submitFormData = async (formData: FormData): Promise<void> => {
     
     
     try {
-        console.log(formData);
+
         // Send data via ipcRenderer
       await ipcRenderer.invoke('edit-order', formData);
     } catch (error) {   

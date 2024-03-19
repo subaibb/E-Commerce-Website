@@ -59,7 +59,6 @@ export default function Customers(): JSX.Element {
   const [form, setForm] = useState(false);
   const [editForm, setEditForm] = useState(false);
   const [Data, setData] = useState<DataType>({Name:'', Address:'', Phone:'',CustomerBackground:'',CustomerID:'',CreatedAt:'',Store:''});
-  console.log(Data);
     return (
       <>
      

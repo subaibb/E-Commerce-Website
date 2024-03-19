@@ -7,8 +7,7 @@ export default function EditBox(): JSX.Element {
     const ref = useRef<HTMLDivElement>(null);
    
     const {visiable,setVisiable} = useContext(ShowContext);
-    const {Allvisiable,setVisiableAll} = useContext(ShowContextAllOrders);
-    console.log(Allvisiable);
+    const {setVisiableAll} = useContext(ShowContextAllOrders);
     const handleClickOutside = (event) => {
         if (ref.current && !ref.current.contains(event.target as Node)) {
             setVisiable(false);

@@ -11,7 +11,7 @@ html,body {
 }
 @layer components {
   .primary-btn {
-    @apply py-[1.6vh] px-[3vw] min-w-[11vw] hover:bg-btnprimary m-auto rounded-2xl transition duration-150 bg-[length:32px_32px] bg-no-repeat  bg-[0.7vw_1.2vh] flex;
+    @apply py-[1.6vh] px-[3vw] w-[11vw] min-w-[11vw] hover:bg-btnprimary m-auto rounded-2xl transition duration-150 bg-[length:32px_32px] bg-no-repeat  bg-[0.7vw_1.2vh] flex;
   }     
   .primary-btn label{       
     @apply text-primary relative text-[16px] top-[0.3vh] cursor-pointer;
