@@ -76,7 +76,7 @@ export default function CustomerProfile(): JSX.Element {
       <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary animate-[400ms_fadeIn_forwards]'>Customer Profile</h2>
       <Background />
       
-        <Buttons/>
+        <Buttons Button={3}/>
         <Stats id={id} />
         <div className='w-[77.9vw] h-fit absolute top-[31.9vh] left-[14.8vw] flex'>
         <CustomerWidgets id={id} />

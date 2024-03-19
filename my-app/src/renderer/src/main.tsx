@@ -21,9 +21,7 @@ const Customers = lazy(() => import('./Customers'));
 const Stores = lazy(() => import('./Stores'));
 const CustomerProfile = lazy(() => import('./CustomerProfile'));
 const StoreProfile = lazy(() => import('./StoreProfile'));
-
-const root = document.getElementById('root') as HTMLElement;
-
+let container;
 type ButtonType = {
   Button: number;
   setButton: (value: number) => void;
@@ -35,20 +33,20 @@ export const ButtonContext = createContext<ButtonType>({
   
 });
 
-function Main(): JSX.Element {
-
-  const [Button, setButton] = useState<number>(1);
+document.addEventListener('DOMContentLoaded', function(event) {
+  if (!container) {
+    container = document.getElementById('root') as HTMLElement;
+    const root = createRoot(container)
   
-return (
+   root.render(
 
   <React.StrictMode>
-      <ButtonContext.Provider value={{Button, setButton}}>
     <QueryClientProvider client={queryClient}>
           <Router>
             <Suspense fallback={
               <>
               <Background/>
-              <Buttons/>
+              <Buttons Button={1}/>
               </>
 
             }>
@@ -67,10 +65,10 @@ return (
             </Suspense >
         </Router>
       </QueryClientProvider>
-      </ButtonContext.Provider>
       </React.StrictMode>
 )
 }
-createRoot(root).render(<Main />);
+});
+
 
 

@@ -3,6 +3,7 @@ import { useMutation ,useQuery,useQueryClient } from '@tanstack/react-query';
 import Autocomplete from "../_DashComponent/AutoComplete";
 import { useState,useEffect } from "react";
 import { DataContextCustomer,ShowContextCustomer } from "@renderer/CustomerProfile";
+import { motion } from "framer-motion";
 import { useContext } from "react";
 const { ipcRenderer } = require('electron')
 const date = new Date();
@@ -47,13 +48,14 @@ export default  function CustomerAddForm(): JSX.Element {
     const {DataCustomer} = useContext(DataContextCustomer);
     const [empty, isEmpty] = useState(false);
     const {isCustomerVisible} = useContext(ShowContextCustomer);
+    const [checked, setChecked] = useState('radio-1');
     const GetAllData =  useQuery({queryKey: ["fetch-All"], queryFn: fetchAll});
 
 
     useEffect(() => {   
         if (DataCustomer === undefined) {
             return;
-        }-
+        }
         setValue('Amount', DataCustomer.Amount);
         setValue('Price', DataCustomer.Price);
         setValue('CreatedAt', formatDate(DataCustomer.CreatedAt));
@@ -63,6 +65,7 @@ export default  function CustomerAddForm(): JSX.Element {
         setValue('Unit', DataCustomer.Unit);
         setValue('Status', DataCustomer.Status);
         setValue('OrderID', DataCustomer.OrderID);
+        DataCustomer.Status === 'Pending' ? setChecked('radio-1') : DataCustomer.Status === 'Paid' ? setChecked('radio-3') : setChecked('radio-2');
     }, [DataCustomer]);
 
 
@@ -159,6 +162,11 @@ export default  function CustomerAddForm(): JSX.Element {
             }
         };
 
+        const handleTabChange = (value) => {
+            value === 'radio-1' ? setChecked('radio-1') : value === 'radio-3' ? setChecked('radio-3') : setChecked('radio-2');
+            value === 'radio-1' ? setValue('Status','Pending') : value === 'radio-3' ? setValue('Status','Paid') : setValue('Status','Cancelled');
+          };
+
     return (
       <>
       <div className="form-div absolute w-[34.8vw] h-[39.7vh] bg-default rounded-lg right-[3vw] bottom-[51vh] shadow-[0px_4px_23.8px_7px_#68B6FF1C] z-[999]">
@@ -168,6 +176,17 @@ export default  function CustomerAddForm(): JSX.Element {
 
             <div className="form-box-1 relative h-[23.7vh] w-[14.1vw]  flex flex-col mr-auto ml-auto top-[3.5vh]">
                  
+                      
+            <label >COMPANY</label>
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="Company" options={companyNames} placeholder="" value={DataCustomer.Company} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+          // Manually set value to the form field
+          setValue('Company', value, { shouldValidate: true});
+        }}/>
+
+                    
+                
+         
+
             <label >AMOUNT</label>
 
             <input type="number" step=".01"{...register("Amount" ,{required:true ,valueAsNumber:true})} />
@@ -180,15 +199,8 @@ export default  function CustomerAddForm(): JSX.Element {
                 <h1></h1>
                 )}
 
-                    
-                    
-                    
-                
-            <label >FABRIC</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="FabricType" options={fabricType} placeholder="" value={DataCustomer.FabricType} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
-          // Manually set value to the form field
-          setValue('FabricType', value, { shouldValidate: true});
-        }}/>
+        
+        
 
                       <label >DATE</label>
                 <input type="date" {...register("CreatedAt" ,{required:true})} />
@@ -209,15 +221,41 @@ export default  function CustomerAddForm(): JSX.Element {
             <div className="form-box-2 relative h-[23.7vh] w-[14.1vw] flex flex-col ml-auto mr-auto top-[3.8vh]">
 
             <label >STATUS</label>
-                <input type="text" {...register("Status" ,{required:true})}/>
-                {errors.Status ? (  
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a proper state</p>
-                </h1>
-                    
-                ) : (
-                <h1></h1>
-                )}
+               <div className="w-[14.1vw] h-[3.5vh] m-auto  flex ">
+                        <div className="container">
+                            <div className="tabs-edit flex  justify-between">
+                                    <motion.span style={{backgroundColor:checked==='radio-1'?'#fcf4d5': checked==='radio-3'?'#ebffe4':'#f2d9d9'}} className="glider"
+                                    animate={{ x: checked === 'radio-1' ? 0 : checked === 'radio-3' ? 95: 190 }}
+                                    transition={{ duration: 0.15 }}
+
+                                    ></motion.span>
+                                <div className="  flex justify-center items-center h-[3vh] w-[4.2vw] rounded-[99px] " onClick={()=>{handleTabChange('radio-1')}}>
+                                <label style={{color:checked==='radio-1'?'#fcbd21':'#fcde8e'}} className="tab z-10">Pending</label>
+                                <input type="radio" id="radio-1"  checked={checked==='radio-1'} {...register("Status")} value={"Pending"} />
+                                </div>
+                                
+                                <div className="  flex justify-center items-center h-[3vh] w-[4.2vw] rounded-[99px] " onClick={()=>{handleTabChange('radio-3')}}>
+                                <input  type="radio" id="radio-3" checked={checked==='radio-3'}{...register("Status")} value={"Paid"} />
+                                <label style={{color:checked==='radio-3'?'#79be79':'#a4d49c'}} className="tab z-10" >Paid</label>
+                                </div>
+
+                                <div className="  flex justify-center items-center h-[3vh] w-[4.2vw] rounded-[99px] " onClick={()=>{handleTabChange('radio-2')}}>
+                                <input  type="radio" id="radio-2" checked={checked==='radio-2'}{...register("Status")} value={"Cancelled"} />
+                                <label style={{color:checked==='radio-2'?'#cc3636':'#e48c8c'}} className="tab z-10" >Cancelled</label>
+                                </div>
+
+                                
+                                
+
+      
+                                
+                                
+                        
+                            </div>
+                           
+                    </div>
+                </div>
+                      
                       
             <label >UNIT PRICE</label>
             <input className="unit" type="number" step=".01" {...register("Price" ,{required:true , valueAsNumber:true})} />
@@ -233,15 +271,13 @@ export default  function CustomerAddForm(): JSX.Element {
             
             
          
-           
-           
-                      
-            <label >COMPANY</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="Company" options={companyNames} placeholder="" value={DataCustomer.Company} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+            <label >FABRIC</label>
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="FabricType" options={fabricType} placeholder="" value={DataCustomer.FabricType} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
           // Manually set value to the form field
-          setValue('Company', value, { shouldValidate: true});
+          setValue('FabricType', value, { shouldValidate: true});
         }}/>
-
+           
+           
             </div>
 
             <input style={{backgroundColor: formState.isValid?'#febf19':'#d6d7d8'
@@ -255,7 +291,7 @@ export default  function CustomerAddForm(): JSX.Element {
             ,transitionDuration:"0.2s"
             ,padding:"1.6vh 2.7vw"}} type="submit" value='UPDATE'/>
 
-            <div className=" absolute left-[30vw] top-[16.7vh] h-[3.5vh] w-fit ">
+            <div className=" absolute left-[30vw] top-[16.5vh] h-[3.5vh] w-fit ">
             <input className="unit-type" {...register("Unit" ,{required:true ,maxLength:6})} />
             <h1 className="unit-type-h1"></h1> 
             </div>  

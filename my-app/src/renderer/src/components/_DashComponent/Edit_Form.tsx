@@ -3,6 +3,7 @@ import { useMutation ,useQuery,useQueryClient } from '@tanstack/react-query';
 import Autocomplete from "./AutoComplete";
 import { useState,useEffect } from "react";
 import { useContext } from "react";
+import { motion } from "framer-motion";
 import { ShowContext } from '../../App';
 import { DataContext } from "../../App";
 const { ipcRenderer } = require('electron')
@@ -56,12 +57,15 @@ export default  function editForm(): JSX.Element {
         setValue('Unit', Data.Unit);
         setValue('Status', Data.Status);
         setValue('OrderID', Data.OrderID);
+
+       Data.Status === 'Pending' ? setChecked('radio-1') : Data.Status === 'Paid' ? setChecked('radio-3') : setChecked('radio-2');
     }, [Data]);
 
     const queryClient = useQueryClient();
     const [dataNames, setDataNames] = useState<string[]>([]); // Specify string[] as the type
     const [companyNames, setCompanyNames] = useState<string[]>([]); // Specify string[] as the type
     const [fabricType, setFabricType] = useState<string[]>([]); // Specify string[] as the type
+    const [checked, setChecked] = useState('radio-1');
     const [empty, isEmpty] = useState(false);
     const {setVisiable} = useContext(ShowContext);
     const GetAllData =  useQuery({queryKey: ["fetch-All"], queryFn: fetchAll});
@@ -162,8 +166,12 @@ export default  function editForm(): JSX.Element {
                 console.error('Mutation failed:', error);
             }
         };
-        
-
+        const handleTabChange = (value) => {
+            value === 'radio-1' ? setChecked('radio-1') : value === 'radio-3' ? setChecked('radio-3') : setChecked('radio-2');
+            value === 'radio-1' ? setValue('Status','Pending') : value === 'radio-3' ? setValue('Status','Paid') : setValue('Status','Cancelled');
+          };
+          
+          console.log(checked);
     return (
       <>
       <div className="form-div absolute w-[34.8vw] h-[39.7vh] bg-default rounded-lg left-[64.1vw] top-[8.9vh] shadow-[0px_4px_23.8px_7px_#68B6FF1C] z-[1]">
@@ -222,16 +230,40 @@ export default  function editForm(): JSX.Element {
             <div className="form-box-2 relative h-[23.7vh] w-[14.1vw] flex flex-col ml-auto mr-auto top-[3.8vh]">
 
             <label >STATUS</label>
-                <input type="text"  {...register('Status', {required:true,pattern: {value: /^\S(?:.*\S)?$/,
-                message: 'Invalid input, leading or trailing spaces are not allowed',},})}/>
-                {errors.Status ? (  
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a proper state</p>
-                </h1>
-                    
-                ) : (
-                <h1></h1>
-                )}
+               <div className="w-[14.1vw] h-[3.5vh] m-auto  flex ">
+                        <div className="container">
+                            <div className="tabs flex w-[14vw]">
+                                    <motion.span style={{backgroundColor:checked==='radio-1'?'#fcf4d5': checked==='radio-3'?'#ebffe4':'#f2d9d9'}} className="glider"
+                                    animate={{ x: checked === 'radio-1' ? 0 : checked === 'radio-3' ? 80: 163 }}
+                                    transition={{ duration: 0.15 }}
+
+                                    ></motion.span>
+                                <div className="  flex justify-center items-center h-[3vh] w-[4.2vw] rounded-[99px] " onClick={()=>{handleTabChange('radio-1')}}>
+                                <label style={{color:checked==='radio-1'?'#fcbd21':'#fcde8e'}} className="tab z-10">Pending</label>
+                                <input type="radio" id="radio-1"  checked={checked==='radio-1'} {...register("Status")} value={"Pending"} />
+                                </div>
+                                
+                                <div className="  flex justify-center items-center h-[3vh] w-[4.2vw] rounded-[99px] " onClick={()=>{handleTabChange('radio-3')}}>
+                                <input  type="radio" id="radio-3" checked={checked==='radio-3'}{...register("Status")} value={"Paid"} />
+                                <label style={{color:checked==='radio-3'?'#79be79':'#a4d49c'}} className="tab z-10" >Paid</label>
+                                </div>
+
+                                <div className="  flex justify-center items-center h-[3vh] w-[4.2vw] rounded-[99px] " onClick={()=>{handleTabChange('radio-2')}}>
+                                <input  type="radio" id="radio-2" checked={checked==='radio-2'}{...register("Status")} value={"Cancelled"} />
+                                <label style={{color:checked==='radio-2'?'#cc3636':'#e48c8c'}} className="tab z-10" >Cancelled</label>
+                                </div>
+
+                                
+                                
+
+      
+                                
+                                
+                        
+                            </div>
+                           
+                    </div>
+                </div>
                       
             <label >UNIT PRICE</label>
             <input className="unit" type="number" step=".01" {...register("Price" ,{required:true , valueAsNumber:true})} />

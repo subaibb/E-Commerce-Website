@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: my-app
+productName: Textile Manager
 directories:
   buildResources: build
 files:

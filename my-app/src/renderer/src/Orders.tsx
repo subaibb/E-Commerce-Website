@@ -133,7 +133,7 @@ export default function Orders(): JSX.Element {
       
       <Add_Button/>
       <EditBox/>
-      <Buttons/>
+      <Buttons Button={2}/>
       </CheckedContext.Provider>
       </ContextSelectAll.Provider>
       </ActionDataContext.Provider>

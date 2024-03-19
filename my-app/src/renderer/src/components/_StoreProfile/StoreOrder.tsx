@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form"
 import { useMutation ,useQuery,useQueryClient } from '@tanstack/react-query';
 import Autocomplete from "../_DashComponent/AutoComplete";
 import { useState,useEffect } from "react";
+import { motion } from "framer-motion";
 const { ipcRenderer } = require('electron')
 const date = new Date();
 
@@ -39,7 +40,7 @@ export default  function StoreOrder({company}): JSX.Element {
     const queryClient = useQueryClient();
     const [CustomerNames,setCustomerNames] = useState<string[]>([]);
     const [fabricType, setFabricType] = useState<string[]>([]); // Specify string[] as the type
-
+    const [checked, setChecked] = useState('radio-1');
     const [empty, isEmpty] = useState(false);
 
     const GetAllData =  useQuery({queryKey: ["fetch-All"], queryFn: fetchAll});
@@ -117,7 +118,12 @@ export default  function StoreOrder({company}): JSX.Element {
                 console.error('Mutation failed:', error);
             }
         };
-        
+
+        const handleTabChange = (value) => {
+            value === 'radio-1' ? setChecked('radio-1') : setChecked('radio-3');
+            value === 'radio-1' ? setValue('status','Pending') : setValue('status','Paid');
+          };
+
 
     return (
       <>
@@ -190,19 +196,37 @@ export default  function StoreOrder({company}): JSX.Element {
                 ) : (
                 <h1 className="unit-h2"></h1>
                 )}
-              <label >STATUS</label>
-                <input type="text" {...register("status" ,{required:true})}/>
-                {errors.status ? (  
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a proper state</p>
-                </h1>
-                    
-                ) : (
-                <h1></h1>
-                )}
-            
-            
-         
+
+           
+           <label >STATUS</label>
+               <div className="w-[14.1vw] h-[3.5vh] m-auto  flex ">
+                        <div className="container">
+                            <div className="tabs flex  w-[11vw]">       
+                                    <motion.span style={{backgroundColor:checked==='radio-1'?'#fcf4d5':'#ebffe4'}} className="glider"
+                                    animate={{ x: checked === 'radio-1' ? 0 : 110 }}
+                                    transition={{ duration: 0.15 }}
+
+                                    ></motion.span>
+                                <div className="  flex justify-center items-center h-[3vh] w-[4vw] rounded-[99px]" onClick={()=>{handleTabChange('radio-1')}}>
+                                <label style={{color:checked==='radio-1'?'#fcbd21':'#fcde8e'}} className="tab">Pending</label>
+                                <input type="radio" id="radio-1"  checked={checked==='radio-1'} {...register("status")} value={"Pending"} />
+                                
+                               
+                                </div>
+                                
+                                <div className="  flex justify-center items-center h-[3vh] w-[4vw] rounded-[99px]" onClick={()=>{handleTabChange('radio-3')}}>
+                                <input  type="radio" id="radio-3" checked={checked==='radio-3'}{...register("status")} value={"Paid"} />
+                                <label style={{color:checked==='radio-3'?'#79be79':'#a4d49c'}} className="tab" >Paid</label>
+                                
+                                </div>
+      
+                                
+                                
+                        
+                            </div>
+                           
+                    </div>
+                </div>
            
            
                       

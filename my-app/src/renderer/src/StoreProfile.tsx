@@ -70,7 +70,7 @@ export default function StoreProfile(): JSX.Element {
         <ShowContextCompany.Provider value={{companyVisible:visiable, isCompanyVisible:setVisiable}}>
         <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondar animate-[400ms_fadeIn_forwards]'>Store Profile</h2>
         <Background/>
-        <Buttons/>
+        <Buttons Button={4}/>
         <div className='absolute w-[78.9vw] h-[83.3vh] left-[14.4vw] top-[11.2vh]  flex flex-col'>
         <TopBar id={id} />
         <BottomBar id={id} />

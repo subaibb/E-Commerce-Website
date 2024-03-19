@@ -69,7 +69,7 @@ const {setButton} = useContext(ButtonContext);
       <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary animate-[400ms_fadeIn_forwards] '>Stores</h2>
       <Background />
       <StoreHolder />
-      <Buttons/>
+      <Buttons Button={4}/>
       <PageSwitch />
       <SortDropDown Type={1}/>
       <AddStore />

@@ -71,7 +71,7 @@ export default function Customers(): JSX.Element {
       <CustomerHolder/>
       <Dropdown Type={2}/>
       <PageSwitch/>
-      <Buttons/>
+      <Buttons Button={3}/>
       <CustomerForm/>
       <AddButton/>
       <EditCustomerForm/>

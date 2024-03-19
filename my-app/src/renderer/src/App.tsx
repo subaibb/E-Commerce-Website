@@ -68,7 +68,7 @@ export default function App(): JSX.Element {
     <DataContext.Provider value={{Data, setData}}>
     <ShowContext.Provider value={{visiable, setVisiable}}>
     <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary animate-[400ms_fadeIn_forwards]'>Dashboard</h2>
-    <Buttons/>
+    <Buttons Button={1}/>
     <Background/>
     <Stats/>
     <Table/>

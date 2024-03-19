@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// @ts-nocheck
 
 import { app, shell, BrowserWindow, ipcMain,screen } from 'electron'
 import { join } from 'path'

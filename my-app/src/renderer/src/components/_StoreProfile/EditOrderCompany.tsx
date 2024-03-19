@@ -4,6 +4,7 @@ import Autocomplete from "../_DashComponent/AutoComplete";
 import { useState,useEffect } from "react";
 import { DataContextCompany,ShowContextCompany } from "@renderer/StoreProfile";
 import { useContext } from "react";
+import { motion } from "framer-motion";
 const { ipcRenderer } = require('electron')
 const date = new Date();
 
@@ -47,6 +48,7 @@ export default  function CustomerAddForm(): JSX.Element {
     const {DataCompany} = useContext(DataContextCompany);
     const [empty, isEmpty] = useState(false);
     const {isCompanyVisible} = useContext(ShowContextCompany);
+    const [checked, setChecked] = useState('radio-1');
     const GetAllData =  useQuery({queryKey: ["fetch-All"], queryFn: fetchAll});
 
 
@@ -63,6 +65,8 @@ export default  function CustomerAddForm(): JSX.Element {
         setValue('Unit', DataCompany.Unit);
         setValue('Status', DataCompany.Status);
         setValue('OrderID', DataCompany.OrderID);
+        DataCompany.Status === 'Pending' ? setChecked('radio-1') : DataCompany.Status === 'Paid' ? setChecked('radio-3') : setChecked('radio-2');
+
     }, [DataCompany]);
 
 
@@ -158,6 +162,12 @@ export default  function CustomerAddForm(): JSX.Element {
             }
         };
 
+        const handleTabChange = (value) => {
+            value === 'radio-1' ? setChecked('radio-1') : value === 'radio-3' ? setChecked('radio-3') : setChecked('radio-2');
+            value === 'radio-1' ? setValue('Status','Pending') : value === 'radio-3' ? setValue('Status','Paid') : setValue('Status','Cancelled');
+          };
+
+
     return (
       <>
       <div className="form-div absolute w-[34.8vw] h-[39.7vh] bg-default rounded-lg right-[3vw] bottom-[51vh] shadow-[0px_4px_23.8px_7px_#68B6FF1C] z-[999]">
@@ -185,36 +195,63 @@ export default  function CustomerAddForm(): JSX.Element {
                 <h1></h1>
                 )}
 
-                    
-                    
-                    
-                
-            <label >FABRIC</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="FabricType" options={fabricType} placeholder="" value={DataCompany.FabricType} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
-          // Manually set value to the form field
-          setValue('FabricType', value, { shouldValidate: true});
-        }}/>
 
-                      
+                
+                    
+                            <label >DATE</label>
+                            <input type="date" {...register("CreatedAt" ,{required:true})} />
+                            {errors.CreatedAt ? (
+                            <h1 style={{ backgroundColor:"#FF6D6D"}}>
+                                <p className="text-[12px] text-[#FF6D6D]">Please type a proper address</p>
+                            </h1>
+
+                            ) : (
+                            <h1></h1>
+                            )}
 
                
-        
 
             </div>
 
             <div className="form-box-2 relative h-[23.7vh] w-[14.1vw] flex flex-col ml-auto mr-auto top-[3.8vh]">
 
-            <label >DATE</label>
-                <input type="date" {...register("CreatedAt" ,{required:true})} />
-                {errors.CreatedAt ? (
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a proper address</p>
-                </h1>
 
-                ) : (
-                <h1></h1>
-                )}
-            
+                <label >STATUS</label>
+                            <div className="w-[14.1vw] h-[3.5vh] m-auto  flex ">
+                                        <div className="container">
+                                            <div className="tabs flex w-[14vw] ">
+                                                    <motion.span style={{backgroundColor:checked==='radio-1'?'#fcf4d5': checked==='radio-3'?'#ebffe4':'#f2d9d9'}} className="glider"
+                                                    animate={{ x: checked === 'radio-1' ? 0 : checked === 'radio-3' ? 80: 163 }}
+                                                    transition={{ duration: 0.15 }} 
+
+                                                    ></motion.span>
+                                                <div className="  flex justify-center items-center h-[3vh] w-[4.2vw] rounded-[99px] " onClick={()=>{handleTabChange('radio-1')}}>
+                                                <label style={{color:checked==='radio-1'?'#fcbd21':'#fcde8e'}} className="tab z-10">Pending</label>
+                                                <input type="radio" id="radio-1"  checked={checked==='radio-1'} {...register("Status")} value={"Pending"} />
+                                                </div>
+                                                
+                                                <div className="  flex justify-center items-center h-[3vh] w-[4.2vw] rounded-[99px] " onClick={()=>{handleTabChange('radio-3')}}>
+                                                <input  type="radio" id="radio-3" checked={checked==='radio-3'}{...register("Status")} value={"Paid"} />
+                                                <label style={{color:checked==='radio-3'?'#79be79':'#a4d49c'}} className="tab z-10" >Paid</label>
+                                                </div>
+
+                                                <div className="  flex justify-center items-center h-[3vh] w-[4.2vw] rounded-[99px] " onClick={()=>{handleTabChange('radio-2')}}>
+                                                <input  type="radio" id="radio-2" checked={checked==='radio-2'}{...register("Status")} value={"Cancelled"} />
+                                                <label style={{color:checked==='radio-2'?'#cc3636':'#e48c8c'}} className="tab z-10" >Cancelled</label>
+                                                </div>
+
+                                                
+                                                
+
+                    
+                                                
+                                                
+                                        
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            
             <label >UNIT PRICE</label>
             <input className="unit" type="number" step=".01" {...register("Price" ,{required:true , valueAsNumber:true})} />
             {errors.Price ? (
@@ -226,16 +263,15 @@ export default  function CustomerAddForm(): JSX.Element {
                 <h1 className="unit-h1"></h1>
                 )}
         
-            <label >STATUS</label>
-                <input type="text" {...register("Status" ,{required:true})}/>
-                {errors.Status ? (  
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a proper state</p>
-                </h1>
-                    
-                ) : (
-                <h1></h1>
-                )}
+    
+                                <label >FABRIC</label>
+                            <Autocomplete setInput={isEmpty} resetInput={empty} required name="FabricType" options={fabricType} placeholder="" value={DataCompany.FabricType} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+                                    // Manually set value to the form field
+                                    setValue('FabricType', value, { shouldValidate: true});
+                                }}/>
+
+                      
+                      
           
             </div>
 

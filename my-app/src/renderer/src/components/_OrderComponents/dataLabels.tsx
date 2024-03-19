@@ -99,7 +99,7 @@ export default function dataLabels({data}): JSX.Element {
 
     const handleShow = (event) => {
 
-      if (event.clientY > 500) {
+      if (event.clientY > 800) {
         setPosition(true);
       }
       else {
