@@ -7,6 +7,7 @@ import { ShowContext,DataContext } from '../../App';
 import { ShowContextAllOrders,AllDataContext } from '@renderer/Orders';
 import { ShowContextCustomer,DataContextCustomer } from '@renderer/CustomerProfile';
 import { ShowContextCompany,DataContextCompany } from '@renderer/StoreProfile';
+import { ActionDataContext,ShowContext as ShowToolBar,CheckedContext } from '@renderer/Orders';
 const { ipcRenderer } = require('electron');
 
 
@@ -31,27 +32,32 @@ function List_1({id,setShow,Position,setHover}): JSX.Element {
     //customer removal 
     
     const queryClient = useQueryClient();
-  
+    const {SelectedIDs} = useContext(ActionDataContext);
+    const {setSeen} = useContext(ShowToolBar);
+    const {setChecked} = useContext(CheckedContext);
   const Delete_Mutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (id) => {
       await ipcRenderer.invoke('remove-orders', id);
     },
     onSuccess: () => {
-      queryClient.refetchQueries({queryKey: ['orders'] });
-      queryClient.refetchQueries({queryKey: ['Status'] });
-      queryClient.refetchQueries({queryKey: ['Percentage']});
-      queryClient.refetchQueries({queryKey: ['Company']});
-      queryClient.refetchQueries({queryKey: ['allOrders']});
-      queryClient.refetchQueries({queryKey: ['Overview']});
-      queryClient.refetchQueries({queryKey: ['CustomerStatus']});
-      queryClient.refetchQueries({queryKey: ['CustomerOverview']});
-      queryClient.refetchQueries({queryKey: ['Customer']});
-      queryClient.refetchQueries({queryKey: ['TopCustomers']});
-      queryClient.refetchQueries({queryKey: ['GetStoreStatus']});
-      queryClient.refetchQueries({queryKey: ['CompanyOrdersFetching']});
-      queryClient.refetchQueries({queryKey: ['GetStoreInfo']});
-      queryClient.refetchQueries({queryKey: ['Companyfetching']});
-      queryClient.refetchQueries({queryKey: ['GetAnalytics']});
+      queryClient.invalidateQueries({queryKey: ['orders'] });
+      queryClient.invalidateQueries({queryKey: ['Status'] });
+      queryClient.invalidateQueries({queryKey: ['Percentage']});
+      queryClient.invalidateQueries({queryKey: ['Company']});
+      queryClient.invalidateQueries({queryKey: ['allOrders']});
+      queryClient.invalidateQueries({queryKey: ['Overview']});
+      queryClient.invalidateQueries({queryKey: ['CustomerStatus']});
+      queryClient.invalidateQueries({queryKey: ['CustomerOverview']});
+      queryClient.invalidateQueries({queryKey: ['Customer']});
+      queryClient.invalidateQueries({queryKey: ['TopCustomers']});
+      queryClient.invalidateQueries({queryKey: ['GetStoreStatus']});
+      queryClient.invalidateQueries({queryKey: ['CompanyOrdersFetching']});
+      queryClient.invalidateQueries({queryKey: ['GetStoreInfo']});
+      queryClient.invalidateQueries({queryKey: ['Companyfetching']});
+      queryClient.invalidateQueries({queryKey: ['GetAnalytics']});
+      setChecked(false);
+      setSeen(false);
+      SelectedIDs.length = 0;
     }
   });
 
@@ -61,6 +67,7 @@ function List_1({id,setShow,Position,setHover}): JSX.Element {
   const Delete = (id:any) => {
     try {
       Delete_Mutation.mutate(id);
+
     }
     catch (error) {
       console.error('Mutation failed:', error);
@@ -102,7 +109,7 @@ function List_1({id,setShow,Position,setHover}): JSX.Element {
   
            <li style={{backgroundImage:`url(${smallArrow})`}} onMouseEnter={()=>{setHover(true);}}><span>Status</span></li>
            <li style={{backgroundImage:`url(${editPen})`   }} onMouseEnter={()=>{setHover(false);}} onClick={()=>{setShow(pervsetsgate => !pervsetsgate); handleEdit(id);setVisiable(true);setVisiableAll(true);isCustomerVisible(true); isCompanyVisible(true)}}><span>Edit</span></li>
-           <li style={{backgroundImage:`url(${trashBin})`  }} onMouseEnter={()=>{setHover(false);}} onClick={()=>{setShow(pervsetsgate => !pervsetsgate); Delete(id);} }><span>Remove</span></li>
+           <li className='li-rem' style={{backgroundImage:`url(${trashBin})`  }} onMouseEnter={()=>{setHover(false);}} onClick={()=>{setShow(pervsetsgate => !pervsetsgate); Delete(id);} }><span>Remove</span></li>
           </ul> 
          
   

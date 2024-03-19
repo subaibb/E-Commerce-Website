@@ -27,7 +27,6 @@ export default  function Company_Holder(): JSX.Element {
   if (fetchCompanys.isLoading) return <div></div>;
   if (fetchCompanys.isError) return <div>Error:</div>;
 
-  console.log (fetchCompanys.data);
 
     return (
       <div className="flex absolute w-[78.5vw] h-[20.5vh] top-[73.7vh] left-[14.8vw] animate-[400ms_slideUp_forwards] justify-between" >

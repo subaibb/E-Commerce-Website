@@ -1,6 +1,7 @@
 import {motion} from 'framer-motion';
 import DataLabels from './DataLabels';
 import { useQuery } from '@tanstack/react-query';
+import EmptyOrdes from "./../../public/Empty-Orders.svg";
 const {ipcRenderer} = require('electron');
 
 
@@ -14,13 +15,17 @@ export default function OrderTable({id}): JSX.Element {
     }});
     if (GetCompanyOrders.isLoading) return <div></div>
     if (GetCompanyOrders.isError) return <div>Error</div>
-
     return (
         <>
         <motion.div className="bg-default h-full w-[57.3vw] rounded-2xl shadow-[2px_4px_4px_#68B6FF0D] mr-auto flex flex-col"
         initial={{scale:0.9, opacity:0}}
         animate={{scale:1, opacity:1}}
         transition={{duration:0.2,delay:0.2}}>
+             { (GetCompanyOrders.data.Orders.length === 0) &&
+        <div className="w-[10vw] h-[5vw]  absolute top-[50%] left-[24vw] flex flex-col ">
+            <img src={EmptyOrdes} className="w-[61px] h-[66px] relative m-auto"/>
+            <label className="w-[10vw] h-[2vh] m-auto text-center text-[#D9D9D9] text-[16px]">It looks empty here..</label>
+        </div>  }
             <TopLabels/>
             <DataHolder data={GetCompanyOrders.data?.Orders}/>
         </motion.div>

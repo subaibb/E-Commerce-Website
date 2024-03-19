@@ -294,9 +294,41 @@ ipcMain.handle('fetch-status', async (event, args) => {
 
 
 //get company
-
+let CompanyConfig;
 ipcMain.handle('fetch-company', async (event, args) => {
 
+
+  function getOrderBy(args) {
+    switch (args) {
+      
+        case 1:
+            
+            CompanyConfig =  [
+                { createdAt: 'desc' },
+                { id: 'desc' },
+            ];
+            break;
+        case 2:
+            
+          CompanyConfig = [
+                { name: 'asc' }
+            ];
+            break;
+  
+        case 3:
+            
+            CompanyConfig = [
+                { orders: { _count: 'desc' } }
+            ];
+            break;
+        default:
+          if (CompanyConfig == null) {
+            CompanyConfig = [{ createdAt: 'desc' }, { id: 'desc' }];
+        }
+        break;
+    }
+  }
+  getOrderBy(args);
 
   try {
    
@@ -324,14 +356,7 @@ ipcMain.handle('fetch-company', async (event, args) => {
         
         
       },
-      orderBy: [
-        {
-           createdAt: 'desc',
-        },
-        {
-           id: 'desc',
-        }
-     ],
+      orderBy: CompanyConfig,
     });
 
     const companyCounts: { 
@@ -476,12 +501,35 @@ ipcMain.handle('fetch-top-company', async (event, args) => {
 // change status  
 
 ipcMain.handle('change-status', async (event, args) => {
+  event;
   try {
     const result = await prisma.order.update({
       where: { id: args.id },
       data: { status: args.status },
     });
     return result ;
+   
+  } catch (error) {
+    console.error('Error changing status:', error);
+    throw error;
+  }
+});
+
+ipcMain.handle('change-status-multiple', async (event, args,status) => {
+
+  try {
+
+          const updatePromises = args.map(async (id) => {
+            const result = await prisma.order.update({
+                where: { id: id },
+                data: { status: status },
+            });
+            return result;
+        });
+
+        // Wait for all update promises to resolve
+        const results = await Promise.all(updatePromises);
+        return results;
   } catch (error) {
     console.error('Error changing status:', error);
     throw error;
@@ -504,6 +552,26 @@ ipcMain.handle('remove-orders', async (event, args) => {
   }
   
 });
+
+
+ipcMain.handle('remove-orders-multiple', async (event, args) => {
+  
+  try {
+      const updatePromises = args.map(async (id) => {
+        const result = await prisma.order.delete({
+            where: { id: id },
+        });
+        return result;
+    });
+    const results = await Promise.all(updatePromises);
+    return results;
+  } catch (error) {
+    console.error('Error deleting order:', error);
+    throw error;
+  }
+  
+});
+
 
 ipcMain.handle('fetch-percentage', async (event, args) => {
 
@@ -2008,6 +2076,20 @@ ipcMain.handle("fetch-analytics", async (event, args) => {
       FiveMonthsAgoPending += order_totals;
     });
 
+    //find Max for all 
+    let MaxAll = Math.max(
+      ThisMonthPaid,
+      LastMonthPaid,
+      TwoMonthsAgoPaid,
+      ThreeMonthsAgoPaid,
+      FourMonthsAgoPaid,
+      FiveMonthsAgoPaid,
+      ThisMonthPending,
+      LastMonthPending,
+      TwoMonthsAgoPending,
+      ThreeMonthsAgoPending,
+      FourMonthsAgoPending,
+      FiveMonthsAgoPending);
     return {
       ThisMonthPaid,
       LastMonthPaid,
@@ -2021,6 +2103,7 @@ ipcMain.handle("fetch-analytics", async (event, args) => {
       ThreeMonthsAgoPending,
       FourMonthsAgoPending,
       FiveMonthsAgoPending,
+      MaxAll,
     };
 
     
@@ -2112,7 +2195,7 @@ ipcMain.handle("edit-order", async (event, args) => {
     });
 }
 
-    const result = await prisma.order.update({
+   const result = await prisma.order.update({
       where: {
         id: args.OrderID
       },
@@ -2131,16 +2214,190 @@ ipcMain.handle("edit-order", async (event, args) => {
         createdAt: formattedDateOrder,
       }
     });
-   
-    return result;
+
+
     
-     
+     return result;
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error;
   }
 });
 
+
+ipcMain.handle("get-company-details", async (event, args) => {
+
+  try {
+    const result = await prisma.company.findFirst({
+      where: {
+        id: args
+      },
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        Address: true,
+        CompanyBackground: true,
+        createdAt: true,
+      }
+    });
+    return {
+      CompanyID: result?.id,
+      Name: result?.name,
+      Phone: result?.phone,
+      Address: result?.Address,
+      CompanyBackground: result?.CompanyBackground,
+      CreatedAt: formatDate(result?.createdAt),
+      
+    };
+    
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+});
+
+ipcMain.handle("edit-company", async (event, args) => { 
+  console.log(args);
+  try {
+    const result = await prisma.company.update({
+      where: {
+        id: args.CompanyID
+      },
+      data: {
+        name: args.Name,
+        phone: args.Phone,
+        Address: args.Address
+      }
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+});
+
+
+ipcMain.handle("delete-company", async (event, args) => {
+  try {
+
+    //check if the company has any orders
+
+    const CompanyOrders = await prisma.order.findMany({
+      where: {
+        companyId: args
+      }
+    });
+
+    //delete all company orders
+    if (CompanyOrders.length > 0) {
+      CompanyOrders.forEach(async (order) => {
+        await prisma.order.delete({
+          where: {
+            id: order.id
+          }
+        });
+      });
+    }
+    const result = await prisma.company.delete({
+      where: {
+        id: args
+      }
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+});
+
+ipcMain.handle("get-customer-details",async (event, args) => {
+  try {
+    const result = await prisma.user.findFirst({
+      where: {
+        id: args
+      },
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        Address: true,
+        UserBackground: true,
+        createdAt: true,
+        StoreName: true
+      }
+    });
+    return {
+      CustomerID: result?.id,
+      Name: result?.name,
+      Phone: result?.phone,
+      Address: result?.Address,
+      CustomerBackground: result?.UserBackground,
+      CreatedAt: formatDate(result?.createdAt),
+      Store: result?.StoreName  
+    };
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+});
+
+
+ipcMain.handle("edit-customer", async (event, args) => {
+  try {
+    const result = await prisma.user.update({
+      where: {
+        id: args.CustomerID
+      },
+      data: {
+        name: args.Name,
+        phone: args.Phone,
+        Address: args.Address,
+        StoreName: args.Store
+      }
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+});
+
+ipcMain.handle("delete-customer", async (event, args) => {
+
+  //check if the customer has any orders
+
+
+
+  try {
+
+      
+  const CustomerOrders = await prisma.order.findMany({
+    where: {
+      userId: args
+    }
+  });
+  //delete all company orders
+  if (CustomerOrders.length > 0) {
+    CustomerOrders.forEach(async (order) => {
+      await prisma.order.delete({
+        where: {
+          id : order.id
+        }
+      });
+    });
+  }
+    const result = await prisma.user.delete({
+      where: {
+        id: args
+      }
+    });
+    return result;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+});
 
 function formatDate(date) {
   var d = new Date(date),

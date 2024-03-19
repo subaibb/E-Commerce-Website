@@ -5,7 +5,7 @@ import Add_Button from './components/_DashComponent/add_button'
 import OrderReveiw from './components/_OrderComponents/orderreveiw'
 import EditBox from './components/_OrderComponents/EditBox'
 import {createContext } from 'react'
-import {useState,useRef,useEffect } from 'react';
+import {useState,useEffect } from 'react';
 
 
 type ShowType = {
@@ -13,7 +13,14 @@ type ShowType = {
   setVisiableAll: (value: boolean) => void;
 };
 
+type ShowContextType = {
+  seen: boolean;
+  setSeen: (value: boolean) => void;
+};
 
+type ActionDataType = {
+  SelectedIDs: string[];
+};
 
 type DataType = {
   User:string,
@@ -31,6 +38,29 @@ type AllDataContextType = {
   AllData: DataType;
   setAllData: (value: any) => void;
 };
+
+
+
+
+
+export const ActionDataContext = createContext<ActionDataType>({
+  SelectedIDs: [],
+});
+
+type selectedType = {
+  selectedAll: number;
+  setSelectedAll: (value: number) => void;
+};
+type CheckedContextType = {
+  checked: boolean;
+  setChecked: (value: boolean) => void;
+};
+
+export const ContextSelectAll= createContext<selectedType>({
+  selectedAll: 10,
+  setSelectedAll: (value: number) => {value},
+});
+
 export const AllDataContext = createContext<AllDataContextType>({
   AllData: {User:'', Company:'', Amount:0, Price:0, FabricType:'', Unit:'', Status:'', CreatedAt:''},
   setAllData: (value: any) => {value},
@@ -41,11 +71,24 @@ export const ShowContextAllOrders = createContext<ShowType>({
   setVisiableAll: (value: boolean) => {value},
 })
 
+export const ShowContext = createContext<ShowContextType>({
+  seen: false,
+  setSeen: (value: boolean) => {value},
+})
+
+export const CheckedContext = createContext<CheckedContextType>({
+  checked: false,
+  setChecked: (value: boolean) => {value},
+})
+
+
 
 
 export default function Orders(): JSX.Element {
-
-
+  const [selectedAll, setSelectedAll] = useState(10);
+  const [SelectedIDs] = useState<string[]>([]);
+  const [seen, setSeen] = useState(false);
+  const [checked, setChecked] = useState(false);
   const [Allvisiable, setVisiableAll] = useState(false);
   const [AllData, setAllData] = useState<any>({
     User:'',
@@ -57,6 +100,9 @@ export default function Orders(): JSX.Element {
     Status:'',
     CreatedAt:'',
   });
+
+
+  
   useEffect(() => {
     setAllData({User:'', Company:'', Amount:0, Price:0, FabricType:'', Unit:'', Status:'', CreatedAt:''});
   },[Allvisiable]);
@@ -64,101 +110,22 @@ export default function Orders(): JSX.Element {
 
 
 
-  const [scale, setScale] = useState(0.95);
-  const [statscale, setStatscale] = useState(1);
-  const elementRef = useRef<HTMLDivElement>(null);
-  let [prevScrollTop, setPrevScrollTop] = useState(0);
-  useEffect(() => {
-    const handleScroll = () => {
-      const element = elementRef.current;
-      if (!element) return;
-
-      const scrollY = element.scrollTop;
-      const maxScroll = element.scrollHeight - element.clientHeight;
-      
-      // Scale for main content
-      const maxScale = 1;
-      const minScale = 0.95;
-
-      // Scale for statistics section
-      const maxscaleStat = 1;
-      const minscaleStat = 0.95;
-
-      // Calculate scale for main content
-      const scaletest = minScale + (maxScale - minScale) * (scrollY / maxScroll);
-      setScale(scaletest);
-
-      // Calculate scale for statistics section
-      const scalingtest = maxscaleStat - (maxscaleStat - minscaleStat) * (scrollY / maxScroll);
-      setStatscale(scalingtest);
-    };
-
-    const element = elementRef.current;
-    if (element) {
-      element.addEventListener('scroll', handleScroll);
-      return () => element.removeEventListener('scroll', handleScroll);
-    }
-    return () => {};
-  }, []);
-
-  function scrollToTop(div, duration) {
-    const scrollStep = -div.scrollTop / (duration / 15);
-    
-    function scroll() {
-      if (div.scrollTop <= 0) return;
-      div.scrollBy(0, scrollStep);
-      requestAnimationFrame(scroll);
-    }
-    
-    scroll();
-  }
-  
-  function scrollToBottom(div, duration) {
-    const scrollStep = (div.scrollHeight - div.scrollTop - div.clientHeight) / (duration / 15);
-    
-    function scroll() {
-      if (div.scrollTop + div.clientHeight >= div.scrollHeight) return;
-      div.scrollBy(0, scrollStep);
-      requestAnimationFrame(scroll);
-    }
-    
-    scroll();
-  }
-  
-  function handleScroll(event) {
-    const div = event.target; // The div that is being scrolled
-    const scrollTop = div.scrollTop;
-    const scrollHeight = div.scrollHeight;
-    const clientHeight = div.clientHeight;
-    
-    // If user is scrolling up and not already at the top
-    if (scrollTop < prevScrollTop && scrollTop > 0) {
-      // Scroll to the top
-      scrollToTop(div, 1200); // Adjust duration as needed
-    } 
-    // If user is scrolling down and not already at the bottom
-    else if (scrollTop > prevScrollTop && scrollTop + clientHeight < scrollHeight) {
-      // Scroll to the bottom
-      scrollToBottom(div, 1200); // Adjust duration as needed
-    }
-    
-    // Update the prevScrollTop state variable
-    setPrevScrollTop(scrollTop);
-  }
-
-
 
  
 
     return (
       <>
-     <AllDataContext.Provider value={{AllData, setAllData}}>
-    <ShowContextAllOrders.Provider value={{Allvisiable, setVisiableAll}}>
+      <AllDataContext.Provider value={{AllData, setAllData}}>
+      <ShowContextAllOrders.Provider value={{Allvisiable, setVisiableAll}}>
+      <ShowContext.Provider value={{seen, setSeen}}>
+      <ActionDataContext.Provider value={{SelectedIDs}}>
+      <ContextSelectAll.Provider value={{selectedAll, setSelectedAll}}>
+      <CheckedContext.Provider value={{checked, setChecked}}>
       <h2 className='font-medium text-4xl top-[3vh] left-[12.9vw] relative w-fit text-secondary animate-[400ms_fadeIn_forwards] '>Orders</h2>
       <div className=" h-[89.7vh] w-[81.9vw] bg-bg left-[12.2vw] top-[3.9vh] relative rounded-3xl ">
-        <div onScroll={handleScroll} id='my-div' ref={elementRef} className=' Background  w-[99.6%] h-[97%] overflow-auto absolute top-[1vh]'>
-        <OrderReveiw opacity ={statscale} scale={statscale}/>
-        <OrderTable opacity ={scale} scale={scale}/>
+        <div id='my-div' className=' Background  w-[99.6%] h-[97%] overflow-auto absolute top-[1vh]'>
+        <OrderReveiw/>
+        <OrderTable />
         <Status/> 
         </div>
      
@@ -167,6 +134,10 @@ export default function Orders(): JSX.Element {
       <Add_Button/>
       <EditBox/>
       <Buttons/>
+      </CheckedContext.Provider>
+      </ContextSelectAll.Provider>
+      </ActionDataContext.Provider>
+      </ShowContext.Provider>
       </ShowContextAllOrders.Provider>
       </AllDataContext.Provider>
       </> 

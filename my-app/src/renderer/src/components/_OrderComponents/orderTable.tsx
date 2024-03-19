@@ -29,7 +29,7 @@ interface orderTableProps {
 
 
 
-export default function orderTable({opacity,scale}:orderTableProps): JSX.Element {
+export default function orderTable({}:orderTableProps): JSX.Element {
 
 
   const [orders, setOrders] = useState<Order[]>([]);
@@ -46,12 +46,10 @@ export default function orderTable({opacity,scale}:orderTableProps): JSX.Element
       <SearchBar data={getOrders.data} setOrders={setOrders}/>
      }
     </div>
-    <div style={{opacity:opacity,transform: `scale(${scale})`}} className="w-[76.3vw] h-[66vh] absolute bg-default left-[2.3vw] top-[36vh] rounded-[14px] shadow-[2px_4px_4px_#68B6FF0D] animate-[400ms_fadeInTable_forwards] flex flex-col">
+    <div className="w-[76.3vw] h-[66vh] justify-center items-center absolute bg-default left-[2.3vw] top-[36vh] rounded-[14px] shadow-[2px_4px_4px_#68B6FF0D] animate-[400ms_fadeInTable_forwards] flex flex-col">
         <TopLabels/>
 
-        <div className='topLabels w-[72vw] left-[2.1vw]  h-[12vh] absolute top-[8vh] flex flex-col'/>
-
-        <div className=' data-holder absolute top-[8vh] w-[72.7vw] left-[2.1vw] h-[56vh] h-max[56vh] overflow-auto z-0'>
+        <div className=' data-holder relative w-[74.5vw] top-[-2vh] m-auto h-[56vh] h-max[56vh] overflow-auto z-0 '>
               
         {orders.length === 0 && 
             getOrders.data?.map((order: Order) => (

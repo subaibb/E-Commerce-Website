@@ -23,9 +23,12 @@ export default function Analytics({id}): JSX.Element {
     const GetAnalytics = useQuery({queryKey:['GetAnalytics',id],queryFn: async () => {
         return await ipcRenderer.invoke('fetch-analytics',id)
     }});
-    if (GetAnalytics.isLoading) return <div></div>
-    if (GetAnalytics.isError) return <div>Error</div>
+    if (GetAnalytics.isLoading) return <div></div>;
+    if (GetAnalytics.isError) return <div>Error</div>;
     
+    if (GetAnalytics.data === undefined) return <div></div>;
+    let Profile  = GetProfile(GetAnalytics.data.MaxAll);
+    console.log(Profile);
     return (
         <>
         <motion.div className="bg-default h-full w-[57.3vw] rounded-2xl shadow-[2px_4px_4px_#68B6FF0D] mr-auto"
@@ -35,10 +38,10 @@ export default function Analytics({id}): JSX.Element {
 
         <h2 className="absolute w-[10.4vw] h-[6.1vh] top-[0.3vh] flex justify-center items-center text-[18px] text-secondary">Orders Report</h2>
 
-        <AnalyticAmounts />
+        <AnalyticAmounts Profile={Profile} />
         <AnalyticLines />
         <MonthLabels />
-        <StaticHolder data={GetAnalytics.data} />
+        <StaticHolder Profile={Profile} data={GetAnalytics.data} />
         </motion.div>
         </>
     )
@@ -50,20 +53,32 @@ export default function Analytics({id}): JSX.Element {
 
 
 
-function AnalyticAmounts (): JSX.Element{
+function AnalyticAmounts ({Profile}): JSX.Element{
     return (
         <div className="Analytic-Amounts absolute top-[6.1vh] left-[1.9vw] h-fit w-fit">
-            <label>200K</label>
-            <label>180K</label>
-            <label>160K</label>
-            <label>140K</label>
-            <label>120K</label>
-            <label>100K</label>
-            <label>80K</label>
-            <label>60K</label>
-            <label>40K</label>
-            <label>20K</label>
-            <label>0</label>
+
+            {
+                Profile === 1 && <LabelProfile1 />
+            }
+            {
+                Profile === 2 && <LabelProfile2 />
+            }
+            {
+                Profile === 3 && <LabelProfile3 />
+            }
+            {
+                Profile === 4 && <LabelProfile4 />
+            }
+            {
+                Profile === 5 && <LabelProfile5 />
+            }
+            {
+                Profile === 6 && <LabelProfile6 />
+                
+              
+            }
+
+           
         </div>
     )
 }
@@ -114,17 +129,17 @@ function MonthLabels (): JSX.Element{
     )
 }
 
-function StaticHolder ({data}:{data:AnalyticsProps}):JSX.Element{
+function StaticHolder ({data,Profile}:{data:AnalyticsProps,Profile:any}):JSX.Element{
 
-
+let Height = Profile === 1 ? 606 : Profile === 2 ? 404 : Profile === 3 ? 303 : Profile === 4 ? 151.5 : Profile === 5 ? 30.3 : 3.3;
     return (
         <div className="w-[52.4vw] h-[35.1vh] absolute left-[4.9vw] top-[5.1vh] flex  ">
-            <Static dataGreen={data.FiveMonthsAgoPaid} heightGreen={(data.FiveMonthsAgoPaid/606)}   dataGray={data.FiveMonthsAgoPending}   heightGray={(data.FiveMonthsAgoPending/606)} />
-            <Static dataGreen={data.FourMonthsAgoPaid} heightGreen={(data.FourMonthsAgoPaid/606)}   dataGray={data.FourMonthsAgoPending}   heightGray={(data.FourMonthsAgoPending/606)} />
-            <Static dataGreen={data.ThreeMonthsAgoPaid} heightGreen={(data.ThreeMonthsAgoPaid/606)} dataGray={data.ThreeMonthsAgoPending}   heightGray= {(data.ThreeMonthsAgoPending/606)} />
-            <Static dataGreen={data.TwoMonthsAgoPaid} heightGreen={(data.TwoMonthsAgoPaid/606)}     dataGray={data.TwoMonthsAgoPending}   heightGray={(data.TwoMonthsAgoPending/606)} />
-            <Static dataGreen={data.LastMonthPaid} heightGreen={(data.LastMonthPaid/606)}           dataGray={data.LastMonthPending}   heightGray={(data.LastMonthPending/606)} />
-            <Static dataGreen={data.ThisMonthPaid} heightGreen={(data.ThisMonthPaid/606)}           dataGray={data.ThisMonthPending}   heightGray={(data.ThisMonthPending/606)} />
+            <Static dataGreen={data.FiveMonthsAgoPaid} heightGreen={(data.FiveMonthsAgoPaid/Height)}   dataGray={data.FiveMonthsAgoPending}   heightGray={(data.FiveMonthsAgoPending/Height)} />
+            <Static dataGreen={data.FourMonthsAgoPaid} heightGreen={(data.FourMonthsAgoPaid/Height)}   dataGray={data.FourMonthsAgoPending}   heightGray={(data.FourMonthsAgoPending/Height)} />
+            <Static dataGreen={data.ThreeMonthsAgoPaid} heightGreen={(data.ThreeMonthsAgoPaid/Height)} dataGray={data.ThreeMonthsAgoPending}   heightGray= {(data.ThreeMonthsAgoPending/Height)} />
+            <Static dataGreen={data.TwoMonthsAgoPaid} heightGreen={(data.TwoMonthsAgoPaid/Height)}     dataGray={data.TwoMonthsAgoPending}   heightGray={(data.TwoMonthsAgoPending/Height)} />
+            <Static dataGreen={data.LastMonthPaid} heightGreen={(data.LastMonthPaid/Height)}           dataGray={data.LastMonthPending}   heightGray={(data.LastMonthPending/Height)} />
+            <Static dataGreen={data.ThisMonthPaid} heightGreen={(data.ThisMonthPaid/Height)}           dataGray={data.ThisMonthPending}   heightGray={(data.ThisMonthPending/Height)} />
         </div>
     )
 }
@@ -195,7 +210,7 @@ function CommentAnalytic ({position,data}){
     return (
 
         
-        <motion.div className={`w-[6vw] h-[6vh] relative flex justify-center items-center`} style={{
+        <motion.div className={`w-[6vw] h-[6vh] relative flex justify-center items-center z-10`} style={{
             backgroundImage: `url(${Comment})`,
             backgroundSize: 'contain',  
             backgroundRepeat: 'no-repeat',
@@ -210,5 +225,143 @@ function CommentAnalytic ({position,data}){
         >
       <label className="text-default">{data}</label>      
         </motion.div>
+    )
+}
+
+function GetProfile (Max:number){
+
+    let Profile:number = 0;
+
+    if (Max < 1000 && Max >= 0){
+        Profile = 6;
+    }
+    else if (Max < 10000 && Max >= 1000){
+        Profile = 5;
+    }
+    else if (Max < 50000 && Max >= 10000){
+        Profile = 4;
+    }
+    else if (Max < 100000 && Max >= 50000){
+        Profile = 3;
+    }
+    else if (Max < 150000 && Max >= 100000){
+        Profile = 2;
+    }
+    else if (Max < 200000 && Max >= 150000){
+        Profile = 1;
+    }
+    else if (Max >= 200000){
+        Profile = 1;
+    }
+    return Profile;
+
+}
+
+function LabelProfile4 ():JSX.Element{
+    return (
+        <>
+            <label>50K</label>
+            <label>45K</label>
+            <label>40K</label>
+            <label>35K</label>
+            <label>30K</label>
+            <label>25K</label>
+            <label>20K</label>
+            <label>15K</label>
+            <label>10K</label>
+            <label>5K</label>
+            <label>0</label>
+        </>
+    )
+}
+
+function LabelProfile3 ():JSX.Element{
+    return (
+        <>
+            <label>100K</label>
+            <label>90K</label>
+            <label>80K</label>
+            <label>70K</label>
+            <label>60K</label>
+            <label>50K</label>
+            <label>40K</label>
+            <label>30K</label>
+            <label>20K</label>
+            <label>10K</label>
+            <label>0</label>
+        </>
+    )
+}
+
+function LabelProfile2 ():JSX.Element{
+    return (
+        <>
+            <label>150K</label>
+            <label>135K</label>
+            <label>120K</label>
+            <label>105K</label>
+            <label>90K</label>
+            <label>75K</label>
+            <label>60K</label>
+            <label>45K</label>
+            <label>30K</label>
+            <label>15K</label>
+            <label>0</label>
+        </>
+    )
+}
+
+
+function LabelProfile1 ():JSX.Element{
+    return (
+        <>
+            <label>200K</label>
+            <label>180K</label>
+            <label>160K</label>
+            <label>140K</label>
+            <label>120K</label>
+            <label>100K</label>
+            <label>80K</label>
+            <label>60K</label>
+            <label>40K</label>
+            <label>20K</label>
+            <label>0</label>
+        </>
+    )
+}
+
+function LabelProfile5 ():JSX.Element{
+    return (
+        <>
+            <label>10K</label>
+            <label>9K</label>
+            <label>8K</label>
+            <label>7K</label>
+            <label>6K</label>
+            <label>5K</label>
+            <label>4K</label>
+            <label>3K</label>
+            <label>2K</label>
+            <label>1K</label>
+            <label>0</label>
+        </>
+    )
+}
+
+function LabelProfile6 ():JSX.Element{
+    return (
+        <>
+            <label>1K</label>
+            <label>900</label>
+            <label>800</label>
+            <label>700</label>
+            <label>600</label>
+            <label>500</label>
+            <label>400</label>
+            <label>300</label>
+            <label>200</label>
+            <label>100</label>
+            <label>0</label>
+        </>
     )
 }

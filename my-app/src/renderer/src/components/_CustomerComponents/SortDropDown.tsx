@@ -7,7 +7,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 
 export default function SortDropDown({Type}): JSX.Element {
     const ref = useRef<HTMLDivElement>(null);
-
+    const [background, setBackground] = useState(1);
     
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -42,7 +42,7 @@ export default function SortDropDown({Type}): JSX.Element {
      exit={{opacity:0}}
      transition={{duration:0.07}}
     >
-    <DropDown setDropDown={setDropDown} Type={Type}/>
+    <DropDown background={background} setBackground={setBackground} setDropDown={setDropDown} Type={Type}/>
     </motion.div>
     }
     </AnimatePresence>
@@ -54,7 +54,7 @@ export default function SortDropDown({Type}): JSX.Element {
 
 
 
-function DropDown ({setDropDown,Type}): JSX.Element {
+function DropDown ({setDropDown,Type,background,setBackground}): JSX.Element {
 
   const queryClient = useQueryClient();
 
@@ -62,16 +62,18 @@ function DropDown ({setDropDown,Type}): JSX.Element {
   const ChangeStatusMutation = useMutation({
     mutationFn: async (value:number) => {
       Type === 1 ?
-      await ipcRenderer.invoke('fetch-stores', value):
+      await ipcRenderer.invoke('fetch-company', value):
       await ipcRenderer.invoke('fetch-customers', value);
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ['CustomerData'] });
+      queryClient.refetchQueries({ queryKey: ['GetStores'] });
     }
   });
 
   const handleButtonClick = (value:number) => {
     try {
+      setBackground(value);
       ChangeStatusMutation.mutate(value);
     }
     catch (error) {
@@ -85,9 +87,9 @@ function DropDown ({setDropDown,Type}): JSX.Element {
     return (
         <>
        <ul className='customers-list w-[8.7vw] h-[13vh] bg-default rounded-[12px] border-2 border-[#EAEAEA] left-[14.6vw] top-[17vh] absolute flex flex-col'>
-              <li  onClick={()=>{setDropDown((pervstate:boolean)=>(!pervstate)); handleButtonClick(1)}}>Default</li>
-              <li  onClick={()=>{setDropDown((pervstate:boolean)=>(!pervstate)); handleButtonClick(2)}}>Name</li>
-              <li  onClick={()=>{setDropDown((pervstate:boolean)=>(!pervstate)); handleButtonClick(3)}}>Orders</li>
+              <li style={{backgroundColor: background===1?'#49A7FF':'',  color: background === 1 ? '#FFFFFF' : ''}}  onClick={()=>{setDropDown((pervstate:boolean)=>(!pervstate)); handleButtonClick(1)}}>Default</li>
+              <li style={{backgroundColor: background===2?'#49A7FF':'',  color: background === 2 ? '#FFFFFF' : ''}}  onClick={()=>{setDropDown((pervstate:boolean)=>(!pervstate)); handleButtonClick(2)}}>Name</li>
+              <li style={{backgroundColor: background===3?'#49A7FF':'',  color: background === 3 ? '#FFFFFF' : ''}}  onClick={()=>{setDropDown((pervstate:boolean)=>(!pervstate)); handleButtonClick(3)}}>Orders</li>
        </ul>
         </>
     )

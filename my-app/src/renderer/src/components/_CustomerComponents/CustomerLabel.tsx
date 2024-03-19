@@ -39,8 +39,8 @@ export default function CustomerLabel({delay,customer}:{delay:number,customer:Cu
             <label className="Customer-Card-Label-2">{customer.phone}</label>
             </div>
             <div className="relative top-[5vh] left-[4%] w-[92%] h-[5vh] flex">
+                <ManageButton id={customer.id}/>
                 <ProfileButton id={customer.id}/>
-                <ManageButton/>
             </div>
         
              

@@ -4,9 +4,11 @@ import Money from '../../public/Money.svg';
 import Orders_pic from '../../public/Orders.svg';
 import Arrowbtn from '../../public/Arrow-btn.svg';
 import Setting from '../../public/Setting.svg';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery,useMutation } from '@tanstack/react-query';
 import { PageContext } from '../../Stores';
 import { useContext,useState } from 'react';
+import {DataContext} from '../../Stores';
+import { EditFormContext } from "../../Stores"
 import SearchBar from '../_OrderComponents/searchbar';
 import { Link } from 'react-router-dom';
 import StorePic from '../_StoreProfile/StorePhoto';
@@ -23,6 +25,10 @@ type StoreObject = {
 
 
 export default function StoreHolder(): JSX.Element {
+
+
+
+  const {setEditForm} = useContext(EditFormContext);
 
   const [Stores, setStores] = useState<StoreObject[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -44,11 +50,11 @@ export default function StoreHolder(): JSX.Element {
            
                  {setStores.length > 0 ? Stores.slice((Page-1)*6,Page*6).map((store,index) => (
 
-                  <Store key={store.companyId} data={store.storeName} backgroundColor={store.StoreBackground}  Revenue={store.totalPaid} Orders={store.notCancelledOrdersCount} delay={index*0.1} id={store.companyId}/>
+                  <Store setEditForm={setEditForm} key={store.companyId} data={store.storeName} backgroundColor={store.StoreBackground}  Revenue={store.totalPaid} Orders={store.notCancelledOrdersCount} delay={index*0.1} id={store.companyId}/>
                   )) :
                   GetStores.data.updatedMainArray.slice((Page-1)*6,Page*6).map((store,index) => (
                   
-                 <Store key={store.companyId} data={store.storeName} backgroundColor={store.StoreBackground}  Revenue={store.totalPaid} Orders={store.notCancelledOrdersCount} delay={index*0.1} id={store.companyId}/>
+                 <Store setEditForm={setEditForm} key={store.companyId} data={store.storeName} backgroundColor={store.StoreBackground}  Revenue={store.totalPaid} Orders={store.notCancelledOrdersCount} delay={index*0.1} id={store.companyId}/>
                 ))
            }  
         </div>
@@ -58,7 +64,27 @@ export default function StoreHolder(): JSX.Element {
 }
 
 
-const Store = ({data,Revenue,Orders,delay,id,backgroundColor}) => {
+const Store = ({data,Revenue,Orders,delay,id,backgroundColor,setEditForm}) => {
+
+  const {setData} = useContext(DataContext);
+  const Edit = useMutation({
+    mutationFn: async () => {
+      return await ipcRenderer.invoke('get-company-details', id);
+    },
+    onSuccess: (data) => {
+      setData(data);
+    }
+  });
+
+    
+  const handleEdit = async (id) => {
+    try {
+      Edit.mutate(id);
+    } catch (error) {
+      console.error('An error occurred during mutation:', error);
+    }
+  };
+
 
   Revenue = Revenue || 0;
 
@@ -86,7 +112,7 @@ const Store = ({data,Revenue,Orders,delay,id,backgroundColor}) => {
         <div className="h-[3.6vh] w-[2vw] bg-company rounded-xl absolute left-[21.5vw] top-[7.8vh] bg-[length:32px_32px] bg-no-repeat bg-center"style={{ backgroundImage: `url(${Orders_pic})` }}/>
         <label className="text-secondary absolute left-[24.1vw] top-[7.5vh] text-[14px] font-medium">Orders</label> 
         <label className="text-secondary absolute left-[24.1vw] top-[9.5vh] text-[14px] font-bold">{Orders}</label><br />
-        <button className="h-[4.8vh] w-[9.5vw] bg-[#F1F8F2] rounded-xl left-[8.9vw] top-[13vh] absolute bg-[length:27px_27px] bg-no-repeat bg-[1vh] hover:bg-[#E6EEE7] transition duration-150" style={{ backgroundImage: `url(${Setting})` }}><label  className=" text-[#96CB9C] cursor-pointer relative left-[0.3vw]  text-[14px]">Manage Shop</label></button> 
+        <button onClick={()=>{setEditForm(true);handleEdit(id)}} className="h-[4.8vh] w-[9.5vw] bg-[#F1F8F2] rounded-xl left-[8.9vw] top-[13vh] absolute bg-[length:27px_27px] bg-no-repeat bg-[1vh] hover:bg-[#E6EEE7] transition duration-150" style={{ backgroundImage: `url(${Setting})` }}><label  className=" text-[#96CB9C] cursor-pointer relative left-[0.3vw]  text-[14px]">Manage Shop</label></button> 
         <Link to={`/StoreProfile/${id}`}>
         <button className="h-[4.8vh] w-[9.5vw] bg-[#70B877] rounded-xl left-[21.3vw] top-[13vh] absolute bg-[length:32px_32px] bg-no-repeat bg-[12vh] hover:bg-[#61AC68] transition duration-150" style={{ backgroundImage: `url(${Arrowbtn})` }}><label className=" text-[#FEFEFE] cursor-pointer relative right-[1vw] text-[14px] ">View Store</label></button>    
         </Link>
