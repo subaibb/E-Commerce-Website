@@ -4,7 +4,6 @@ import { app, BrowserWindow, screen, ipcMain, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { PrismaClient } from '@prisma/client';
-
 const prisma = new PrismaClient();
 function createWindow(): void {
   // Create the browser window.
@@ -13,6 +12,7 @@ function createWindow(): void {
     height: Math.round((screen.getPrimaryDisplay().workAreaSize.height * 0.9)), // 60% of screen height
     show: false,
     autoHideMenuBar: true,
+    icon: join(__dirname, '../renderer/src/public/fabric.png'),
     ...(process.platform === 'linux' ? {  } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

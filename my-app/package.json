@@ -69,5 +69,12 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.12"
+  },
+  "build": {
+    "productName": "My App",
+    "directories": {
+      "output": "./src/renderer/src/public/fabric.png"
+    }
   }
+  
 }
