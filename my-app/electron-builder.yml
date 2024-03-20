@@ -45,7 +45,7 @@ publish:
   url: https://example.com/auto-updates
   
 extraResources:
-  - "resources/database.db"
+  - "./prisma/dev.db"
   - "node_modules/.prisma/**/*"
   - "node_modules/@prisma/client/**/*"
 

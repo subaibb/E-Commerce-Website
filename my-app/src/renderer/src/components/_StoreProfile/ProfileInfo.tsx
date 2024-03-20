@@ -1,6 +1,4 @@
 import {motion} from 'framer-motion';
-import Orders_pic from '../../public/Orders.svg';
-import Money from '../../public/Money.svg';
 import { useQuery } from '@tanstack/react-query';
 import StorePic from './StorePhoto';
 const { ipcRenderer } = require('electron');
@@ -51,8 +49,8 @@ function MiddleInfo ({data}:{data:Data}):JSX.Element{
 
     return(
         <div className='relative w-[100%] h-[8vh] m-auto flex'>
-            <InfoPics Img={Orders_pic} data={data.Orders} label={'Orders'}/>  
-            <InfoPics Img={Money} data={data.TotalAmount} label={'Revenue'}/>        
+            <InfoPics Img={'img-2'} data={data.Orders} label={'Orders'}/>  
+            <InfoPics Img={'img-14'} data={data.TotalAmount} label={'Revenue'}/>        
         </div>
 
     )
@@ -72,7 +70,7 @@ function InfoPics ({label,data,Img}):JSX.Element{
     
         return(
             <div className='relative w-[7.17vw] h-[3.6vh] m-auto flex'>
-                <div className="h-[3.6vh] w-[2vw] bg-company rounded-xl relative bg-[length:32px_32px] bg-no-repeat bg-center m-auto"style={{ backgroundImage: `url(${Img})` }}/>
+                <div className={`h-[3.6vh] w-[2vw] bg-company rounded-xl relative bg-[length:32px_32px] bg-no-repeat ${Img} bg-center m-auto`}/>
                 <div className='w-[4.5vw] h-[3.6vh]  flex flex-col m-auto'>
                 <label className="text-secondary relative text-[14px] font-medium">{label}</label>
                 <label className="text-secondary relative text-[14px] font-bold">{data}</label>
