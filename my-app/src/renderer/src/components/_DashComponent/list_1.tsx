@@ -1,6 +1,4 @@
-import smallArrow from '../../public/mini-arrow.svg';
-import trashBin from '../../public/trash-bin.svg';
-import editPen from '../../public/edit-pen.svg';
+
 import {useMutation,useQueryClient} from '@tanstack/react-query';
 import { useContext } from 'react';
 import { ShowContext,DataContext } from '../../App';
@@ -107,9 +105,9 @@ function List_1({id,setShow,Position,setHover}): JSX.Element {
         
           <ul className="List-1" style={{top:Position?'-7vh':'2.9vh'}}>
   
-           <li style={{backgroundImage:`url(${smallArrow})`}} onMouseEnter={()=>{setHover(true);}}><span>Status</span></li>
-           <li style={{backgroundImage:`url(${editPen})`   }} onMouseEnter={()=>{setHover(false);}} onClick={()=>{setShow(pervsetsgate => !pervsetsgate); handleEdit(id);setVisiable(true);setVisiableAll(true);isCustomerVisible(true); isCompanyVisible(true)}}><span>Edit</span></li>
-           <li className='li-rem' style={{backgroundImage:`url(${trashBin})`  }} onMouseEnter={()=>{setHover(false);}} onClick={()=>{setShow(pervsetsgate => !pervsetsgate); Delete(id);} }><span>Remove</span></li>
+           <li className='img-19' onMouseEnter={()=>{setHover(true);}}><span>Status</span></li>
+           <li className='img-20' onMouseEnter={()=>{setHover(false);}} onClick={()=>{setShow(pervsetsgate => !pervsetsgate); handleEdit(id);setVisiable(true);setVisiableAll(true);isCustomerVisible(true); isCompanyVisible(true)}}><span>Edit</span></li>
+           <li className='li-rem img-21' onMouseEnter={()=>{setHover(false);}} onClick={()=>{setShow(pervsetsgate => !pervsetsgate); Delete(id);} }><span>Remove</span></li>
           </ul> 
          
   

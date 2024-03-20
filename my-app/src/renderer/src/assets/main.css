@@ -818,6 +818,15 @@ a:link {
 .img-17{
   background-image: url('../public/Comment.svg');
 }
+.img-19{
+  background-image: url('../public/mini-arrow.svg');
+}
+.img-20{
+  background-image: url('../public/edit-pen.svg');
+}
+.img-21{
+  background-image: url('../public/trash-bin.svg');
+}
 @keyframes l15-1 {
  0%,100% {background-size:20% 100%}
  33%,66% {background-size:20% 40%}
