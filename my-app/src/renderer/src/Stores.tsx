@@ -25,6 +25,10 @@ type DataType = {
   CreatedAt: string,
 }
 
+type DataContextType = {
+  Data: DataType;
+  setData: (value: any) => void;
+};
 export const FormContext = createContext({
   form: false,
   setForm: (value: boolean) => {value},
@@ -35,10 +39,7 @@ export const EditFormContext = createContext({
   setEditForm: (value: boolean) => {value},
 })
 
-type DataContextType = {
-  Data: DataType;
-  setData: (value: any) => void;
-};
+
 export const DataContext = createContext<DataContextType>({
   Data: {Name:'', Address:'', Phone:'',CompanyBackground:'',CompanyID:'',CreatedAt:''},
   setData: (value: any) => {value},
@@ -59,7 +60,6 @@ const {setButton} = useContext(ButtonContext);
  useEffect(() => {
   setButton(4);   
 },[setButton]);
-
     return (
       <>
       <FormContext.Provider value={{form, setForm}}>

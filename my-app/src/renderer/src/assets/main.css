@@ -766,6 +766,58 @@ a:link {
 }
 
 
+
+.img-1{
+  background-image: url('../public/Home.svg');
+}
+.img-2{
+  background-image: url('../public/Orders.svg');
+}
+.img-3{
+  background-image: url('../public/Group.svg');
+}
+.img-4{
+  background-image: url('../public/shop-repo.svg');
+}
+.img-5{
+  background-image: url('../public/Check.svg');
+}
+.img-6{
+  background-image: url('../public/TimeLeft.svg');
+}
+.img-7{
+  background-image: url('../public/Multiply.svg');
+}
+.img-8{
+  background-image: url('../public/BoxOrder.svg');
+}
+.img-9{
+  background-image: url('../public/Dollar.svg');
+}
+.img-10{
+  background-image: url('../public/Com.svg');
+}
+.img-11{
+  background-image: url('../public/Customers.svg');
+}
+.img-12{
+  background-image: url('../public/Setting.svg');
+}
+.img-13{
+  background-image: url('../public/Arrow-btn.svg');
+}
+.img-14{
+  background-image: url('../public/Money.svg');
+}
+.img-15{
+  background-image: url('../public/Back.svg');
+}
+.img-16{
+  background-image: url('../public/Back-Green.svg');
+}
+.img-17{
+  background-image: url('../public/Comment.svg');
+}
 @keyframes l15-1 {
  0%,100% {background-size:20% 100%}
  33%,66% {background-size:20% 40%}

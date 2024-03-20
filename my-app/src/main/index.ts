@@ -1,6 +1,6 @@
-// @ts-nocheck
+//@ts-nocheck
 
-import { app, shell, BrowserWindow, ipcMain,screen } from 'electron'
+import { app, BrowserWindow, screen, ipcMain, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { PrismaClient } from '@prisma/client';

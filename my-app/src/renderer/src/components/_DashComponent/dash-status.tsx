@@ -1,6 +1,4 @@
-import Dollar from '../../public/Dollar.svg';
-import completed from '../../public/Com.svg';
-import Time from '../../public/Customers.svg';
+
 import Arrows from './arrow-status';
 
 
@@ -37,7 +35,7 @@ export default  function DashStatus(): JSX.Element {
         
         <div className="Stats mr-auto">
 
-          <div className="Stat-Pic bg-[#EBF0FF] " style={{backgroundImage: `url(${completed})`}}/>
+          <div className="Stat-Pic bg-[#EBF0FF] img-10"/>
           <div  className='absolute h-[4vh] w-[fit] flex top-[4vh] left-[8.8vw]'>
           <label className="label-top">{getStatus.data.total_orders.toString()}</label>
           <Arrows percentage={getPercentage.data.order_percentage_change} type={"number"}/>
@@ -48,7 +46,7 @@ export default  function DashStatus(): JSX.Element {
         </div>
 
         <div className="Stats ml-auto mr-auto ">
-        <div className="Stat-Pic bg-[#FFF8E9]" style={{backgroundImage: `url(${Time})`}}/> 
+        <div className="Stat-Pic bg-[#FFF8E9] img-11"/> 
         <div className='absolute h-[4vh] w-[fit] flex top-[4vh] left-[8.8vw]'>
         <label className="label-top">{getStatus.data.total_customers.toString()}</label>
         <Arrows percentage={getPercentage.data.customer_percentage_change} type={"number"}/>
@@ -63,7 +61,7 @@ export default  function DashStatus(): JSX.Element {
         <div className="Stats ml-auto">
 
           
-          <div className="Stat-Pic bg-[#FFEEF5]" style={{backgroundImage: `url(${Dollar})`}}/> 
+          <div className="Stat-Pic bg-[#FFEEF5] img-9"/> 
           
           <div className='absolute h-[4vh] w-[fit] flex top-[4vh] left-[8.3vw]'>
 

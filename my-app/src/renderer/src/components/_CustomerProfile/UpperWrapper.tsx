@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import BackImg from './../../public/Back.svg';
 import {motion,AnimatePresence} from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useState,useEffect,useRef } from 'react';
@@ -60,7 +59,7 @@ const [show,setShow] = useState(false);
 function Back (){
     return (
         <Link to={"/Customers"}>
-        <motion.button style={{backgroundImage: `url(${BackImg})`}} className="Back-Button"
+        <motion.button  className="Back-Button img-15"
         key={1}
         initial={{opacity: 0, transform: 'translateY(20%)'}}
         animate={{opacity: 1, transform: 'translateY(0%)'}}

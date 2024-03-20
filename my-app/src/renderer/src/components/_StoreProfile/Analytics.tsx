@@ -1,6 +1,5 @@
 import {AnimatePresence, motion} from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import Comment from './../../public/Comment.svg';
 import { useState } from "react";
 const {ipcRenderer} = require('electron');
 
@@ -210,8 +209,7 @@ function CommentAnalytic ({position,data}){
     return (
 
         
-        <motion.div className={`w-[6vw] h-[6vh] relative flex justify-center items-center z-10`} style={{
-            backgroundImage: `url(${Comment})`,
+        <motion.div className={`w-[6vw] h-[6vh] relative flex justify-center items-center z-10 img-17`} style={{
             backgroundSize: 'contain',  
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',

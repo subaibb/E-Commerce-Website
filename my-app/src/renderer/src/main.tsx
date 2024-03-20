@@ -1,13 +1,12 @@
 import './assets/main.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import {lazy,Suspense}from 'react';
 import { QueryClient,QueryClientProvider} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createContext } from 'react';
 import Buttons from './components/_DashComponent/Buttons';
 import Background from './components/_DashComponent/bg';
-import { useState } from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom/client'
 import React from 'react';
 
 
@@ -21,7 +20,7 @@ const Customers = lazy(() => import('./Customers'));
 const Stores = lazy(() => import('./Stores'));
 const CustomerProfile = lazy(() => import('./CustomerProfile'));
 const StoreProfile = lazy(() => import('./StoreProfile'));
-let container;
+
 type ButtonType = {
   Button: number;
   setButton: (value: number) => void;
@@ -33,12 +32,7 @@ export const ButtonContext = createContext<ButtonType>({
   
 });
 
-document.addEventListener('DOMContentLoaded', function(event) {
-  if (!container) {
-    container = document.getElementById('root') as HTMLElement;
-    const root = createRoot(container)
-  
-   root.render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
@@ -46,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
             <Suspense fallback={
               <>
               <Background/>
-              <Buttons Button={1}/>
+              <Buttons Button={5}/>
               </>
 
             }>
@@ -67,8 +61,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
       </QueryClientProvider>
       </React.StrictMode>
 )
-}
-});
+
 
 
 
