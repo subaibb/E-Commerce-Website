@@ -74,8 +74,11 @@ export default  function CustomerAddForm({name}): JSX.Element {
     
     const handleTabChange = (value) => {
         value === 'radio-1' ? setChecked('radio-1') : setChecked('radio-3');
-        value === 'radio-1' ? setValue('status','Pending') : setValue('status','Paid');
       };
+
+      useEffect(() => {
+        checked === 'radio-1' ? setValue('status','Pending') : setValue('status','Paid');
+        }, [checked]);
 
 
 
@@ -108,6 +111,7 @@ export default  function CustomerAddForm({name}): JSX.Element {
             onSuccess: () => {
                 isEmpty(!empty);
                 reset();
+                setChecked('radio-1');
                 queryClient.refetchQueries({queryKey: ['CustomerStatus']});
                 queryClient.refetchQueries({queryKey: ['CustomerOverview']});
                 queryClient.refetchQueries({queryKey: ['Customer']});

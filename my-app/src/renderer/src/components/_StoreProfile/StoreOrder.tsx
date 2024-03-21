@@ -102,6 +102,7 @@ export default  function StoreOrder({company}): JSX.Element {
             onSuccess: () => {
                 isEmpty(!empty);
                 reset();
+                setChecked('radio-1');
                 queryClient.refetchQueries({queryKey: ['GetStoreStatus']});
                 queryClient.refetchQueries({queryKey: ['CompanyOrdersFetching']});
                 queryClient.refetchQueries({queryKey: ['GetStoreInfo']});
@@ -121,8 +122,11 @@ export default  function StoreOrder({company}): JSX.Element {
 
         const handleTabChange = (value) => {
             value === 'radio-1' ? setChecked('radio-1') : setChecked('radio-3');
-            value === 'radio-1' ? setValue('status','Pending') : setValue('status','Paid');
           };
+
+          useEffect(() => {
+            checked === 'radio-1' ? setValue('status','Pending') : setValue('status','Paid');
+            }, [checked]);
 
 
     return (
@@ -156,49 +160,25 @@ export default  function StoreOrder({company}): JSX.Element {
                     
                     
                     
-                
-            <label >FABRIC</label>
-            <Autocomplete setInput={isEmpty} resetInput={empty} required name="address" options={fabricType} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
-          // Manually set value to the form field
-          setValue('address', value, { shouldValidate: true});
-        }}/>
+        <label >DATE</label>
+                        <input type="date" {...register("createdAt" ,{required:true})} />
+                        {errors.createdAt ? (
+                        <h1 style={{ backgroundColor:"#FF6D6D"}}>
+                            <p className="text-[12px] text-[#FF6D6D]">Please type a proper address</p>
+                        </h1>
 
-               
-        
+                        ) : (
+                        <h1></h1>
+                        )}
+
+
 
             </div>
 
             <div className="form-box-2 relative h-[23.7vh] w-[14.1vw] flex flex-col ml-auto mr-auto top-[3.8vh]">
                 
-            <label >DATE</label>
-                <input type="date" {...register("createdAt" ,{required:true})} />
-                {errors.createdAt ? (
-                <h1 style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please type a proper address</p>
-                </h1>
-
-                ) : (
-                <h1></h1>
-                )}
-
-
-          
-                     
-
             
-            <label >UNIT PRICE</label>
-            <input className="unit" type="number" step=".01" {...register("price" ,{required:true , valueAsNumber:true})} />
-            {errors.price ? (
-                <h1 className="unit-h1 " style={{ backgroundColor:"#FF6D6D"}}>
-                    <p className="text-[12px] text-[#FF6D6D]">Please insert a value.</p>
-                </h1>
-
-                ) : (
-                <h1 className="unit-h2"></h1>
-                )}
-
-           
-           <label >STATUS</label>
+            <label >STATUS</label>
                <div className="w-[14.1vw] h-[3.5vh] m-auto  flex ">
                         <div className="container">
                             <div className="tabs flex  w-[11vw]">       
@@ -229,7 +209,31 @@ export default  function StoreOrder({company}): JSX.Element {
                 </div>
            
            
+                     
+
+            
+            <label >UNIT PRICE</label>
+            <input className="unit" type="number" step=".01" {...register("price" ,{required:true , valueAsNumber:true})} />
+            {errors.price ? (
+                <h1 className="unit-h1 " style={{ backgroundColor:"#FF6D6D"}}>
+                    <p className="text-[12px] text-[#FF6D6D]">Please insert a value.</p>
+                </h1>
+
+                ) : (
+                <h1 className="unit-h2"></h1>
+                )}
+
+           
+          
                       
+            <label >FABRIC</label>
+            <Autocomplete setInput={isEmpty} resetInput={empty} required name="address" options={fabricType} placeholder="" value={''} register={register} errors={errors} validationSchema={{required:true,minLength: {value: 3}}} onChange={(value) => {
+          // Manually set value to the form field
+          setValue('address', value, { shouldValidate: true});
+        }}/>
+
+               
+        
            
 
             </div>
@@ -246,7 +250,7 @@ export default  function StoreOrder({company}): JSX.Element {
             ,transitionDuration:"0.2s"
             ,padding:"1.6vh 2.7vw"}} type="submit" value='ADD'/>
 
-            <div className=" absolute left-[30vw] top-[16.9vh] h-[3.5vh] w-fit ">
+            <div className=" absolute left-[30vw] top-[16.6vh] h-[3.5vh] w-fit ">
             <input className="unit-type-1" {...register("unit" ,{required:true ,maxLength:6})} />
             <h1 className="unit-type-h2"></h1> 
             </div>  

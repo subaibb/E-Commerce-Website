@@ -109,6 +109,7 @@ export default  function Add_Form(): JSX.Element {
             onSuccess: () => {
                 isEmpty(!empty);
                 reset();
+                setChecked('radio-1');
                 queryClient.refetchQueries({queryKey: ['orders']});
                 queryClient.refetchQueries({queryKey: ['Status']});
                 queryClient.refetchQueries({queryKey: ['Percentage']});
@@ -134,8 +135,10 @@ export default  function Add_Form(): JSX.Element {
         };
         const handleTabChange = (value) => {
             value === 'radio-1' ? setChecked('radio-1') : setChecked('radio-3');
-            value === 'radio-1' ? setValue('status','Pending') : setValue('status','Paid');
           };
+          useEffect(() => {
+            checked === 'radio-1' ? setValue('status','Pending') : setValue('status','Paid');
+            }, [checked]);
 
     return (
       <>

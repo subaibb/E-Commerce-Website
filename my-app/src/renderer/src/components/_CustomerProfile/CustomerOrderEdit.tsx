@@ -151,7 +151,8 @@ export default  function CustomerAddForm(): JSX.Element {
 
                 for (const key of Keys1) {
                     if (formattedForData[key] !== DataCustomer[key]) {
-                        NewOrder.mutate(formData)
+                        NewOrder.mutate(formData);
+                        return;
                     }
                   }
                   isCustomerVisible(false);

@@ -720,8 +720,8 @@ function getOrderBy(args) {
           
       case 4:
           Config = [
-              { amount: 'asc' },
-              { price: 'asc' },
+              { amount: 'desc' },
+              { price: 'desc' },
           ];
           break;
       case 5:
@@ -2076,6 +2076,21 @@ ipcMain.handle("fetch-analytics", async (event, args) => {
       FiveMonthsAgoPending += order_totals;
     });
 
+
+    ThisMonthPaid= parseInt(ThisMonthPaid.toFixed(2))
+    LastMonthPaid = parseInt(LastMonthPaid.toFixed(2))
+    TwoMonthsAgoPaid = parseInt(TwoMonthsAgoPaid.toFixed(2))
+    ThreeMonthsAgoPaid = parseInt(ThreeMonthsAgoPaid.toFixed(2))
+    FourMonthsAgoPaid = parseInt(FourMonthsAgoPaid.toFixed(2))
+    FiveMonthsAgoPaid = parseInt(FiveMonthsAgoPaid.toFixed(2))
+    ThisMonthPending = parseInt(ThisMonthPending.toFixed(2))
+    LastMonthPending = parseInt(LastMonthPending.toFixed(2))
+    TwoMonthsAgoPending = parseInt(TwoMonthsAgoPending.toFixed(2))
+    ThreeMonthsAgoPending = parseInt(ThreeMonthsAgoPending.toFixed(2))
+    FourMonthsAgoPending = parseInt(FourMonthsAgoPending.toFixed(2))
+    FiveMonthsAgoPending = parseInt(FiveMonthsAgoPending.toFixed(2))
+   
+
     //find Max for all 
     let MaxAll = Math.max(
       ThisMonthPaid,
@@ -2090,6 +2105,7 @@ ipcMain.handle("fetch-analytics", async (event, args) => {
       ThreeMonthsAgoPending,
       FourMonthsAgoPending,
       FiveMonthsAgoPending);
+      MaxAll = parseInt(MaxAll.toFixed(2))
     return {
       ThisMonthPaid,
       LastMonthPaid,

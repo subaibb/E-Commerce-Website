@@ -122,7 +122,7 @@ function DropDownList_1({setDropDown,setBackground,background}): JSX.Element {
       <li style={{backgroundColor: background===1?'#49A7FF':'',  color: background === 1 ? '#FFFFFF' : ''}} id='list-1' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(1); toggleStyle('list-1')}}>Default</li>
       <li style={{backgroundColor: background===2?'#49A7FF':'',  color: background === 2 ? '#FFFFFF' : ''}} id='list-2' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(2); toggleStyle('list-2')}}>Name</li>
       <li style={{backgroundColor: background===3?'#49A7FF':'',  color: background === 3 ? '#FFFFFF' : ''}} id='list-3' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(3); toggleStyle('list-3')}}>Company</li>
-      <li style={{backgroundColor: background===4?'#49A7FF':'',  color: background === 4 ? '#FFFFFF' : ''}} id='list-4' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(4); toggleStyle('list-4')}}>Total</li>
+      <li style={{backgroundColor: background===4?'#49A7FF':'',  color: background === 4 ? '#FFFFFF' : ''}} id='list-4' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(4); toggleStyle('list-4')}}>Amount</li>
       <li style={{backgroundColor: background===5?'#49A7FF':'',  color: background === 5 ? '#FFFFFF' : ''}} id='list-5' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(5); toggleStyle('list-5')}}>Fabric</li>
       <li style={{backgroundColor: background===6?'#49A7FF':'',  color: background === 6 ? '#FFFFFF' : ''}} id='list-6' onClick={()=>{setDropDown(pervstate=>(!pervstate)); ChooseStatus(6); toggleStyle('list-6')}}>Type</li>
       

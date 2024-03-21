@@ -154,7 +154,8 @@ export default  function editForm(): JSX.Element {
 
                 for (const key of Keys1) {
                     if (formattedForData[key] !== AllData[key]) {
-                        NewOrder.mutate(formData)
+                        NewOrder.mutate(formData);
+                        return;
                     }
                   }
                   setVisiableAll(false);
