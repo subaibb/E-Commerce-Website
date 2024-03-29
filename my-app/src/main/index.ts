@@ -964,7 +964,7 @@ ipcMain.handle('CustomerOrders', async (event, args) => {
       where: {
         userId: args,
         createdAt: {
-          gte: ninetyDaysAgo// Date 180 days ago
+          gte: sexMonthsAgo
         }
       },
       include: {
