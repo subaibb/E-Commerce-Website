@@ -12,9 +12,10 @@ export default function Home() {
         
         transition={{ duration: 1.2 , type: 'spring' , bounce: 0.4}}
       >
-            <h1 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-7xl font-bold">hello its the admin</h1>
+            <h1 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-7xl font-[400]">Discover the Essence.
+</h1>
       </motion.div>
-    </div>
+    </div>  
     </>
   );  
 }

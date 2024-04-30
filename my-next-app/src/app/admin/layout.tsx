@@ -1,10 +1,7 @@
 
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import { Nav, NavLink } from "../components/Nav";
-import "../globals.css";
+import { Nav } from "../components/Nav";
 
-const poppins = Poppins({  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,10 +15,8 @@ export default function RootLayout({
 }>) {
     return (
      <>
-        <Nav>
-        <NavLink href="/">Home</NavLink>
-        <NavLink href="/admin">Admin</NavLink>
-        <NavLink href="/orders">My Orders</NavLink>
+        <Nav variation={0}>
+
       </Nav>
      <div>
             {children}

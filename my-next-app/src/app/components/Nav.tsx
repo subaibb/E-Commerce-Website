@@ -1,37 +1,127 @@
 "use client";
 import Link from "next/link";
 import cn from "classnames";
-import { usePathname } from "next/navigation";
-import { ComponentProps, ReactNode } from "react"
+import { ReactNode } from "react"
 import { Searchbar } from "./Searchbar";
 import { SideBar } from "./SideBar";
+import { Paths } from "../shopall/_components/Paths";
+import { useMediaQuery } from 'usehooks-ts';
+import  {useIsLargeScreen} from '../hooks/MediaQuery';
+export function Nav({variation}:{variation:number}): JSX.Element{
 
-export function Nav({children}:{children : ReactNode}): JSX.Element{
-
+  
     return(
-        <nav className=" h-16 flex top-[1vh] relative">
-            <div className=" h-full  flex justify-between items-center w-[50%] ">
-            <Link className="m-auto flex" href="/" passHref>
-            <h1 className="text-5xl font-[800] relative flex m-auto">RIT<span className=" text-background">EL</span></h1>
-            </Link>
-            {children}
-            </div>
-            <div className=" h-full  flex items-center w-[50%] justify-between">
-                <Searchbar/>
-                <SideBar/>
-            </div>
-             
+       
+        <nav className={cn("flex justify-center items-center flex-col absolute w-full ",{
+          "h-[18vh]": variation === 0,
+          "h-[16vh]": variation === 1,
+        })}>
+          <TopNav/>
+          <BottomNav variation={variation}/>
+          
+          {
+            variation === 0 ? <ExtraNav/> : null
+          }
+         
         </nav>
     )
 }
 
-export function NavLink (props:Omit<ComponentProps<typeof Link>,"className">): JSX.Element{
-    const pathname = usePathname();
+function TopNav ():JSX.Element{
+  
+ const {isLargeScreen} = useIsLargeScreen();
     return(
-        <Link {...props} className={cn("p-4 h-2 font-medium text-[22] m-auto items-center justify-center flex NavLinks transition duration-150"
-        ,pathname === props.href ? "border-b-2 border-solid border-textprimary" : ""
-        )} >
-            
-        </Link>
+        <div className={cn("w-[95%] h-1/2 border-b-[1px] border-solid border-textprimary flex justify-center items-center")}>
+          
+          <div className="w-full h-full flex justify-start items-center top-0 relative mb-auto ">
+          <a href="/">
+          <h2 className=" text-2xl text-primary">PaliWear</h2>
+          </a>
+          </div>
+
+           <div style={{
+            display: !isLargeScreen ? 'none' : 'flex'  
+           }} className="h-full w-[25%] flex justify-between items-center">
+            <label className=" font-wixMade xl:text-sm sm:text-[10px] text-textprimary">Free Shipping on all orders over 30$</label>
+            <ShopNow>Shop Now</ShopNow>
+            </div>
+         
+          
+        </div>
     )
+}
+function BottomNav ({variation}:{variation:number}):JSX.Element{
+
+ 
+
+  return(
+      <div className="  w-[95%] h-1/2 flex justify-between items-center z-10">
+
+        
+          <Searchbar radiant={variation}/>
+   
+          <NavLinks>
+          <NavLink radiant={variation} href="/shopall">ShopAll</NavLink>
+          <NavLink radiant={variation} href="/oils">Oils</NavLink>
+          <NavLink radiant={0} href="/soaps">Soaps</NavLink>
+          <NavLink radiant={0} href="/clothing">Clothing</NavLink>
+          <NavLink radiant={0} href="/about">About Us</NavLink>
+          <NavLink radiant={0} href="/contact">Contact</NavLink>
+          </NavLinks>
+
+
+       
+
+        
+          <SideBar variation={variation}/>
+       
+      </div>
+  )
+} 
+
+function ExtraNav ():JSX.Element{
+  return(
+    <div className="w-[95%] h-[2vh] flex justify-start items-center">
+        <Paths/>
+    </div>
+  )
+}
+
+function ShopNow ({children}:{children:ReactNode}):JSX.Element{
+  return(
+    <button className="font-wixMade xl:text-sm sm:text-[10px] text-textprimary bg-transparent border-[1px] xl:rounded-3xl md:rounded-xl sm:rounded-lg w-[28%] h-[40%] border-textprimary text-center hover:bg-[#EFDCC3] transition duration-75 z-10">
+      {children}
+    </button>
+  )
+}
+
+function NavLink ({children , href , radiant}:{children:ReactNode , href:string , radiant:number}):JSX.Element{
+  return(
+    <Link href={href} className={cn(
+      " hover:border-b-[1px] border-solid border-textprimary",
+      {
+        " text-textprimary": radiant === 0,
+        " text-textscondary hover:border-b-[1px] border-solid border-textscondary": radiant === 1,
+      }
+    )}>
+      {children}
+    </Link>
+  )
+}
+
+function NavLinks ({children}:{children:ReactNode}):JSX.Element{
+  const {isLargeScreen} = useIsLargeScreen();
+  return(
+    <div style={
+      {
+        display: isLargeScreen ? 'flex' : 'none',
+      }
+    
+    }
+   className="h-full w-[40%]  justify-between items-center">
+      {children}
+      <div>
+      </div>
+    </div>
+  )
 }

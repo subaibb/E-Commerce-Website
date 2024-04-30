@@ -1,5 +1,6 @@
-import { Nav, NavLink } from "@/app/components/Nav"
-
+import { Nav } from "@/app/components/Nav"
+import { SideBarWrapper } from "@/app/hooks/Toggle"
+import { SideNav } from "@/app/components/SideNav"
 export const dynamic = "force-dynamic"
 
 export default function Layout({
@@ -9,13 +10,13 @@ export default function Layout({
 }>) {
   return (
     <>
-      <Nav>
-        <NavLink href="/admin">Categories</NavLink>
-        <NavLink href="/Deals">Deals</NavLink>
-        <NavLink href="/New">What's New</NavLink>
-        <NavLink href="/Again">Buy Again</NavLink>
+    <SideBarWrapper>
+      <Nav variation={1}>
       </Nav>
+      <SideNav/>
+      </SideBarWrapper>
       <div className="w-full h-full">{children}</div>
+     
     </>
   )
 }

@@ -1,93 +1,76 @@
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
-@import url('https://fonts.cdnfonts.com/css/satoshi');
+  @tailwind components;
+  @tailwind utilities;
 
+  @layer base {
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 224 71.4% 4.1%;
 
-.Search-img {
-    background-image: url('./../../public/Search.svg');
-    background-size: 32px 32px;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-.Switcher {
-    background-image: url('/Switcher.svg');
-    background-size: 15px 15px;
-    background-repeat: no-repeat;
-    background-position: center;
-}
+      --card: 0 0% 100%;
+      --card-foreground: 224 71.4% 4.1%;
 
-.SearchBar-Input:focus {
-    @apply outline-none;
-}
+      --popover: 0 0% 100%;
+      --popover-foreground: 224 71.4% 4.1%;
 
-.SearchBar-Input::placeholder {
-    @apply font-bold ;
-}
+      --primary: 220.9 39.3% 11%;
+      --primary-foreground: 210 20% 98%;
 
-.Search-Bar:hover{
-    @apply bg-[#dbd8d8] ;
-}
-.Search-img:hover{
-    @apply bg-background ;
-}
+      --secondary: 220 14.3% 95.9%;
+      --secondary-foreground: 220.9 39.3% 11%;
 
+      --muted: 220 14.3% 95.9%;
+      --muted-foreground: 220 8.9% 46.1%;
 
-.Cart-img {
-    background-image: url('./../../public/Cart.svg');
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-.Heart-img {
-    background-image: url('./../../public/Heart.svg');
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: center;
-}
+      --accent: 220 14.3% 95.9%;
+      --accent-foreground: 220.9 39.3% 11%;
 
-.Portait-img {
-    background-image: url('./../../public/Portrait.png');
-    background-size: 60px 60px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-fit: cover;
-}
-.Header{
-    background-image: url('./../../public/Header.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: right;
-}
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 210 20% 98%;
 
-.StarsGray{
-    background-image: url('./../../public/GrayStar.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+      --border: 220 13% 91%;
+      --input: 220 13% 91%;
+      --ring: 224 71.4% 4.1%;
 
-}
-.StarsYellow{
-    background-image: url('./../../public/YellowStar.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+      --radius: 0.5rem;
+    }
 
-}
-.HeaderButton:hover{
-    @apply bg-[#D87183] text-default ;
-}
+    .dark {
+      --background: 224 71.4% 4.1%;
+      --foreground: 210 20% 98%;
 
-label{
-    @apply text-textprimary;
-}
+      --card: 224 71.4% 4.1%;
+      --card-foreground: 210 20% 98%;
 
-.NavLinks:hover{
-    @apply border-b-2 border-solid border-textprimary;
-}
-.SmallArrow {
-    background-image: url('./../../public/SmallArrow.svg');
-    background-size: 15px 15px;
-    background-repeat: no-repeat;   
-    background-position: right;
-}
+      --popover: 224 71.4% 4.1%;
+      --popover-foreground: 210 20% 98%;
+
+      --primary: 210 20% 98%;
+      --primary-foreground: 220.9 39.3% 11%;
+
+      --secondary: 215 27.9% 16.9%;
+      --secondary-foreground: 210 20% 98%;
+
+      --muted: 215 27.9% 16.9%;
+      --muted-foreground: 217.9 10.6% 64.9%;
+
+      --accent: 215 27.9% 16.9%;
+      --accent-foreground: 210 20% 98%;
+
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 20% 98%;
+
+      --border: 215 27.9% 16.9%;
+      --input: 215 27.9% 16.9%;
+      --ring: 216 12.2% 83.9%;
+    }
+  }
+
+  @layer base {
+    * {
+      @apply border-border;
+    }
+    body {
+      @apply bg-background text-foreground;
+    }
+  }

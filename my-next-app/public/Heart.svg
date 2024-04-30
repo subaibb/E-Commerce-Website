@@ -1,7 +1,4 @@
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="SVGRepo_bgCarrier" stroke-width="0"/>
-<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-<g id="SVGRepo_iconCarrier"> <path d="M15.7 4C18.87 4 21 6.98 21 9.76C21 15.39 12.16 20 12 20C11.84 20 3 15.39 3 9.76C3 6.98 5.13 4 8.3 4C10.12 4 11.31 4.91 12 5.71C12.69 4.91 13.88 4 15.7 4Z" stroke="#010101" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </g>
-</svg>
+<svg width="170" height="170" viewBox="0 0 170 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M128.648 70.131C128.648 54.2365 117.564 41.3514 103.892 41.3514C94.8908 41.3514 87.0353 46.9548 82.7023 55.3064C78.3692 46.9548 70.5139 41.3514 61.5126 41.3514C47.8403 41.3514 36.7567 54.2365 36.7567 70.131C36.7567 73.7646 37.3603 77.2266 38.4171 80.4278C46.6029 107.8 82.7026 137.838 82.7026 137.838C82.7026 137.838 118.802 107.8 126.988 80.4278C128.045 77.2269 128.648 73.7646 128.648 70.131Z" stroke="#D6C18A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="85" cy="85" r="82.5" stroke="#D6C18A" stroke-width="5"/>
+</svg>

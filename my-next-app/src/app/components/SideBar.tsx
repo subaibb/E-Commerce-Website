@@ -1,22 +1,52 @@
+"use client";
+import React, { ReactNode } from 'react'
+import { motion } from 'framer-motion';
+import { useMediaQuery } from 'usehooks-ts';
+import cn from 'classnames';
+import {useSideBar} from '../hooks/Toggle';
+import  {useIsLargeScreen} from '../hooks/MediaQuery';
+export function SideBar({variation}:{variation:number}):JSX.Element{
 
-
-export function SideBar():JSX.Element{
+    const {show, setShow} = useSideBar();
+    const {isLargeScreen} = useIsLargeScreen();
     return (
-        <div className="h-full w-[25%]  flex justify-between items-center  m-auto">
-        <div className="flex  h-[70%]">
-            <div className="flex flex-col h-full  justify-center items-center" >
+        <div className={cn(" xl:w-[15%] w-[30%] h-full justify-evenly items-center flex xs:w-[55%] sm:w-[45%] lg:w-[15%]")}>
 
-                <div className="w-20 h-full Cart-img cursor-pointer"/>
-                <label className="text-[12px] font-medium">Cart</label>
-                </div>
-                <div className="flex flex-col h-full  justify-center items-center cursor-pointer">
-                <div className="w-20 h-full Heart-img"/>
-                <label className="text-[12px] font-medium ">Wishlist</label>
-                </div>
+            <Icon>
+            <img src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
+            
+            <label style={{
+                display: isLargeScreen ? 'block' : 'none'
+            
+            }} className='ml-2 relative justify-center items-center hover:text-texthover transition duration-75 cursor-pointer xl:text-base lg:text-sm md:text-xs '>Login</label>
+            
+            </Icon>
 
+            <Icon>
+            <img src="/Favs.svg" alt="Favs" className="w-6 h-6"/>
+            </Icon>
 
-            </div>
-        <div className="w-14 h-14 Portait-img rounded-[50%] relative"/>
+            
+            <Icon>
+            <img src="/Bag.svg" alt="Favs" className="w-6 h-6"/>
+            </Icon>
+
+            <Icon Style={{
+                display: isLargeScreen ? 'none' : 'flex'
+            
+            }} >
+            <img onClick={()=>setShow(!show)}  src="/More.svg" alt="More" className="w-6 h-6"/>
+            </Icon>
+
+        </div>
+    )
+}
+
+function Icon({children,Style}:{children:ReactNode,Style?:React.CSSProperties}):JSX.Element{
+
+    return(
+        <div style={Style} className="flex items-center justify-center w-20 h-1/2 cursor-pointer">
+            {children}
         </div>
     )
 }
