@@ -5,7 +5,6 @@ import { ReactNode } from "react"
 import { Searchbar } from "./Searchbar";
 import { SideBar } from "./SideBar";
 import { Paths } from "../shopall/_components/Paths";
-import { useMediaQuery } from 'usehooks-ts';
 import  {useIsLargeScreen} from '../hooks/MediaQuery';
 export function Nav({variation}:{variation:number}): JSX.Element{
 
@@ -89,7 +88,7 @@ function ExtraNav ():JSX.Element{
 
 function ShopNow ({children}:{children:ReactNode}):JSX.Element{
   return(
-    <button className="font-wixMade xl:text-sm sm:text-[10px] text-textprimary bg-transparent border-[1px] xl:rounded-3xl md:rounded-xl sm:rounded-lg w-[28%] h-[40%] border-textprimary text-center hover:bg-[#EFDCC3] transition duration-75 z-10">
+    <button className="font-wixMade xl:text-xs sm:text-[10px] text-textprimary bg-transparent border-[1px] xl:rounded-3xl md:rounded-xl sm:rounded-lg w-[28%] h-[40%] border-textprimary text-center hover:bg-[#EFDCC3] transition duration-75 z-10">
       {children}
     </button>
   )
@@ -120,8 +119,7 @@ function NavLinks ({children}:{children:ReactNode}):JSX.Element{
     }
    className="h-full w-[40%]  justify-between items-center">
       {children}
-      <div>
-      </div>
+     
     </div>
   )
 }

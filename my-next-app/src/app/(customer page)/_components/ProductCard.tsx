@@ -1,13 +1,12 @@
 "use client";
-import {motion,useInView} from "framer-motion";
+import {useInView} from "framer-motion";
 import { ReactNode, useRef } from "react"
-import { useReducer } from "react";
-
 export function ProductCard ({children , label , price }:{children:ReactNode , label : string , price : string}):JSX.Element{
 
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
     const fraction = price.split('.');
+
  
         return (
            <div className="w-[33.2%] h-fit flex flex-col" ref={ref}

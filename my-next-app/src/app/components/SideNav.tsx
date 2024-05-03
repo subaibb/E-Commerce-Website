@@ -1,13 +1,21 @@
 "use client";
 import { ReactNode } from "react";
 import Link from "next/link";
-import  {useSideBar}  from "../hooks/Toggle";
+import  {useSideBar}  from "../hooks/Contexts";
+import { useEffect } from "react";
 import {motion,AnimatePresence} from 'framer-motion';
 export function SideNav():JSX.Element{
 
     const {show} = useSideBar();
 
-    
+    useEffect(()=>{
+        if(show){
+            document.body.style.overflow = 'hidden';
+        }else{
+            document.body.style.overflow = 'scroll';
+        }
+    },[show])
+
     return(
 
         <>
@@ -77,9 +85,9 @@ function Blackout ():JSX.Element{
 }
 
 function Label({children,link,delay}:{children:ReactNode,link:string,delay:number}):JSX.Element{
-    const {show} = useSideBar();
+    const {show,setShow} = useSideBar();
     return(
-        <Link className="m-auto" href={link}>
+        <Link onClick={()=>setShow(!show)} className="m-auto" href={link}>
         <motion.h1 className="text-lg text-textprimary "
         initial={{opacity:0,transform:'translateY(50px)'}}
         animate={{opacity:1,transform:'translateY(0px)'}}

@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss"
 
 const config = {
@@ -10,15 +11,31 @@ const config = {
 	],
   prefix: "",
   theme: {
+    fontFamily: {
+      wixMade: ["Wix Madefor Text", "sans-serif"],
+    },
+    screens: {
+      xs: "320px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+    },
     container: {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        xl: "1280px",
       },
     },
     extend: {
       colors: {
+        default: "#E9E6E2", 
+        textprimary: "#474241",
+        textscondary: "#D6C18A",
+        thick: "#232119",
+        header:"#3A6A59",
+        texthover: "#6F6866",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -25,7 +25,7 @@ export function ContactCard({children,Header,delay}:{children:ReactNode,Header:s
 
 export function Label({children}:{children:ReactNode}):JSX.Element{
   return(
-    <label className=" text-textprimary hover:text-textscondary transition duration-75 mt-4 mb-4 w-fit xs:text-xs">{children}</label>
+    <label className=" text-textprimary hover:text-textscondary transition duration-75 mt-4 mb-4 w-fit xs:text-xs sm:text-base">{children}</label>
   )
 }
 

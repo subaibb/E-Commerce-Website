@@ -1,11 +1,12 @@
 "use client";
-import { HeaderButton } from "./HeaderButton"
-import { Icons } from "./Icons"
-import {motion} from 'framer-motion'
-import { useMediaQuery } from "usehooks-ts";
+import { HeaderButton } from "./HeaderButton";
+import { Icons } from "./Icons";
+import {motion} from 'framer-motion';
 import  {useIsLargeScreen}  from "../../hooks/MediaQuery";
+
 export function Header ():JSX.Element{
 
+  console.log("Header");
   const {isLargeScreen} = useIsLargeScreen();
     return(
       <>

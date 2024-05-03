@@ -80,7 +80,7 @@ function Top({children}:{children:ReactNode}):JSX.Element{
 
 function Category({children}:{children:ReactNode}):JSX.Element{
     return(
-        <motion.div className="w-full h-[2%]  border-textprimary mb-6"
+        <motion.div className="w-full h-[2%]  border-textprimary mb-2"
         initial={{opacity:0,transform:"translateY(4px)"}}
         animate={{opacity:1,transform:"translateY(0)"}}
         transition={{duration:0.5,delay:0.1}}

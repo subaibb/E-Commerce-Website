@@ -74,3 +74,11 @@
       @apply bg-background text-foreground;
     }
   }
+
+  .blackout{
+    background-color: rgba(96, 90, 90, 0.10);
+    backdrop-filter: blur(5px);
+  }
+  .Product:hover > .Fav{
+    opacity: 1;
+  }
