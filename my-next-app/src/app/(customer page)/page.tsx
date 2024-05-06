@@ -80,7 +80,9 @@ function Footer():JSX.Element{
         Add a touch of Palestine to your home and wardrobe
         </AnimatedLabel>
 
-        <FooterLink/>
+        <FooterLink Link="/collections">
+        Shop Now
+        </FooterLink>
           
 
         </div>

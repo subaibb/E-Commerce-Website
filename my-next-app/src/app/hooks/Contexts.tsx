@@ -6,6 +6,11 @@ type SideBarContextType = {
   setShow: (value: boolean) => void;
 };
 
+type LoginWarningContextType = {
+  visible: boolean;
+  setVisible: (value: boolean) => void;
+};
+
 type CartsContext = {
   cart: number;
   setCart: (value: number) => void;
@@ -14,6 +19,11 @@ type CartsContext = {
 type FavsContext = {
   fav: number;
   setFav: (value: number) => void;
+};
+
+type PathContext = {
+  Product: string;
+  setProduct: (value: string) => void;
 };
 
 
@@ -83,3 +93,49 @@ export function FavContextWrapper  ({children}:{children:ReactNode}):JSX.Element
 export function useFavCount(): FavsContext {
   return useContext(FavsContext);
 }
+
+
+
+
+
+
+
+const ProductContext = createContext<PathContext>({
+  Product: "",
+  setProduct: (value: string) => {value},
+  }); 
+  
+  export function ProductContextWrapper  ({children}:{children:ReactNode}):JSX.Element  {
+    const [Product, setProduct] = useState("");
+    return (
+      <ProductContext.Provider value={{Product,setProduct}}>
+        {children}
+      </ProductContext.Provider>
+    )
+  }
+  
+  export function useProduct(): PathContext {
+    return useContext(ProductContext);
+  }
+
+
+
+
+
+  const LoginWarningContext = createContext<LoginWarningContextType>({
+    visible: false,
+    setVisible: (value: boolean) => {value},
+    }); 
+    
+    export function LoginWarningContextWrapper  ({children}:{children:ReactNode}):JSX.Element  {
+      const [visible, setVisible] = useState(false);
+      return (
+        <LoginWarningContext.Provider value={{visible,setVisible}}>
+          {children}
+        </LoginWarningContext.Provider>
+      )
+    }
+    
+    export function useLoginWarning(): LoginWarningContextType {
+      return useContext(LoginWarningContext);
+    }

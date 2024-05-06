@@ -6,7 +6,6 @@ import  {useIsLargeScreen}  from "../../hooks/MediaQuery";
 
 export function Header ():JSX.Element{
 
-  console.log("Header");
   const {isLargeScreen} = useIsLargeScreen();
     return(
       <>

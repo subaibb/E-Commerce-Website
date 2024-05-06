@@ -1,17 +1,21 @@
 "use client";
 import cn from 'classnames'
 import { ReactNode } from 'react'
-import {useSideBar,useFavCount,useCartCount} from '@/app/hooks/Contexts';
+import {useFavCount,useCartCount,useLoginWarning} from '@/app/hooks/Contexts';
 import { useState } from 'react';
-
-
+import { useSession } from 'next-auth/react';
 export function  PurchaseButton({variant,children}:{variant:number,children:ReactNode}):JSX.Element{
 
-    
+    const {status} = useSession();
     const {cart,setCart} = useCartCount();
     const [isCart,setIsCart] = useState(false);
+    const {setVisible} = useLoginWarning();
 
     const clicAction = ()=>{
+        if (status == 'unauthenticated') {
+            setVisible(true);
+            return;
+        }
         if (variant===2) {
         setCart(cart+1)
         setIsCart(!isCart)
@@ -30,15 +34,25 @@ export function  PurchaseButton({variant,children}:{variant:number,children:Reac
 }
 
 export function FavoriteButton({variant}:{variant:number}):JSX.Element{
+
+
+    const {status} = useSession();
     const {fav,setFav} = useFavCount();
     const [isFav,setIsFav] = useState(false);
-    return(
-        <button onClick={()=>{setFav(fav+1)
-            setIsFav(!isFav)
-            isFav ? setFav(fav-1) : setFav(fav+1)
+    const {setVisible} = useLoginWarning();
+
+
+    const clicAction = ()=>{
+        if (status == 'unauthenticated') {
+            setVisible(true);
+            return;
         }
-                
-        } className={cn("sm:w-[8%] xs:h-1/2 xs:w-[12%] flex justify-center items-center sm:h-full transition duration-150 border-[1px] border-textprimary",{
+        setFav(fav+1)
+        setIsFav(!isFav)
+        isFav ? setFav(fav-1) : setFav(fav+1)
+    }
+    return(
+        <button onClick={clicAction} className={cn("sm:w-[8%] xs:h-1/2 xs:w-[12%] flex justify-center items-center sm:h-full transition duration-150 border-[1px] border-textprimary",{
             "hover:bg-[#F4ECE4]":variant===1,
         })}>
             <img src={

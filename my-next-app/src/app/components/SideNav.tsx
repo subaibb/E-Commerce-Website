@@ -1,18 +1,18 @@
 "use client";
 import { ReactNode } from "react";
 import Link from "next/link";
-import  {useSideBar}  from "../hooks/Contexts";
+import  {useSideBar,useLoginWarning}  from "../hooks/Contexts";
 import { useEffect } from "react";
 import {motion,AnimatePresence} from 'framer-motion';
 export function SideNav():JSX.Element{
-
-    const {show} = useSideBar();
-
+    const {show} = useSideBar(); 
+   
+    
     useEffect(()=>{
         if(show){
             document.body.style.overflow = 'hidden';
         }else{
-            document.body.style.overflow = 'scroll';
+            document.body.style.overflow = 'auto';
         }
     },[show])
 
@@ -70,11 +70,12 @@ export function SideNav():JSX.Element{
 
 }
 
-function Blackout ():JSX.Element{
+export function Blackout ():JSX.Element{
     const {show,setShow} = useSideBar();
+    const {visible,setVisible} = useLoginWarning();
     return(
     
-        <motion.div onClick={()=>setShow(!show)} className="fixed top-0 left-0 w-full h-full z-[999] backdrop-filter blackout"
+        <motion.div onClick={()=>{setShow(!show);setVisible(!visible)}} className="fixed top-0 left-0 w-full h-full z-[999] backdrop-filter blackout"
         initial={{opacity:0}}
         animate={{opacity:1}}
         exit={{opacity:0}}

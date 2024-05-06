@@ -30,7 +30,7 @@ const config = {
     },
     extend: {
       colors: {
-        default: "#E9E6E2", 
+        default: "#EEE7DD", 
         textprimary: "#474241",
         textscondary: "#D6C18A",
         thick: "#232119",

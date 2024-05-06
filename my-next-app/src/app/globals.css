@@ -82,3 +82,9 @@
   .Product:hover > .Fav{
     opacity: 1;
   }
+
+  .InputForm:valid button{
+    background-color: #474241;
+    pointer-events: auto;
+  }
+

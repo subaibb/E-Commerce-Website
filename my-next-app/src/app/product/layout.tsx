@@ -1,5 +1,5 @@
 import { Nav } from "@/app/components/Nav"
-import { SideBarWrapper,FavContextWrapper,CartContextWrapper } from "@/app/hooks/Contexts"
+import { SideBarWrapper,FavContextWrapper,CartContextWrapper,ProductContextWrapper } from "@/app/hooks/Contexts"
 import { SideNav } from "../components/SideNav";
 export const dynamic = "force-dynamic"
 
@@ -10,6 +10,7 @@ export default function Layout({
 }>) {
   return (
     <>
+    <ProductContextWrapper>
       <CartContextWrapper>
       <FavContextWrapper>
       <SideBarWrapper >
@@ -24,6 +25,7 @@ export default function Layout({
         </div>
       </FavContextWrapper>
       </CartContextWrapper>
+      </ProductContextWrapper>
        
     </>
   )

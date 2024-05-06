@@ -3,10 +3,23 @@ import React, { ReactNode } from 'react'
 import cn from 'classnames';
 import {useSideBar,useFavCount,useCartCount} from '@/app/hooks/Contexts';
 import  {useIsLargeScreen} from '../hooks/MediaQuery';
+import { signOut } from 'next-auth/react';
+import { useSession } from "next-auth/react"
+import { DefaultSession } from 'next-auth';
+import Link from 'next/link';
 
+
+declare module 'next-auth' {
+    interface Session extends DefaultSession {
+      user: {
+        name: string
+      }
+    }
+  }
 
 export function SideBar({variation}:{variation:number}):JSX.Element{
-
+    
+    const {data:session,status} = useSession();
     const {show, setShow} = useSideBar();
     const {isLargeScreen} = useIsLargeScreen();
     const {fav} = useFavCount();
@@ -14,15 +27,35 @@ export function SideBar({variation}:{variation:number}):JSX.Element{
     return (
         <div className={cn(" xl:w-[15%] w-[30%] h-full justify-evenly items-center flex xs:w-[55%] sm:w-[45%] lg:w-[15%]")}>
 
-            <Icon>
-            <img src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
-            
-            <label style={{
-                display: isLargeScreen ? 'block' : 'none'
-            
-            }} className='ml-2 relative justify-center items-center hover:text-texthover transition duration-75 cursor-pointer xl:text-base lg:text-sm md:text-xs '>Login</label>
-            
-            </Icon>
+            {
+                session ?
+                 <Link href="/profile">
+                 <Icon>
+                 <img src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
+                 
+                 <label style={{
+                     display: isLargeScreen ? 'block' : 'none'
+                 
+                 }} className='ml-2 relative justify-center items-center hover:text-texthover transition duration-75 cursor-pointer xl:text-base lg:text-sm md:text-xs '>{session.user.name.slice(0,session.user.name.indexOf(' '))}</label>
+                 
+                 </Icon>
+                 </Link>
+                    :
+                    <Link href="/login">
+                    <Icon>
+                    <img src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
+                    
+                    <label style={{
+                        display: isLargeScreen ? 'block' : 'none'
+                    
+                    }} className='ml-2 relative justify-center items-center hover:text-texthover transition duration-75 cursor-pointer xl:text-base lg:text-sm md:text-xs '>Login</label>
+                    
+                    </Icon>
+                    </Link>
+
+
+            }
+          
             
             <Icon>
             <Notifaction count={fav}/>

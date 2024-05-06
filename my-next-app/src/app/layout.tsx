@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Marcellus } from 'next/font/google'
+import AuthProvider from "./hooks/AuthProvider";
+import { LoginWarningContextWrapper } from "./hooks/Contexts";
 import cn from "classnames";
 import "./globals.css";
   const marcellus = Marcellus({ weight: '400', subsets: ['latin']});
@@ -17,7 +19,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={marcellus.className}>
-      <body className={cn("h-full w-full bg-default")}>{children}</body>
+      <body className={cn("h-full w-full bg-default")}>
+        <AuthProvider>
+          <LoginWarningContextWrapper>
+          {children}
+          </LoginWarningContextWrapper>
+          </AuthProvider>
+        </body>
     </html>
   );
 }

@@ -1,14 +1,14 @@
 "use client";
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { useInView } from "framer-motion";
 
 
-export function FooterLink():JSX.Element{
+export function FooterLink({Link,children}:{Link:string,children:ReactNode}):JSX.Element{
 
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
     return(
-        <a href="/collections" className="w-[20%] h-fit m-auto"
+        <a href={Link} className="w-full h-fit m-auto"
         ref={ref}
         style={{
             transform: isInView ? "translateY(0)" : "translateY(30px)",
@@ -17,7 +17,7 @@ export function FooterLink():JSX.Element{
         }}
         >
         <div className=" w-full h-full bg-transparent flex justify-evenly items-center hover:tracking-[0.3rem] transition-all duration-300 cursor-pointer">
-          <label className="text-textprimary sildeUp cursor-pointer xl:text-base sm:text-[12px] xs:text-[8px]">Shop Now</label>
+          <label className="text-textprimary sildeUp cursor-pointer xl:text-base sm:text-[12px] xs:text-[8px]">{children}</label>
           <img src="/arrow.svg" alt="Arrow" className="
             xl:w-[50px] xl:h-[50px] sm:w-[40px] sm:h-[40px] xs:w-[25px] xs:h-[25px]  cursor-pointer xl:ml-2 sm:ml-1
             xs:ml-2

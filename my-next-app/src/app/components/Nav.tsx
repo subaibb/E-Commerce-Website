@@ -1,14 +1,13 @@
-"use client";
+
 import Link from "next/link";
 import cn from "classnames";
 import { ReactNode } from "react"
 import { Searchbar } from "./Searchbar";
 import { SideBar } from "./SideBar";
 import { Paths } from "../shopall/_components/Paths";
-import  {useIsLargeScreen} from '../hooks/MediaQuery';
-export function Nav({variation}:{variation:number}): JSX.Element{
 
-  
+export  function Nav({variation}:{variation:number}){
+
     return(
        
         <nav className={cn("flex justify-center items-center flex-col absolute w-full ",{
@@ -28,7 +27,6 @@ export function Nav({variation}:{variation:number}): JSX.Element{
 
 function TopNav ():JSX.Element{
   
- const {isLargeScreen} = useIsLargeScreen();
     return(
         <div className={cn("w-[95%] h-1/2 border-b-[1px] border-solid border-textprimary flex justify-center items-center")}>
           
@@ -38,9 +36,7 @@ function TopNav ():JSX.Element{
           </a>
           </div>
 
-           <div style={{
-            display: !isLargeScreen ? 'none' : 'flex'  
-           }} className="h-full w-[25%] flex justify-between items-center">
+           <div className="h-full w-[25%] flex justify-between items-center lg:flex xs:hidden">
             <label className=" font-wixMade xl:text-sm sm:text-[10px] text-textprimary">Free Shipping on all orders over 30$</label>
             <ShopNow>Shop Now</ShopNow>
             </div>
@@ -109,15 +105,9 @@ function NavLink ({children , href , radiant}:{children:ReactNode , href:string 
 }
 
 function NavLinks ({children}:{children:ReactNode}):JSX.Element{
-  const {isLargeScreen} = useIsLargeScreen();
   return(
-    <div style={
-      {
-        display: isLargeScreen ? 'flex' : 'none',
-      }
-    
-    }
-   className="h-full w-[40%]  justify-between items-center">
+    <div 
+   className="h-full w-[40%] lg:flex xs:hidden justify-between items-center">
       {children}
      
     </div>

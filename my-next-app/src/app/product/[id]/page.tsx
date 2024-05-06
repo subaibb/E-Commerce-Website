@@ -2,71 +2,151 @@ import { Header } from "@/app/shopall/_components/Header";
 import { MainPic } from "./_components/MainPic";
 import { Stars,ReviewLabel } from "@/app/shopall/_components/Stars";
 import { PurchaseButton,FavoriteButton } from "../[id]/_components/PurchaseButton";
-import { AccordionSection } from "./_components/Accordiations";
+import { BottomDetail } from "./_components/Accordiations";
 import { ProductCard } from "@/app/shopall/_components/ProductCard";
 import { Contact } from "@/app/(customer page)/_components/Contact";
 import { RatingSection } from "./_components/RatingSection";
 import { Dropdown } from "./_components/Dropdown";
 import { Review,ReviewsCarrier,Separator } from "./_components/Review";
+import { LoginWarning } from '@/app/components/LoginWarning';
+import db from "@/db/db";
 
-export default function ProductPage() {
+type ProductData = {
+    id: string;
+    name: string;
+    price: number;
+    imagepath: string;
+    createdAt: Date;
+    updatedAt: Date;
+    available: boolean;
+    description: string;
+    rating: number;
+    accrdation: {
+        name: string;
+        description: string;
+                }[];
+} | null
+
+
+type RelatedProductsData = {
+    id: string;
+    name: string;
+    price: number;
+    imagepath: string;
+    rating: number;
+}[];
+
+const getRelatedProducts = async(id:string)=>{
+
+    return db.product.findMany({
+        select:{
+            id:true,
+            name:true,
+            price:true,
+            imagepath:true,
+            rating:true,
+        
+        },
+        where:{
+           id:{
+            not:id
+            }
+        }
+});
+}
+
+const getProduct = async(id:string)=>{
+
+    return db.product.findUnique({
+
+        select:{
+            id:true,
+            name:true,
+            price:true,
+            imagepath:true,
+            rating:true,
+            createdAt:true,
+            updatedAt:true,
+            available:true,
+            description:true,
+            accrdation:{
+                select:{
+                    name:true,
+                    description:true
+                }
+            }
+        },
+        
+        where:{
+            id:id
+        }
+    })
+}
+
+export default function ProductPage({ params }: { params: { id: string } }) {
+    
+    if (!params.id) return <div>404</div>;
   return (
     <div className="w-full h-full">
+        <LoginWarning/>
         <Header/>
-        <MainSection/>
-        <RelatedProducts/>
+        <MainSection id={params.id} />
+        <RelatedProducts id={params.id}/>
         <Reviews/>
         <Contact/>
     </div>
   );
 }
 
-function MainSection():JSX.Element{
-    return(
-        <div className="w-full sm:h-[75vh] xs:h-[120vh] sm:flex sm:flex-row sm:justify-center items-center xs:flex-col xs:flex xs:justify-center ">
-                <ProductContainer/>
-                <ProductDetails/>
+async function MainSection({id}:{id:string}){
+   
 
+    const Product:ProductData= await getProduct(id);
+    return(
+        <div className="w-full sm:h-[75vh] xs:h-[135vh] sm:flex sm:flex-row sm:justify-center items-center xs:flex-col xs:flex xs:justify-center relative ">
+                <ProductContainer imagePath={Product?.imagepath} name={Product?.name}/>
+                <ProductDetails data={Product}/>
         </div>
     )
 }
 
-function ProductContainer():JSX.Element{
-
+function ProductContainer({imagePath,name}:{imagePath?:string,name?:string}):JSX.Element{
+        
     return(
         <div className=" sm:w-[45%] h-fit flex justify-center items-center xs:w-[95%] ">
-        <MainPic>
-        <img src="/Oil.png" alt="" />
+        <MainPic name={name}>
+        <img loading="lazy" src={
+            imagePath
+        } alt="" />
         </MainPic>
         </div>
         
     )
 }
 
-function ProductDetails():JSX.Element{
-
+function ProductDetails({data}:{data:ProductData}):JSX.Element{
     return(
         <div className="sm:w-[45%] sm:h-[95%] flex-col justify-center items-center xs:w-[95%] xs:h-[50%]">
  
-            <TopDetail/>
-            <MiddleDetail/>
-            <BottomDetail/>
+            <TopDetail id={idFormatter(data?.id)} name={data?.name} />
+            <MiddleDetail description={data?.description} price={data?.price}/>
+            <BottomDetail data={data?.accrdation}/>
         </div>
     )
 }
 
 
 
-function TopDetail():JSX.Element{
+function TopDetail({id,name}:{id?:string,name?:string}):JSX.Element{
     return(
 
         <div className="w-[90%] h-[18%] flex justify-start flex-col items-center  ">
 
         <div className="w-full h-[30%] flex justify-end items-center">
-            <p className="text-sm text-[#8A8A8A] ">LSKFEOWA1</p>
+            <p className="text-sm text-[#8A8A8A] ">{id}</p>
         </div>
         <div className=" h-[10%] w-full flex justify-start items-center sm:mb-4 xs:mb-1">
-            <p className="sm:text-3xl text-thick xs:text-xl">6Oz. Olive Oil</p>
+            <p className="sm:text-2xl lg:text-3xl text-thick xs:text-xl">{name}</p>
         </div>
 
         <div className=" w-full flex justify-start items-center">
@@ -80,16 +160,14 @@ function TopDetail():JSX.Element{
     )
 }
 
-function MiddleDetail():JSX.Element{
+function MiddleDetail({description,price}:{description?:string,price?:number}):JSX.Element{
     return(
         <div className="w-[90%] sm:h-[35%] flex flex-col justify-start items-center xs:h-[30%]">
-            <p className="text-[#8A8A8A] text-sm w-full xs:hidden sm:flex ">
-                Indulge in our luxurious olive oil product, crafted from the finest organic olives for intense hydration
-                and a radiant glow. Pamper your skin with its lightweight formula, leaving it irresistibly soft and smooth.</p>
+            <p className="text-[#8A8A8A] text-sm w-full xs:hidden sm:flex ">{description}</p>
 
                 
         <h2 className="w-full h-[30%] flex justify-start items-center text-4xl text-thick font-wixMade font-medium mb-4">
-            $15.00
+            ${price}
         </h2>
 
         <div className="flex l w-full sm:h-[22%] xs:h-[90%] justify-between">
@@ -106,51 +184,23 @@ function MiddleDetail():JSX.Element{
     )
 }
 
-function BottomDetail():JSX.Element{
-    return(
-        <div className="w-[90%] h-[30%] flex justify-start items-center ">
-            <AccordionSection/>
-        </div>
-    )
-}
+ async function RelatedProducts({id}:{id:string}){
 
-function RelatedProducts():JSX.Element{
+    const RelatedProducts:RelatedProductsData = await getRelatedProducts(id);
+
     return(
-        <div className="w-full h-fit flex justify-center items-center flex-col  ">
+        <div className="w-full h-fit flex justify-center items-center flex-col relative ">
 
             <h1 className="text-2xl h-[7vh] w-fit text-textprimary">Related Products</h1>
 
             <div className="w-[95%] h-[90%] flex justify-center items-center ">
-                <div className="w-[85%] h-[90%] grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
-                
+                <div className="w-[85%] h-[90%] gap-2 grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
+                {RelatedProducts.map((product) => (
+                    <ProductCard key={product.id} data={product} Style={{height:"fit-content"}}>
+                        <img loading="lazy" src={product.imagepath} alt="" className="w-full object-contain"/>
+                    </ProductCard>
+                ))}
 
-                <ProductCard Style={{
-                    width:"90%",
-                    margin:"auto"
-                }} label="6Oz. Olive Oil" price="19.99">
-                <img src="/Oil.png" alt="Olive Oil" className="w-[100%]"/>
-                </ProductCard>
-
-                <ProductCard Style={{
-                    width:"90%",
-                    margin:"auto"
-                }} label="6Oz. Olive Oil" price="19.99">
-                <img src="/Oil.png" alt="Olive Oil" className="w-[100%]"/>
-                </ProductCard>
-
-                <ProductCard Style={{
-                    width:"90%",
-                    margin:"auto"
-                }} label="6Oz. Olive Oil" price="19.99">
-                <img src="/Oil.png" alt="Olive Oil" className="w-[100%]"/>
-                </ProductCard>
-
-                <ProductCard Style={{
-                    width:"90%",
-                    margin:"auto"
-                }} label="6Oz. Olive Oil" price="19.99">
-                <img src="/Oil.png" alt="Olive Oil" className="w-[100%]"/>
-                </ProductCard>
                 </div>
             </div>
         </div>
@@ -196,7 +246,9 @@ function ExtraWidget():JSX.Element{
 }
 
 
-
+function idFormatter(id?:string):string | undefined{
+    return id?.slice(0,9).toUpperCase() 
+}
 
 
 

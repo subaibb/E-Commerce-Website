@@ -6,12 +6,20 @@ import { useState } from "react";
 import { useFavCount } from "@/app/hooks/Contexts";
 import Link from "next/link";
 
-export function ProductCard ({children , label , price,Style }:{children:ReactNode , label : string , price : string,Style?:CSSProperties}):JSX.Element{
 
+type Product = {
+    id: string;
+    name: string;
+    price: number;
+    imagepath: string;
+    rating: number;
+}
+  
 
+export function ProductCard ({children,Style,data }:{children:ReactNode,Style?:CSSProperties,data:Product}):JSX.Element{
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
-    const fraction = price.split('.');
+    const fraction = data.price.toString().split(".");
     const [isFav, setIsFav] = useState(false);
     const {fav,setFav} = useFavCount();
         return (
@@ -32,7 +40,7 @@ export function ProductCard ({children , label , price,Style }:{children:ReactNo
                 isFav ? "/FullFav.svg" : "/Favourite.svg"
             } alt="" />
             </div>
-            <Link href="/product/1">
+            <Link href="/product/[id]" as={`/product/${data.id}`}>
            <div  className="w-full h-fit bg-[#F4ECE4]">
               {children}
            </div>
@@ -40,11 +48,11 @@ export function ProductCard ({children , label , price,Style }:{children:ReactNo
 
            <div className="w-full h-[6vh] flex flex-col relative top-2 ">
             <div className="flex w-full h-1/2 justify-between">
-            <label className=" w-2/3">{label}</label>
+            <label className=" w-2/3">{data.name}</label>
             <label>${fraction[0]}.<span className="text-[12px]">{fraction[1]}</span></label>
             
             </div>
-            <Stars rating={3}>
+            <Stars rating={3}> 
             <ReviewLabel ReviewCount={3}/>
             </Stars>
            </div>
