@@ -9,6 +9,8 @@ import { RatingSection } from "./_components/RatingSection";
 import { Dropdown } from "./_components/Dropdown";
 import { Review,ReviewsCarrier,Separator } from "./_components/Review";
 import { LoginWarning } from '@/app/components/LoginWarning';
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 import db from "@/db/db";
 
 type ProductData = {
@@ -83,6 +85,30 @@ const getProduct = async(id:string)=>{
     })
 }
 
+
+const getFavs = async () => {
+    const session = await getServerSession(authConfig);
+    if (!session) {
+      return [];
+    }
+  
+    const favs = await db.favorite.findMany({
+      select: {
+        postId: true,
+      },
+      where: {
+        user: {
+          id: session.user.id,
+        },
+      },
+    });
+  
+    return favs.map((fav) => fav.postId);
+  }
+
+
+
+
 export default function ProductPage({ params }: { params: { id: string } }) {
     
     if (!params.id) return <div>404</div>;
@@ -126,10 +152,10 @@ function ProductContainer({imagePath,name}:{imagePath?:string,name?:string}):JSX
 
 function ProductDetails({data}:{data:ProductData}):JSX.Element{
     return(
-        <div className="sm:w-[45%] sm:h-[95%] flex-col justify-center items-center xs:w-[95%] xs:h-[50%]">
+        <div className="sm:w-[45%] sm:h-[95%] flex flex-col justify-center sm:items-start xs:items-center xs:w-[95%] xs:h-[50%]">
  
             <TopDetail id={idFormatter(data?.id)} name={data?.name} />
-            <MiddleDetail description={data?.description} price={data?.price}/>
+            <MiddleDetail description={data?.description} price={data?.price} id={data?.id}/>
             <BottomDetail data={data?.accrdation}/>
         </div>
     )
@@ -160,7 +186,9 @@ function TopDetail({id,name}:{id?:string,name?:string}):JSX.Element{
     )
 }
 
-function MiddleDetail({description,price}:{description?:string,price?:number}):JSX.Element{
+async function MiddleDetail({description,price,id}:{description?:string,price?:number,id?:string}){
+
+    const Favs = await getFavs();
     return(
         <div className="w-[90%] sm:h-[35%] flex flex-col justify-start items-center xs:h-[30%]">
             <p className="text-[#8A8A8A] text-sm w-full xs:hidden sm:flex ">{description}</p>
@@ -171,13 +199,18 @@ function MiddleDetail({description,price}:{description?:string,price?:number}):J
         </h2>
 
         <div className="flex l w-full sm:h-[22%] xs:h-[90%] justify-between">
-        <PurchaseButton variant={2}>
+        <PurchaseButton variant={2} id={id}>
             Add to Cart
         </PurchaseButton>
-        <PurchaseButton variant={1}>
+
+
+        <PurchaseButton variant={1} id={id}>
             Buy Now
         </PurchaseButton>
-        <FavoriteButton variant={1}/>
+
+        <FavoriteButton Status={
+            Favs.includes(id || "") ? true : false
+        } variant={1} id={id}/>
         </div>
       
         </div>
@@ -187,7 +220,7 @@ function MiddleDetail({description,price}:{description?:string,price?:number}):J
  async function RelatedProducts({id}:{id:string}){
 
     const RelatedProducts:RelatedProductsData = await getRelatedProducts(id);
-
+    const Favs = await getFavs();
     return(
         <div className="w-full h-fit flex justify-center items-center flex-col relative ">
 
@@ -196,10 +229,14 @@ function MiddleDetail({description,price}:{description?:string,price?:number}):J
             <div className="w-[95%] h-[90%] flex justify-center items-center ">
                 <div className="w-[85%] h-[90%] gap-2 grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1">
                 {RelatedProducts.map((product) => (
-                    <ProductCard key={product.id} data={product} Style={{height:"fit-content"}}>
-                        <img loading="lazy" src={product.imagepath} alt="" className="w-full object-contain"/>
-                    </ProductCard>
-                ))}
+                     Favs.includes(product.id) ? 
+                        <ProductCard key={product.id} favs={true}  data={product} Style={{height:"fit-content"}}>
+                          <img loading="lazy" src={product.imagepath} alt="" className="w-full object-contain"/>
+                            </ProductCard>:
+                             <ProductCard key={product.id} favs={false}  data={product} Style={{height:"fit-content"}}>
+                         <img loading="lazy" src={product.imagepath} alt="" className="w-full object-contain"/>
+                         </ProductCard>
+                          ))}
 
                 </div>
             </div>

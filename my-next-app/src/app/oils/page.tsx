@@ -1,15 +1,14 @@
-import { ProductCard } from "./_components/ProductCard";
-import { Header } from "./_components/Header";
-import { Filters } from "./_components/Filters";
-import { Contact } from "../(customer page)/_components/Contact";
+import db from "@/db/db";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { LoginWarning } from "../components/LoginWarning";
-import db from "@/db/db";
-
+import { ProductCard } from "../shopall/_components/ProductCard";
+import { Header } from "../shopall/_components/Header";
+import { Filters } from "../shopall/_components/Filters";
+import { Contact } from "../(customer page)/_components/Contact";
 //DataBaseQueries
 
-const getProducts = async () => {
+const getOils = async () => {
   return await db.product.findMany({
     select: {
       id: true,
@@ -18,34 +17,35 @@ const getProducts = async () => {
       imagepath: true,
       rating: true,
     },
+    where: {
+        productType: "Oils"
+    },
   });
 };
 
 
 const getFavs = async () => {
-  const session = await getServerSession(authConfig);
-  if (!session) {
-    return [];
+    const session = await getServerSession(authConfig);
+    if (!session) {
+      return [];
+    }
+  
+    const favs = await db.favorite.findMany({
+      select: {
+        postId: true,
+      },
+      where: {
+        user: {
+          id: session.user.id,
+        },
+      },
+    });
+  
+    return favs.map((fav) => fav.postId);
   }
 
-  const favs = await db.favorite.findMany({
-    select: {
-      postId: true,
-    },
-    where: {
-      user: {
-        id: session.user.id,
-      },
-    },
-  });
 
-  return favs.map((fav) => fav.postId);
-}
-
-
-//Components
-
-export default function ShopAll() {
+  export default function ShopOil() {
     return (
      <>
      <LoginWarning/>
@@ -58,8 +58,28 @@ export default function ShopAll() {
     );  
   }
 
+  function Navigation():JSX.Element{
+    return(
+        <div className="w-full h-[5vh] flex mb-9">
+        </div>
+    )
+  }
+
+  function MainSection ():JSX.Element{
+    
+    return(
+      <div className=" w-full h-fit flex justify-center items-center xs:p-[5%] sm:p-[2%] mb-5 ">
+        <div className="w-[95%] h-full flex justify-between 0">
+        <Filters/>
+        <ProductContainer/>
+        </div>
+  
+      </div>
+    )
+  }
+
   async function ProductContainer(){
-    const Products = await getProducts();
+    const Products = await getOils();
     const Favs = await getFavs();
    
     return(
@@ -78,27 +98,3 @@ export default function ShopAll() {
         </div>
     )
   }
-
-  function Navigation():JSX.Element{
-    return(
-        <div className="w-full h-[5vh] flex mb-9">
-        </div>
-    )
-  }
-  
-  function MainSection ():JSX.Element{
-    
-      return(
-        <div className=" w-full h-fit flex justify-center items-center xs:p-[5%] sm:p-[2%] mb-5 ">
-          <div className="w-[95%] h-full flex justify-between 0">
-          <Filters/>
-          <ProductContainer/>
-          </div>
-    
-        </div>
-      )
-    }
-
-
-
-

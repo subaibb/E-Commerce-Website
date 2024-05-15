@@ -4,9 +4,7 @@ import { LandingImage } from "./_components/LandingImage";
 import { ProductCard,AnimatedLabel} from "./_components/ProductCard";
 import { FooterLink } from "./_components/FooterLink";
 import { Contact } from "./_components/Contact";
-
 export default function Home() {
-
 
 
   return (
@@ -50,7 +48,7 @@ function ProductSection():JSX.Element{
    
     <div className="w-[92.2%] h-[80%] relative flex justify-between">
       <ProductCard label="6Oz. Olive Oil" price="19.99">
-        <img src="/Oil.png" alt="Olive Oil" className="w-[100%]"/>
+        <img src="/Shirt.png" alt="Olive Oil" className="w-[100%]"/>
       </ProductCard>
 
       <ProductCard label="Sage Kick Back Hoodie" price="79.99">
@@ -80,7 +78,9 @@ function Footer():JSX.Element{
         Add a touch of Palestine to your home and wardrobe
         </AnimatedLabel>
 
-        <FooterLink Link="/collections">
+        <FooterLink Style={{
+        width: "30%",
+        }} Link="/collections">
         Shop Now
         </FooterLink>
           

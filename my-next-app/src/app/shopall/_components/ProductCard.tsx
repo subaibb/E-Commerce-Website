@@ -1,9 +1,11 @@
 "use client";
-import {useInView} from "framer-motion";
+import {motion,useInView} from "framer-motion";
 import { CSSProperties, ReactNode, useRef } from "react"
 import { Stars,ReviewLabel } from "./Stars";
 import { useState } from "react";
-import { useFavCount } from "@/app/hooks/Contexts";
+import { useLoginWarning,useFavCount } from "@/app/hooks/Contexts";
+import { AddFav,RemoveFav } from "../../../lib/CustomerActions";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 
@@ -16,32 +18,51 @@ type Product = {
 }
   
 
-export function ProductCard ({children,Style,data }:{children:ReactNode,Style?:CSSProperties,data:Product}):JSX.Element{
+export function ProductCard ({children,Style,data,favs}:{children:ReactNode,Style?:CSSProperties,data:Product,favs:boolean}):JSX.Element{
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true });
     const fraction = data.price.toString().split(".");
-    const [isFav, setIsFav] = useState(false);
+    const [isFav, setIsFav] = useState(favs);
     const {fav,setFav} = useFavCount();
+    const {setVisible} = useLoginWarning();
+    const {status} = useSession();
+
+    const handleClick = () => {
+
+        if (status === "unauthenticated"){
+            setVisible(true);
+            return;
+        }
+        if (fav.includes(data.id)){
+            setFav(fav.filter((item:string) => item !== data.id));
+            const RemoveFavs = RemoveFav.bind(null,{id:data.id});
+            setIsFav(false);
+            RemoveFavs();
+        }
+        else{
+            const UpdateFavs = AddFav.bind(null,{id:data.id});
+            UpdateFavs();
+            setFav([...fav,data.id]);
+            setIsFav(true);
+        }
+    }
+
+
+        
         return (
-           <div className=" h-fit xs:h-full flex flex-col Product" ref={ref}
-           style={{
-            transform: isInView ? "translateY(0)" : "translateY(5px)",
-            opacity: isInView ? 1 : 0,
-            transition: "all 1s",
-            ...Style
-            
-        }}
+           <motion.div className=" h-fit xs:h-full flex flex-col Product" ref={ref}
+              initial={{opacity:0,transform:"translateY(30px)"}}
+            animate={{opacity:1,transform:"translateY(0)"}}
+            transition={{duration:1}}
+            style={Style}
+
            >
-            <div onClick={()=>{setFav(fav+1)
-            setIsFav(!isFav)
-            isFav ? setFav(fav-1) : setFav(fav+1)
-        }} className="w-8 h-8 absolute right-3 top-3 Fav opacity-0 transition duration-150 cursor-pointer active:translate-y-[2px]">
+            <div onClick={handleClick} className="w-8 h-8 absolute right-3 top-3 Fav opacity-0 transition duration-150 cursor-pointer active:translate-y-[2px]">
             <img src={
                 isFav ? "/FullFav.svg" : "/Favourite.svg"
             } alt="" />
             </div>
             <Link href="/product/[id]" as={`/product/${data.id}`}>
-           <div  className="w-full h-fit bg-[#F4ECE4]">
+           <div  className="w-full h-fit bg-productBackground">
               {children}
            </div>
             </Link>
@@ -57,7 +78,7 @@ export function ProductCard ({children,Style,data }:{children:ReactNode,Style?:C
             </Stars>
            </div>
 
-           </div>
+           </motion.div>
         )
 }
 

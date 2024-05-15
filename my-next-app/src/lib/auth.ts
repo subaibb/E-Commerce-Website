@@ -27,7 +27,7 @@ export const authConfig: NextAuthOptions = {
           return null;
 
         const dbUser = await db.user.findFirst({
-          where: { email: credentials.email },
+          where: { email: credentials.email.toLowerCase() },
           select:{
             id:true,
             email:true,
@@ -39,9 +39,7 @@ export const authConfig: NextAuthOptions = {
           },
         });
 
-        //Verify Password here
-        //We are going to use a simple === operator
-        //In production DB, passwords should be encrypted using something like bcrypt...
+
         if (dbUser && dbUser.password === credentials.password) {
           const { password, createdAt,updatedAt,rating, ...dbUserWithoutPassword } = dbUser;
 

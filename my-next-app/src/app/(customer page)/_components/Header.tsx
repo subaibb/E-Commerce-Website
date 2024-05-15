@@ -2,27 +2,14 @@
 import { HeaderButton } from "./HeaderButton";
 import { Icons } from "./Icons";
 import {motion} from 'framer-motion';
-import  {useIsLargeScreen}  from "../../hooks/MediaQuery";
 
 export function Header ():JSX.Element{
 
-  const {isLargeScreen} = useIsLargeScreen();
     return(
       <>
-        <motion.div style={{
-          width: !isLargeScreen ? '85%' : '44%',
-        }} className="bg-header w-[44%] h-[90%] rounded-br-[333px] justify-end items-end flex"
-        initial={{opacity:1,width:'30%',height:"85%"}}
-        animate={{opacity:1,width:!isLargeScreen ? '85%' : '44%',height:"90%"}}
-        transition={{duration:1}}
-        >
+        <motion.div  className="bg-header lg:w-[44%] xs:w-[85%] h-[90%] rounded-br-[333px] justify-end items-end flex">
 
-          <div style={
-            {
-              width: isLargeScreen ? '95%' : '97%'
-            }
-          
-          } className="w-[95%] h-full flex flex-col">
+          <div  className="xs:w-[97%] lg:w-[95%] h-full flex flex-col">
 
          
           <div className="w-full h-[8vh] border-b-[1px] border-solid border-textscondary flex justify-between items-center top-0 relative mb-auto z-10 bg-header ">
@@ -33,12 +20,12 @@ export function Header ():JSX.Element{
                   <motion.h2 className="  text-textscondary w-full m-auto xl:text-4xl sm:text-3xl xs:text-2xl"
                             initial={{opacity:0,transform:"translateY(5px)"}}
                             animate={{opacity:1,transform:"translateY(0px)"}}
-                            transition={{duration:0.4,delay:1.00}}
+                            transition={{duration:0.4}}
                   >Discover the Essence.</motion.h2>
                   <motion.h2 className=" xl:text-4xl sm:text-3xl xs:text-2xl text-textscondary w-full m-auto"
                             initial={{opacity:0,transform:"translateY(5px)"}}
                             animate={{opacity:1,transform:"translateY(0px)"}}
-                            transition={{duration:0.4,delay:1.07}}
+                            transition={{duration:0.4,delay:0.07}}
                             
                   >Palestinian Oils & More.</motion.h2>
                     <HeaderButton>Shop Now</HeaderButton>
@@ -51,7 +38,7 @@ export function Header ():JSX.Element{
             <motion.label className="text-textscondary font-wixMade w-[40%] xl:text-base md:text-sm xs:text-xs"
              initial={{opacity:0,transform:"translateY(5px)"}}
              animate={{opacity:1,transform:"translateY(0px)"}}
-             transition={{duration:0.4,delay:1.50}}
+             transition={{duration:0.4,delay:0.50}}
             >50% of the the profit goes to help the children of Gaza.</motion.label>
           </div>
 

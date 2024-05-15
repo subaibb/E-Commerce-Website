@@ -4,10 +4,45 @@ import cn from "classnames";
 import { ReactNode } from "react"
 import { Searchbar } from "./Searchbar";
 import { SideBar } from "./SideBar";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 import { Paths } from "../shopall/_components/Paths";
+import  db  from "@/db/db";
+//get Favs and Cart Counts 
 
-export  function Nav({variation}:{variation:number}){
+const GetCounts = async()=>{
+  const session = await getServerSession(authConfig);
+  if (!session){
+    return {
+      favs:0,
+      cart:0
+    }
+  }
+  const favs = await db.favorite.findMany({
+    where:{
+      user:{
+        id:session.user.id
+      }
+    }
+  });
 
+  const cart = await db.cart.findMany({
+    where:{
+      user:{
+        id:session.user.id
+      }
+    }
+  });
+
+  return {
+    favs:favs.length,
+    cart:cart.length
+  }
+}
+
+export async function Nav({variation}:{variation:number}){
+
+    
     return(
        
         <nav className={cn("flex justify-center items-center flex-col absolute w-full ",{
@@ -45,10 +80,9 @@ function TopNav ():JSX.Element{
         </div>
     )
 }
-function BottomNav ({variation}:{variation:number}):JSX.Element{
+async function BottomNav ({variation}:{variation:number}){
 
- 
-
+  const {favs,cart} = await GetCounts();
   return(
       <div className="  w-[95%] h-1/2 flex justify-between items-center z-10">
 
@@ -68,7 +102,7 @@ function BottomNav ({variation}:{variation:number}):JSX.Element{
        
 
         
-          <SideBar variation={variation}/>
+          <SideBar favItems={favs} cartItems={cart}/>
        
       </div>
   )

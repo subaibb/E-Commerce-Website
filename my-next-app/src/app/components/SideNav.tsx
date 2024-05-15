@@ -1,60 +1,48 @@
 "use client";
 import { ReactNode } from "react";
 import Link from "next/link";
-import  {useSideBar,useLoginWarning}  from "../hooks/Contexts";
+import  {useSideBar,useLoginWarning,useShowCart,useShowFavorite}  from "../hooks/Contexts";
 import { useEffect } from "react";
 import {motion,AnimatePresence} from 'framer-motion';
-export function SideNav():JSX.Element{
-    const {show} = useSideBar(); 
-   
-    
+
+
+export function SideNav({children,Header,extras,Toggle}:{children:ReactNode,Header?:string,extras?:ReactNode,Toggle:boolean}):JSX.Element{
+
+
+
     useEffect(()=>{
-        if(show){
+        if(Toggle){
             document.body.style.overflow = 'hidden';
         }else{
             document.body.style.overflow = 'auto';
         }
-    },[show])
+    },[Toggle])
 
     return(
 
         <>
         <AnimatePresence>
-        {
+        {Toggle?
 
-            show ? <>
+             <>
                     <Blackout/>
 
-                <motion.div className="fixed top-0 right-0 w-[40%] z-[1000] bg-default h-full flex justify-center"
+                <motion.div className="fixed top-0 right-0 lg:w-[25%] sm:w-[35%] xs:w-[40%] z-[1000] bg-default h-full flex flex-col justify-start items-center"
                 initial={{transform:'translateX(100%)'}}
                 animate={{transform:'translateX(0%)'}}
                 transition={{duration:0.5}}
                 exit={{transform:'translateX(100%)'}}
-                >
+                >   
+                    <h2 className="w-[85%] sm:text-2xl xs:text-xl h-[5%] flex justify-center items-center">{Header}</h2>
 
-                    <div className="w-[85%] h-1/5  flex flex-col justify-center items-center top-[10%] relative">
+                    <div className="w-[95%] h-[80%] flex flex-col justify-start items-center relative space-y-6 overflow-auto Cart">
 
-                        <Label delay={0.1} link="/shopall">
-                        Shop All
-                        </Label>
-
-                        <Label delay={0.2} link="/oils">
-                        Oils
-                        </Label>
-
-                        <Label delay={0.3} link="/clothing">
-                        Clothing
-                        </Label>
-
-                        <Label delay={0.36} link="/aboutus">
-                        About Us
-                        </Label>
-
-                        <Label delay={0.4} link="/contact">
-                        Contact
-                        </Label>
-
+                        {children}
+                        
                     </div>
+
+                    {extras}
+                    
                 </motion.div>
 
             
@@ -70,12 +58,17 @@ export function SideNav():JSX.Element{
 
 }
 
+
+
 export function Blackout ():JSX.Element{
-    const {show,setShow} = useSideBar();
-    const {visible,setVisible} = useLoginWarning();
+    const {setShow} = useSideBar();
+    const {setVisible} = useLoginWarning();
+    const {setShowCart} = useShowCart();
+    const {setShowFavorite} = useShowFavorite();
+
     return(
     
-        <motion.div onClick={()=>{setShow(!show);setVisible(!visible)}} className="fixed top-0 left-0 w-full h-full z-[999] backdrop-filter blackout"
+        <motion.div onClick={()=>{setShow(false);setVisible(false);setShowCart(false);setShowFavorite(false)}} className="fixed top-0 left-0 w-full h-full z-[999] backdrop-filter blackout"
         initial={{opacity:0}}
         animate={{opacity:1}}
         exit={{opacity:0}}
@@ -85,7 +78,7 @@ export function Blackout ():JSX.Element{
     )
 }
 
-function Label({children,link,delay}:{children:ReactNode,link:string,delay:number}):JSX.Element{
+export function Label({children,link,delay}:{children:ReactNode,link:string,delay:number}):JSX.Element{
     const {show,setShow} = useSideBar();
     return(
         <Link onClick={()=>setShow(!show)} className="m-auto" href={link}>
@@ -98,3 +91,17 @@ function Label({children,link,delay}:{children:ReactNode,link:string,delay:numbe
         </Link>
     )
 }
+
+export function LabelWrapper({children}:{children:ReactNode}):JSX.Element{
+
+
+    return(
+        <div className="w-full h-[35%] flex flex-col items-center justify-center">
+            {children}
+        </div>
+    )
+}
+
+
+
+

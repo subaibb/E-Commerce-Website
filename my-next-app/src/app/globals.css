@@ -88,3 +88,20 @@
     pointer-events: auto;
   }
 
+.CartItem{
+ min-height: 20%;
+}
+
+.Cart::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+.Cart::-webkit-scrollbar-track {
+  background: transparent;        /* color of the tracking area */
+}
+
+.Cart::-webkit-scrollbar-thumb {
+  background-color: #302523;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid #F4E7D5;  /* creates padding around scroll thumb */
+}

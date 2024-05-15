@@ -20,13 +20,13 @@ function IconHolder():JSX.Element{
     return(
         <div className="justify-between items-center flex h-full xl:w-1/2 xs:w-[70%] ">
 
-            <Icon delay={1.07} src="/Heart.svg" label="Healthy"/>
+            <Icon delay={0.07} src="/Heart.svg" label="Healthy"/>
 
-            <Icon delay={1.2} label="Pure" src="/Pure.svg"/>
+            <Icon delay={0.2} label="Pure" src="/Pure.svg"/>
 
-            <Icon delay={1.26} label="Vegan" src="/Vegan.svg"/>
+            <Icon delay={0.26} label="Vegan" src="/Vegan.svg"/>
 
-            <Icon delay={1.33} label="Recycled" src="/Recycle.svg"/>
+            <Icon delay={0.33} label="Recycled" src="/Recycle.svg"/>
 
         </div>
     )

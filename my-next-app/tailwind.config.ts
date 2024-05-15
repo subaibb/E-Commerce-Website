@@ -36,6 +36,7 @@ const config = {
         thick: "#232119",
         header:"#3A6A59",
         texthover: "#6F6866",
+        productBackground: "#FBF3EB",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

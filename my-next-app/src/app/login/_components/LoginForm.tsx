@@ -1,12 +1,12 @@
 "use client";
 import { ReactNode } from "react";
-import { useFormState, useFormStatus } from "react-dom"
+import { useFormStatus } from "react-dom"
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm, SubmitHandler, UseFormRegister,FieldErrors } from "react-hook-form"
+import { useForm, UseFormRegister,FieldErrors } from "react-hook-form"
 import { signIn } from "next-auth/react";
 import { z,ZodType } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
+import {motion} from 'framer-motion';
 
 type FormInfo = {
   email:string,
@@ -19,9 +19,10 @@ const schema :ZodType<FormInfo> = z.object({
 })
 
 export function Login(): JSX.Element {
+
   
   return (
-    <div className="w-[55%] h-full justify-center items-center flex">
+    <div className="lg:w-[55%] lg:h-full justify-center items-center flex z-10 xs:w-full xs:h-1/2">
       <LoginForm />
     </div>
   );
@@ -29,7 +30,7 @@ export function Login(): JSX.Element {
 
 function LoginForm(): JSX.Element {
   const router = useRouter();
-  const {register,handleSubmit,formState :{ errors }} = useForm<FormInfo>({
+  const {register,setError,handleSubmit,formState :{ errors }} = useForm<FormInfo>({
     resolver:zodResolver(schema)
   });
 
@@ -47,6 +48,10 @@ function LoginForm(): JSX.Element {
     if (response && !response.error){
       router.push("/shopall");
     }
+
+    if (response && response.error){
+     setError("email",{message:"Incorrect Email or Password"});
+    }
   
     
     
@@ -56,9 +61,14 @@ function LoginForm(): JSX.Element {
 
 
   return (
-    <div className="w-1/2 h-[40%] flex justify-between items-center flex-col">
+    <div className="xs:w-1/2 lg:h-[40%] xs:h-[60%]  flex justify-between items-center flex-col">
       <form onSubmit={handleSubmit(PassData)} className="w-full h-full flex flex-col justify-between items-center InputForm">
-      <h1 className="w-full text-2xl text-textscondary text-center">Login</h1>
+      <motion.h1 className="w-full text-2xl text-textscondary text-center"
+       initial={{opacity:0,transform:"translateY(5px)"}}
+       animate={{opacity:1,transform:"translateY(0)"}}
+       transition={{duration:1,delay:0.03}}
+
+      >Login</motion.h1>
       <Input register={register} error={errors} Name="email" >EMAIL</Input>
       <Input register={register} error={errors} Name="password" > PASSWORD</Input>
       <LoginButton>Login</LoginButton>
@@ -70,19 +80,28 @@ function LoginForm(): JSX.Element {
 function Input({Name,children,error,register}:{Name:"email" | "password",children:ReactNode,error:FieldErrors<FormInfo>,register:UseFormRegister<FormInfo>}): JSX.Element {
 
   return (
-    <div className="w-full h-[20%] flex flex-col">
+    <motion.div className="w-full lg:h-[20%] xs:h-[25%] flex flex-col"
+    initial={{opacity:0,transform:"translateY(5px)"}}
+    animate={{opacity:1,transform:"translateY(0)"}}
+    transition={{duration:1,delay:0.1}}
+    >
       <label className="w-full">{children}</label>
       <input {...register(Name)} id="name" type="text" required className="w-full h-full bg-default border-b-[1px] border-solid border-textprimary focus:outline-none"
        />
         {error[Name] ? <p className="text-red-500 text-sm h-0"> {error[Name]?.message} </p> : null}
 
-    </div>
+    </motion.div>
   );
 }
 
 function LoginButton({children}:{children:ReactNode}): JSX.Element {
   const {pending} = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="w-full h-[15%] bg-[#8D8B8A] text-default transition-all duration-150 pointer-events-none">{children}</button>
+    <motion.button type="submit" disabled={pending} className="w-full lg:h-[15%] xs:h-[20%] bg-[#8D8B8A] text-default transition-all duration-150 pointer-events-none"
+    initial={{opacity:0,transform:"translateY(5px)"}}
+    animate={{opacity:1,transform:"translateY(0)"}}
+    transition={{duration:1,delay:0.2}}
+
+    >{children}</motion.button>
   );
 }
