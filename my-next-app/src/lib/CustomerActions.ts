@@ -2,16 +2,14 @@
 import db from "@/db/db";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
-
+import { revalidatePath } from "next/cache"
 export async function AddFav(data: {id:string}):Promise<boolean> {
     
-
     const session = await getServerSession(authConfig);
 
     if (!session){
         return false;
     }
-
     //check if the product is already in the user's favorite list
     const checkFavs = await db.favorite.findFirst({
         where:{
@@ -27,7 +25,7 @@ export async function AddFav(data: {id:string}):Promise<boolean> {
                 postId:data.id,
                 user:{
                     connect:{
-                        email:session.user.email
+                        id:session.user.id
                     }
                 },
                 products:{
@@ -39,7 +37,14 @@ export async function AddFav(data: {id:string}):Promise<boolean> {
             
         });
 
+
         if (AddFavs){
+            revalidatePath('/');
+            revalidatePath('/shopall');
+            revalidatePath(`/product/${data.id}`);
+            revalidatePath('/clothing');
+            revalidatePath('/oils');
+            revalidatePath('/soaps');
             return true;
         }
     
@@ -77,6 +82,12 @@ export async function RemoveFav(data: {id:string}):Promise<boolean> {
     });
 
     if (RemoveFavs){
+        revalidatePath('/');
+        revalidatePath('/shopall');
+        revalidatePath(`/product/${data.id}`);
+        revalidatePath('/clothing');
+        revalidatePath('/oils');
+        revalidatePath('/soaps');
         return true;
     }
 
@@ -92,19 +103,27 @@ export async function AddCart(data: {id:string}):Promise<boolean> {
     const session = await getServerSession(authConfig);
 
     if (!session){
+        
         return false;
     }
 
     //check if the product is already in the user's cart
-    const checkCarts = await db.cart.findFirst({
+    const checkCart = await db.cart.findFirst({
         where:{
             postId:data.id,
     }});
 
 
 
-    if (checkCarts){
+    if (checkCart){
     incrementCart({id:data.id});
+    revalidatePath('/');
+    revalidatePath('/shopall');
+    revalidatePath(`/product/${data.id}`);
+    revalidatePath('/clothing');
+    revalidatePath('/oils');
+    revalidatePath('/soaps');
+    return true;
     }
     
         // if it is not in the cart, add it
@@ -127,6 +146,12 @@ export async function AddCart(data: {id:string}):Promise<boolean> {
     });
 
     if (AddCarts){
+        revalidatePath('/');
+        revalidatePath('/shopall');
+        revalidatePath(`/product/${data.id}`);
+        revalidatePath('/clothing');
+        revalidatePath('/oils');
+        revalidatePath('/soaps');
         return true;
     }
     
@@ -161,8 +186,13 @@ export async function RemoveCart(data: {id:string}):Promise<boolean> {
             id:checkCarts.id
         }
     });
-
     if (RemoveCarts){
+        revalidatePath('/');
+        revalidatePath('/shopall');
+        revalidatePath(`/product/${data.id}`);
+        revalidatePath('/clothing');
+        revalidatePath('/oils');
+        revalidatePath('/soaps');
         return true;
     }
 
@@ -189,6 +219,11 @@ export async function RemoveAllCart():Promise<boolean> {
     });
 
     if (RemoveCarts){
+        revalidatePath('/');
+        revalidatePath('/shopall');
+        revalidatePath('/clothing');
+        revalidatePath('/oils');
+        revalidatePath('/soaps');
         return true;
     }
 
@@ -230,6 +265,12 @@ export async function incrementCart(data: {id:string}):Promise<boolean> {
     });
 
     if (AddQuantity){
+        revalidatePath('/');
+        revalidatePath('/shopall');
+        revalidatePath(`/product/${data.id}`);
+        revalidatePath('/clothing');
+        revalidatePath('/oils');
+        revalidatePath('/soaps');
         return true;
     }
 
@@ -271,6 +312,12 @@ export async function decrementCart(data: {id:string}):Promise<boolean> {
     });
 
     if (AddQuantity){
+        revalidatePath('/');
+        revalidatePath('/shopall');
+        revalidatePath(`/product/${data.id}`);
+        revalidatePath('/clothing');
+        revalidatePath('/oils');
+        revalidatePath('/soaps');
         return true;
     }
 

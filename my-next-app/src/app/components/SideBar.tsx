@@ -2,24 +2,16 @@
 import React, { ReactNode } from 'react'
 import cn from 'classnames';
 import {useSideBar,useShowCart,useShowFavorite} from '@/app/hooks/Contexts';
-import  {useIsLargeScreen} from '../hooks/MediaQuery';
-import { signOut } from 'next-auth/react';
+
 import { SideNav } from "../components/SideNav";
 import { useSession } from "next-auth/react"
-import { DefaultSession } from 'next-auth';
 import Link from 'next/link';
 import { MouseEventHandler } from 'react';
+import { useLoginWarning } from '@/app/hooks/Contexts';
 import { Subtotal } from '../product/[id]/_components/Counter';
+import Image from 'next/image';
 
-declare module 'next-auth' {
-    interface Session extends DefaultSession {
-      user: {
-        name: string
-        id: string
-        email: string
-      }
-    }
-  }
+
 
 export function SideBar({favItems,cartItems}:{favItems:number,cartItems:number}):JSX.Element{
     
@@ -27,7 +19,7 @@ export function SideBar({favItems,cartItems}:{favItems:number,cartItems:number})
     const {show, setShow} = useSideBar();
     const {showCart,setShowCart} = useShowCart();
     const {showFavorite,setShowFavorite} = useShowFavorite();
-
+    const {setVisible} = useLoginWarning();
     
     return (
         <div className={cn(" xl:w-[15%] w-[30%] h-full justify-evenly items-center flex xs:w-[55%] sm:w-[45%] lg:w-[15%]")}>
@@ -36,7 +28,7 @@ export function SideBar({favItems,cartItems}:{favItems:number,cartItems:number})
                 session ?
                  <Link href="/profile">
                  <Icon variant={1}>
-                 <img src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
+                 <Image width={4} height={4} src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
                  
                  <label  className='ml-2 relative justify-center items-center hover:text-texthover transition duration-75 cursor-pointer xl:text-base lg:text-sm md:text-xs lg:block xs:hidden '>{session.user.name.slice(0,session.user.name.indexOf(' '))}</label>
                  
@@ -45,7 +37,7 @@ export function SideBar({favItems,cartItems}:{favItems:number,cartItems:number})
                     :
                     <Link href="/login">
                     <Icon variant={1}>
-                    <img src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
+                    <Image width={4} height={4} src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
                     
                     <label className='ml-2 relative lg:block xs:hidden justify-center items-center hover:text-texthover transition duration-75 cursor-pointer xl:text-base lg:text-sm md:text-xs '>Login</label>
                     
@@ -56,18 +48,33 @@ export function SideBar({favItems,cartItems}:{favItems:number,cartItems:number})
             }
           
             
-            <Icon variant={1} OnClick={()=>setShowFavorite(!showFavorite)}>
+            <Icon variant={1} OnClick={()=>{
+                if(session){
+                    setShowFavorite(!showFavorite)
+                }else{
+                    setVisible(true)
+                }
+            
+            }}>
             <Notifaction count={favItems}/>
-            <img  src="/Favs.svg" alt="Favs" className="w-6 h-6"/>
+            <Image width={4} height={4}  src="/Favs.svg" alt="Favs" className="w-6 h-6"/>
             </Icon>
 
-            <Icon variant={1} OnClick={()=>setShowCart(!showCart)}>
+            <Icon variant={1} OnClick={()=>
+                {
+                    if(session){
+                        setShowCart(!showCart)
+                    }else{
+                        setVisible(true)
+                    }
+                }
+            }>
             <Notifaction count={cartItems}/>
-            <img src="/Bag.svg" alt="Bag" className="w-6 h-6"/>
+            <Image width={4} height={4} src="/Bag.svg" alt="Bag" className="w-6 h-6"/>
             </Icon>
 
             <Icon variant={2} OnClick={()=>setShow(!show)}>
-            <img  src="/More.svg" alt="More" className="w-6 h-6"/>
+            <Image width={4} height={4}  src="/More.svg" alt="More" className="w-6 h-6"/>
             </Icon>
 
         </div>

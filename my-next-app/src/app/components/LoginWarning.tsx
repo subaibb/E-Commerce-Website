@@ -2,7 +2,7 @@
 import { Blackout } from './SideNav';
 import { FooterLink } from '../(customer page)/_components/FooterLink';
 import { useEffect } from 'react';
-import { useLoginWarning } from '../hooks/Contexts';
+  import { useLoginWarning } from '../hooks/Contexts';
 import {motion,AnimatePresence} from 'framer-motion';
 export function LoginWarning(): JSX.Element {
 
@@ -50,6 +50,6 @@ function Warning(): JSX.Element {
       </div>
     </motion.div>
   );
-} 
+}
 
 

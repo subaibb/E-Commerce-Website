@@ -1,7 +1,5 @@
 "use client";
 import { useIsExtraSmallScreen } from "@/app/hooks/MediaQuery"
-import { useProduct } from "@/app/hooks/Contexts";
-import { useEffect } from "react";
 import {
     Accordion,
     AccordionContent,
@@ -11,7 +9,7 @@ import {
 
 
   
-export function BottomDetail({data}:{data:{name:string,description:string}[] | undefined},info:string):JSX.Element{
+export function BottomDetail({data,info}:{data:{name:string,description:string}[] | undefined,info:string|undefined}):JSX.Element{
     const {isExtraSmall} = useIsExtraSmallScreen();
     if (!data) return <div>404</div>;
     return(
@@ -34,8 +32,7 @@ export function BottomDetail({data}:{data:{name:string,description:string}[] | u
                         <h1>More Details</h1>
                     </AccordionTrigger>
                     <AccordionContent>
-                        <p>Indulge in our luxurious olive oil product, crafted from the finest organic olives for intense hydration
-                        and a radiant glow. Pamper your skin with its lightweight formula, leaving it irresistibly soft and smooth.</p>
+                        <p>{info}</p>
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>

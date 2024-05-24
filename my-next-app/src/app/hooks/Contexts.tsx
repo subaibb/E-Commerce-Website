@@ -37,6 +37,10 @@ type ShowFavoriteContext = {
 };
 
 
+type ShowSuccessContext = {
+  showSuccess: boolean;
+  setShowSuccess: (value: boolean) => void; 
+};
 
 
 
@@ -190,3 +194,21 @@ const ShowCartContext = createContext<ShowCartContext>({
 }
 
 
+
+const ShowSuccessContext = createContext<ShowSuccessContext>({
+  showSuccess: false,
+  setShowSuccess: (value: boolean) => {value},
+  }); 
+  
+  export function ShowSuccessContextWrapper  ({children}:{children:ReactNode}):JSX.Element  {
+    const [showSuccess, setShowSuccess] = useState(false);
+    return (
+      <ShowSuccessContext.Provider value={{showSuccess,setShowSuccess}}>
+        {children}
+      </ShowSuccessContext.Provider>
+    )
+  }
+  
+  export function useShowSuccess(): ShowSuccessContext {
+    return useContext(ShowSuccessContext);
+}

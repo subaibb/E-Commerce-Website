@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { CSSProperties } from "react";
 
 
@@ -11,7 +12,7 @@ export function Stars({ rating,Style,children }: { rating: number,Style?:CSSProp
             const starValue = i + 1;
             return (
 
-                <img style={Style} key={i} className="w-4 h-4 relative" src={starValue <= rating ? "/FullStar.svg" : "/Star.svg"} alt="" />
+                <Image width={4} height={4} style={Style} key={i} className="w-4 h-4 relative" src={starValue <= rating ? "/FullStar.svg" : "/Star.svg"} alt="" />
             );
         })}
         </div>

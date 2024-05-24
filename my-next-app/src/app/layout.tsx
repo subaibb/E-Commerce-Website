@@ -8,22 +8,24 @@ import { Label,LabelWrapper } from "./components/SideNav";
 import { Counter,DeleteButton,AddCartButton } from "./product/[id]/_components/Counter";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
+import { cache } from "@/lib/cache";
 import db from "../db/db";
 import cn from "classnames";
 import "./globals.css";
+import Image from "next/image";
 
 
   const marcellus = Marcellus({ weight: '400', subsets: ['latin']});
 
   //get customer Cart
 
-  const getCart = async () => {
+  const getCart = cache ( async () => {
+    
     const session = await getServerSession(authConfig);
     if (!session) {
       return [];
     }
-  
-    const carts = await db.cart.findMany({
+    const carts = db.cart.findMany({
       select: {
         quantity: true,
         products: {
@@ -33,20 +35,17 @@ import "./globals.css";
             price: true,
             imagepath: true,
             rating: true,
-            
           },  
       },
-      
+    
       },
       where: {
-        user:{
-          id:session.user.id
-        }
+        userId:session.user.id
       },
     });
 
     // get Subtotal
-    const cartsWithSubtotal = carts.map(cart => {
+    const cartsWithSubtotal = (await carts).map(cart => {
       // Calculate subtotal for each cart
       const subtotal = cart.products.reduce((acc, product) => {
           return acc + product.price * cart.quantity;
@@ -60,7 +59,7 @@ import "./globals.css";
         subtotal: subtotal,
         
     };
-  })
+  });
       // add the total to the cart object
       const total = cartsWithSubtotal.reduce((acc, cart) => {
         return acc + cart.subtotal;
@@ -73,10 +72,10 @@ import "./globals.css";
           }
         });
 
-}
+},['/','cart'])
 
 
-  const getFavs = async () => {
+  const getFavs = cache ( async () => {
     const session = await getServerSession(authConfig);
     if (!session) {
       return [];
@@ -93,8 +92,7 @@ import "./globals.css";
             rating: true,
           },  
       },
-      
-      
+    
       },
       where: {
         user:{
@@ -104,7 +102,7 @@ import "./globals.css";
     });
   
     return favs.map((fav) => fav.products);
-  }
+  },['/','fav'])
 
 
 
@@ -119,6 +117,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authConfig);
     const cart = await getCart();
     const fav = await getFavs();
   return (
@@ -133,44 +132,63 @@ export default async function RootLayout({
               <SideBarWrapper>
 
 
-            <CartBar total={cart[0].total}>
-             {
-             
-                cart.map((cartItem,index)=>{
-                  
-                  return(
-                    
-                    <ProductView TypeForDelete="Cart"  extras={
-                      <>
-                      <Counter quantity={cartItem.quantity} id={cartItem.products[0].id} />
-                      <DeleteButton type="Cart" id={cartItem.products[0].id} variant={1}/>
-                      </>
-                    } data={cartItem.products} key={index} delay={index/10}>
-                      <img src={cartItem.products[0].imagepath} alt={cartItem.products[0].name} className="w-[75%] bg-productBackground" />
-    
-                    </ProductView>
-                  )
-                })
-                
-             }
-             </CartBar>
 
-            <FavBar>
-            {
-              fav.map((favItem,index)=>{
-                return(
-                  <ProductView TypeForDelete="Fav" extras={
-                    <>
-                    <AddCartButton id={favItem[0].id}/>
-                    <DeleteButton type="Fav" id={favItem[0].id} variant={1}/>
-                    </>
-                  } data={favItem} key={index} delay={index/10}>
-                    <img src={favItem[0].imagepath} alt={favItem[0].name} className="w-[75%] bg-productBackground" />
-                  </ProductView>
-                )
-              })
-            }
-            </FavBar>
+                {
+
+                    session &&
+
+                    <CartBar total={cart[0]?.total}>
+                    {
+
+                  
+                        
+                      cart.length  > 0 ?
+                      cart.map((cartItem,index)=>{
+                        return(
+                          
+                          <ProductView TypeForDelete="Cart"  extras={
+                            <>
+                            <Counter quantity={cartItem.quantity} id={cartItem.products[0]?.id} />
+                            <DeleteButton type="Cart" id={cartItem.products[0]?.id} variant={1}/>
+                            </>
+                          } data={cartItem.products} key={index} delay={index/10}>
+                            <Image width={250} height={250} src={cartItem.products[0]?.imagepath} alt={cartItem.products[0]?.name} className="sm:w-[35%] xs:w-[50%] bg-productBackground" />
+
+                          </ProductView>
+                        )
+                      }):<p className="text-center text-textprimary top-1/2 relative">Your Cart is Empty</p>
+                      
+                    }
+                    </CartBar>
+                  
+                }
+            
+
+
+              {
+                    session &&
+                  <FavBar>
+                  {
+                     fav.length > 0 ?
+                    fav.map((favItem,index)=>{
+                      return(
+
+                       
+                        <ProductView TypeForDelete="Fav" extras={
+                          <>
+                          <AddCartButton id={favItem[0].id}/>
+                          <DeleteButton type="Fav" id={favItem[0].id} variant={1}/>
+                          </>
+                        } data={favItem} key={index} delay={index/10}>
+                          <Image width={250} height={250} src={favItem[0].imagepath} alt={favItem[0].name} className="sm:w-[35%] xs:w-[50%] bg-productBackground" />
+                        </ProductView>
+                      )
+                    }):<p className="text-center text-textprimary top-1/2 relative">Your Favorites is Empty</p>
+                  }
+                  </FavBar>
+
+              }
+
 
 
 

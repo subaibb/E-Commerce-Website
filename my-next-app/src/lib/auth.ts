@@ -36,6 +36,7 @@ export const authConfig: NextAuthOptions = {
             createdAt:true,
             updatedAt:true,
             name:true,
+            role:true,
           },
         });
 
@@ -60,6 +61,7 @@ export const authConfig: NextAuthOptions = {
           id:user.id,
           name:user.name,
           email:user.email,
+          role:user.role,
         }
       }
       return token;
@@ -68,9 +70,10 @@ export const authConfig: NextAuthOptions = {
       return {
         ...session,
         user:{
-          id:token.id,
           email:token.email,
           name:token.name,
+          role:token.role,
+          id:token.id,
         }
       
       }

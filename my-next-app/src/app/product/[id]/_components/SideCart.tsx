@@ -1,7 +1,7 @@
 "use client";
 
 import { DeleteButton } from "./Counter";
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 import {useInView} from "framer-motion";
 import { useRef } from "react";
 
@@ -15,7 +15,7 @@ type ProductViewProps = {
 }[]
 
 
-export function ProductView({children,delay,data,extras,TypeForDelete}:{children:ReactNode,delay:number,data:ProductViewProps,extras?:ReactNode,TypeForDelete:"Fav"|"Cart"}):JSX.Element{
+export function ProductView({children,delay,data,extras,TypeForDelete,Style}:{children:ReactNode,delay:number,data:ProductViewProps,extras?:ReactNode,TypeForDelete:"Fav"|"Cart",Style?:CSSProperties}):JSX.Element{
 
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
@@ -31,12 +31,12 @@ export function ProductView({children,delay,data,extras,TypeForDelete}:{children
         }} ref={ref} className="w-full lg:h-[25%] sm:h-[30%] xs:h-[35%] flex justify-evenly items-center flex-col CartItem">
 
 
-            <div className="w-full h-full sm:flex sm:flex-row xs:flex xs:flex-col justify-between items-center">
+            <div style={Style} className="w-full h-full sm:flex sm:flex-row xs:flex xs:flex-col justify-between items-center">
 
            
-            <div className=" sm:w-1/2 xs:w-[80%] h-fit  justify-center items-center flex">
+          
                 {children}
-            </div>  
+            
 
             <div className=" sm:h-[75%] xs:h-1/2 sm:w-[60%] xs:w-full justify-between sm:items-start xs:items-center flex flex-col space-y-3">
                 <div className="w-full h-[20%]  flex sm:justify-between xs:justify-center items-center">

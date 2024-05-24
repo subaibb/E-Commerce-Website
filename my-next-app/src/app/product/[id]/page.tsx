@@ -53,7 +53,8 @@ const getRelatedProducts = async(id:string)=>{
            id:{
             not:id
             }
-        }
+        },
+        take:4
 });
 }
 
@@ -156,7 +157,7 @@ function ProductDetails({data}:{data:ProductData}):JSX.Element{
  
             <TopDetail id={idFormatter(data?.id)} name={data?.name} />
             <MiddleDetail description={data?.description} price={data?.price} id={data?.id}/>
-            <BottomDetail data={data?.accrdation}/>
+            <BottomDetail data={data?.accrdation} info={data?.description}/>
         </div>
     )
 }

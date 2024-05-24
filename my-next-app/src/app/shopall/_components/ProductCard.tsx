@@ -3,11 +3,11 @@ import {motion,useInView} from "framer-motion";
 import { CSSProperties, ReactNode, useRef } from "react"
 import { Stars,ReviewLabel } from "./Stars";
 import { useState } from "react";
-import { useLoginWarning,useFavCount } from "@/app/hooks/Contexts";
+import { useLoginWarning,useFavCount,useShowFavorite } from "@/app/hooks/Contexts";
 import { AddFav,RemoveFav } from "../../../lib/CustomerActions";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-
+import Image from "next/image";
 
 type Product = {
     id: string;
@@ -25,7 +25,7 @@ export function ProductCard ({children,Style,data,favs}:{children:ReactNode,Styl
     const {fav,setFav} = useFavCount();
     const {setVisible} = useLoginWarning();
     const {status} = useSession();
-
+    const {setShowFavorite} = useShowFavorite();
     const handleClick = () => {
 
         if (status === "unauthenticated"){
@@ -43,6 +43,7 @@ export function ProductCard ({children,Style,data,favs}:{children:ReactNode,Styl
             UpdateFavs();
             setFav([...fav,data.id]);
             setIsFav(true);
+            setShowFavorite(true);
         }
     }
 
@@ -57,7 +58,7 @@ export function ProductCard ({children,Style,data,favs}:{children:ReactNode,Styl
 
            >
             <div onClick={handleClick} className="w-8 h-8 absolute right-3 top-3 Fav opacity-0 transition duration-150 cursor-pointer active:translate-y-[2px]">
-            <img src={
+            <Image width={4} height={4} src={
                 isFav ? "/FullFav.svg" : "/Favourite.svg"
             } alt="" />
             </div>

@@ -88,6 +88,20 @@
     pointer-events: auto;
   }
 
+  
+.PayForm:valid button{
+    background-color: #474241;
+    pointer-events: auto;
+    @apply hover:bg-thick transition
+}
+.addProduct:valid button{
+  background-color: #474241;
+  pointer-events: auto;
+  @apply hover:bg-thick transition
+}
+
+
+
 .CartItem{
  min-height: 20%;
 }
@@ -100,8 +114,32 @@
   background: transparent;        /* color of the tracking area */
 }
 
-.Cart::-webkit-scrollbar-thumb {
+.Products::-webkit-scrollbar-thumb {
   background-color: #302523;    /* color of the scroll thumb */
   border-radius: 20px;       /* roundness of the scroll thumb */
   border: 3px solid #F4E7D5;  /* creates padding around scroll thumb */
+}
+
+
+.Products::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+.Products::-webkit-scrollbar-track {
+  background: transparent;        /* color of the tracking area */
+}
+
+.TableData::-webkit-scrollbar-thumb {
+  background-color: #302523;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid #F4E7D5;  /* creates padding around scroll thumb */
+}
+
+
+.TableData::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+.TableData::-webkit-scrollbar-track {
+  background: transparent;        /* color of the tracking area */
 }

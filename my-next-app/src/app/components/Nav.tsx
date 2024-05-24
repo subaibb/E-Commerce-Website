@@ -65,7 +65,7 @@ function TopNav ():JSX.Element{
     return(
         <div className={cn("w-[95%] h-1/2 border-b-[1px] border-solid border-textprimary flex justify-center items-center")}>
           
-          <div className="w-full h-full flex justify-start items-center top-0 relative mb-auto ">
+          <div className="w-full h-full flex lg:justify-start xs:justify-center items-center top-0 relative mb-auto ">
           <a href="/">
           <h2 className=" text-2xl text-primary">PaliWear</h2>
           </a>

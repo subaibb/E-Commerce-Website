@@ -2,6 +2,7 @@
 import React from "react";
 import { Stars } from "@/app/shopall/_components/Stars";
 import { useState , useEffect } from "react";
+import Image from "next/image";
 
 
 
@@ -97,7 +98,7 @@ export function Interactions({likeCount,dislikeCount}:{likeCount:number,dislikeC
         <div className=" lg:w-[10%] md:w-[15%] xs:w-[25%] h-full flex justify-between items-center">
 
             <div className="h-full xl:w-[40%] lg:w-[45%] flex items-center">
-            <img src={
+            <Image width={4} height={4} src={
                 likeStatus ? "/Liked.svg" : "/Like.svg"
             } onClick={()=>{
               likeStatus ? setLike(like-1) : setLike(like+1);
@@ -110,7 +111,7 @@ export function Interactions({likeCount,dislikeCount}:{likeCount:number,dislikeC
             <span className=" font-wixMade w-fit h-4 flex justify-center items-center ml-3">{like}</span>
             </div>
             <div className="h-full xl:w-[40%] lg:w-[45%] flex items-center">
-            <img src={
+            <Image width={4} height={4} src={
                 dislikeStatus ? "/Disliked.svg" : "/Dislike.svg"
             } onClick={()=>{
                 dislikeStatus ? setDislike(dislike-1) :

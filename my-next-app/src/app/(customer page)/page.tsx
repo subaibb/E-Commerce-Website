@@ -4,12 +4,44 @@ import { LandingImage } from "./_components/LandingImage";
 import { ProductCard,AnimatedLabel} from "./_components/ProductCard";
 import { FooterLink } from "./_components/FooterLink";
 import { Contact } from "./_components/Contact";
+import { LoginWarning } from "../components/LoginWarning";
+import Link from "next/link";
+import db from "@/db/db";
+import Image from "next/image";
+
+
+
+//get recent products
+
+const getRecentProducts = async () =>{
+
+  const products = await db.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      imagepath: true,
+      rating: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 3,
+  });
+
+  return {
+    props: {
+      products,
+    },
+  };
+}
+
 export default function Home() {
 
 
   return (
     <>
-
+    <LoginWarning/>
     <MainSection/>
     <ProductSection/>
     <Footer/>
@@ -30,7 +62,9 @@ function MainSection ():JSX.Element{
   )
 }
 
-function ProductSection():JSX.Element{
+async function ProductSection(){
+
+  const Products = await getRecentProducts();
 
   return(
 
@@ -47,17 +81,20 @@ function ProductSection():JSX.Element{
       </div>
    
     <div className="w-[92.2%] h-[80%] relative flex justify-between">
-      <ProductCard label="6Oz. Olive Oil" price="19.99">
-        <img src="/Shirt.png" alt="Olive Oil" className="w-[100%]"/>
-      </ProductCard>
 
-      <ProductCard label="Sage Kick Back Hoodie" price="79.99">
-        <img src="/Hoodie.png" alt="Lavender Oil" className="w-[100%]"/>
-      </ProductCard>
-
-      <ProductCard label="Classic Kuffiyah" price="15.99">
-        <img src="/Kufiyah.png" alt="Lavender Oil" className="w-[100%]"/>
-      </ProductCard>
+      {
+        Products.props.products.map((product) => {
+          return(
+            <Link className="w-[33.2%] h-fit" href={`/product/${product.id}`} key={product.id}>
+            <ProductCard key={product.id} data={product}>
+              <Image width={400} height={400} src={product.imagepath} alt="product" className="w-full"/>
+  
+            </ProductCard>
+            </Link>
+          )
+        })
+      }
+     
     </div>
     </div>
   )

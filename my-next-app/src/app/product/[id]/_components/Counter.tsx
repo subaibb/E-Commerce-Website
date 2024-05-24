@@ -6,6 +6,7 @@ import { incrementCart,decrementCart,AddCart,RemoveCart,RemoveFav } from "@/lib/
 import { useSideBar,useLoginWarning,useShowCart,useShowFavorite } from "@/app/hooks/Contexts";
 import Link from "next/link";
 import cn from "classnames";
+import Image from "next/image";
 
     
 
@@ -77,7 +78,7 @@ export function DeleteButton ({variant,id,type}:{variant:number,id:string,type:"
                 'xs:hidden sm:flex':variant === 2,
             })}
             >
-                <img src="/Delete.svg" alt="" className="w-[60%]" />
+                <Image width={4} height={4} src="/Delete.svg" alt="" className="w-[60%]" />
             </button>
         </div>
     )
@@ -86,19 +87,26 @@ export function DeleteButton ({variant,id,type}:{variant:number,id:string,type:"
 
 
 export function Subtotal({total}:{total:number}):JSX.Element{
-
+   
     const {setShow} = useSideBar();
     const {setVisible} = useLoginWarning();
     const {setShowCart} = useShowCart();
     const {setShowFavorite} = useShowFavorite();
-    return(
-        <div className="h-[15%] w-[95%] flex flex-col items-center justify-between ">
 
+        if (!total) return(
+            <></>
+        )
+    return(
+        
+            
+        
+        <div className="h-[15%] w-[95%] flex flex-col items-center justify-between ">
+        
             <div className="w-full h-[1px] bg-[#B5A4A3] relative mb-2 mt-4"/>
              <div className="w-full h-[20%] flex justify-between items-center">
              <h3 className="text-lg font-wixMade text-textprimary ">Subtotal</h3>
 
-            <h3 className="text-base font-wixMade text-textprimary">${total.toFixed(2)}</h3>    
+            <h3 className="text-base font-wixMade text-textprimary">${total?.toFixed(2)}</h3>    
 
             </div>
 
@@ -109,7 +117,7 @@ export function Subtotal({total}:{total:number}):JSX.Element{
             
 
         </div>
-
+        
     )
 }
 
