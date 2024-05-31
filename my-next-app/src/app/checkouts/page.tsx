@@ -7,7 +7,6 @@ import db from "@/db/db";
 import { authConfig } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { cache } from "@/lib/cache";
 type ProductProps = {
   total: number;
   subtotal: number;
@@ -39,7 +38,7 @@ export default function Page():JSX.Element{
 
 
 
-const getCart = cache ( async () => {
+const getCart =  async () => {
     const session = await getServerSession(authConfig);
     if (!session) {
       return [];
@@ -95,7 +94,7 @@ const getCart = cache ( async () => {
           }
         });
 
-},['/checkout','cart2'])
+}
 
 
 async function MainSection(){
@@ -104,7 +103,7 @@ async function MainSection(){
     redirect("/shopall");
   
     return(
-        <div className="w-full h-[100vh] bg-transparent flex absolute">
+        <div className="w-full h-[100vh] bg-transparent lg:flex lg:flex-row xs:flex xs:flex-col-reverse absolute">
             <FormInfo total={getProducts[0]?.total}/>
             <Products data={getProducts}/>
         </div>
@@ -115,7 +114,7 @@ async function MainSection(){
 async function Products({data}:{data:ProductProps}){
 
     return(
-        <div className="w-1/2 h-full bg-[#DDD7CE] flex flex-col items-start">
+        <div className="lg:w-1/2 lg:h-full xs:w-full xs:h-1/2 bg-[#DDD7CE] flex flex-col lg:items-start xs:items-center">
             <Seperator/>
             <h3 className="w-[60%] text-xl font-wixMade text-textprimary h-[5%] font-medium "></h3>
             <ProductHolder>
@@ -140,10 +139,14 @@ async function Products({data}:{data:ProductProps}){
 function FormInfo({total}:{total:number}):JSX.Element{
 
     return(
-        <div className="w-1/2 h-full bg-transparent flex flex-col items-end">
-            <Seperator/>
-            <h3 className="w-[65%] text-xl font-wixMade text-textprimary h-[5%] font-medium ">Delivery</h3>
-            <div className="w-[65%] bg-textprimary h-[2px]"></div>
+        <div className="lg:w-1/2 lg:h-full xs:w-full xs:h-1/2 bg-transparent flex flex-col lg:items-end xs:items-center justify-center">
+               <div className="w-full lg:min-h-[18vh] lg:h-[18vh] xs:min-h-[2vh] ">
+
+                </div>    
+            <h3 className="w-[65%] lg:text-xl xs:text-base font-wixMade text-textprimary h-[5%] font-medium mb-1 ">Delivery</h3>
+            <div className="w-[65%] h-fit items-start justify-start flex">
+              <div className="w-[95%] bg-textprimary lg:h-[2px] xs:h-[1px]"/>
+            </div>
 
             <CheckoutForm total={total}/>
 

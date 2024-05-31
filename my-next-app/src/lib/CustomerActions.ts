@@ -39,12 +39,7 @@ export async function AddFav(data: {id:string}):Promise<boolean> {
 
 
         if (AddFavs){
-            revalidatePath('/');
-            revalidatePath('/shopall');
-            revalidatePath(`/product/${data.id}`);
-            revalidatePath('/clothing');
-            revalidatePath('/oils');
-            revalidatePath('/soaps');
+            revalidatePath('/',"layout");
             return true;
         }
     
@@ -82,12 +77,7 @@ export async function RemoveFav(data: {id:string}):Promise<boolean> {
     });
 
     if (RemoveFavs){
-        revalidatePath('/');
-        revalidatePath('/shopall');
-        revalidatePath(`/product/${data.id}`);
-        revalidatePath('/clothing');
-        revalidatePath('/oils');
-        revalidatePath('/soaps');
+        revalidatePath('/',"layout");
         return true;
     }
 
@@ -117,12 +107,7 @@ export async function AddCart(data: {id:string}):Promise<boolean> {
 
     if (checkCart){
     incrementCart({id:data.id});
-    revalidatePath('/');
-    revalidatePath('/shopall');
-    revalidatePath(`/product/${data.id}`);
-    revalidatePath('/clothing');
-    revalidatePath('/oils');
-    revalidatePath('/soaps');
+    revalidatePath('/',"layout");
     return true;
     }
     
@@ -146,12 +131,7 @@ export async function AddCart(data: {id:string}):Promise<boolean> {
     });
 
     if (AddCarts){
-        revalidatePath('/');
-        revalidatePath('/shopall');
-        revalidatePath(`/product/${data.id}`);
-        revalidatePath('/clothing');
-        revalidatePath('/oils');
-        revalidatePath('/soaps');
+        revalidatePath('/',"layout");
         return true;
     }
     
@@ -187,12 +167,7 @@ export async function RemoveCart(data: {id:string}):Promise<boolean> {
         }
     });
     if (RemoveCarts){
-        revalidatePath('/');
-        revalidatePath('/shopall');
-        revalidatePath(`/product/${data.id}`);
-        revalidatePath('/clothing');
-        revalidatePath('/oils');
-        revalidatePath('/soaps');
+        revalidatePath('/',"layout");
         return true;
     }
 
@@ -219,11 +194,7 @@ export async function RemoveAllCart():Promise<boolean> {
     });
 
     if (RemoveCarts){
-        revalidatePath('/');
-        revalidatePath('/shopall');
-        revalidatePath('/clothing');
-        revalidatePath('/oils');
-        revalidatePath('/soaps');
+        revalidatePath('/',"layout");
         return true;
     }
 
@@ -265,12 +236,7 @@ export async function incrementCart(data: {id:string}):Promise<boolean> {
     });
 
     if (AddQuantity){
-        revalidatePath('/');
-        revalidatePath('/shopall');
-        revalidatePath(`/product/${data.id}`);
-        revalidatePath('/clothing');
-        revalidatePath('/oils');
-        revalidatePath('/soaps');
+        revalidatePath('/',"layout");
         return true;
     }
 
@@ -312,12 +278,7 @@ export async function decrementCart(data: {id:string}):Promise<boolean> {
     });
 
     if (AddQuantity){
-        revalidatePath('/');
-        revalidatePath('/shopall');
-        revalidatePath(`/product/${data.id}`);
-        revalidatePath('/clothing');
-        revalidatePath('/oils');
-        revalidatePath('/soaps');
+        revalidatePath('/',"layout");
         return true;
     }
 

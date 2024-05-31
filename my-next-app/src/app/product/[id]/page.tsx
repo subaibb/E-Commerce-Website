@@ -11,6 +11,8 @@ import { Review,ReviewsCarrier,Separator } from "./_components/Review";
 import { LoginWarning } from '@/app/components/LoginWarning';
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
+import { cache } from "@/lib/cache";
+import Link from "next/link";
 import db from "@/db/db";
 
 type ProductData = {
@@ -38,7 +40,7 @@ type RelatedProductsData = {
     rating: number;
 }[];
 
-const getRelatedProducts = async(id:string)=>{
+const getRelatedProducts = cache ( async (id:string) => {
 
     return db.product.findMany({
         select:{
@@ -56,9 +58,10 @@ const getRelatedProducts = async(id:string)=>{
         },
         take:4
 });
-}
+},[`/product`,'relatedproducts'],
+{revalidate: 60})
 
-const getProduct = async(id:string)=>{
+const getProduct = cache ( async (id:string) => {
 
     return db.product.findUnique({
 
@@ -84,10 +87,12 @@ const getProduct = async(id:string)=>{
             id:id
         }
     })
-}
+},[`/product`,'product'],
+{revalidate: 60})
 
 
-const getFavs = async () => {
+
+const getFavs = cache ( async () => {
     const session = await getServerSession(authConfig);
     if (!session) {
       return [];
@@ -105,12 +110,14 @@ const getFavs = async () => {
     });
   
     return favs.map((fav) => fav.postId);
-  }
+  },['/product','favs'],
+    {revalidate: 60})
 
 
 
 
 export default function ProductPage({ params }: { params: { id: string } }) {
+    
     
     if (!params.id) return <div>404</div>;
   return (
@@ -130,7 +137,7 @@ async function MainSection({id}:{id:string}){
 
     const Product:ProductData= await getProduct(id);
     return(
-        <div className="w-full sm:h-[75vh] xs:h-[135vh] sm:flex sm:flex-row sm:justify-center items-center xs:flex-col xs:flex xs:justify-center relative ">
+        <div className="w-full h-fit sm:flex sm:flex-row sm:justify-center sm:items-start xs:items-center xs:flex-col xs:flex xs:justify-center relative mt-6">
                 <ProductContainer imagePath={Product?.imagepath} name={Product?.name}/>
                 <ProductDetails data={Product}/>
         </div>
@@ -153,7 +160,7 @@ function ProductContainer({imagePath,name}:{imagePath?:string,name?:string}):JSX
 
 function ProductDetails({data}:{data:ProductData}):JSX.Element{
     return(
-        <div className="sm:w-[45%] sm:h-[95%] flex flex-col justify-center sm:items-start xs:items-center xs:w-[95%] xs:h-[50%]">
+        <div className="sm:w-[45%] sm:h-[95%] flex flex-col justify-center sm:items-start xs:items-center xs:w-[95%] xs:h-[50%] space-y-6">
  
             <TopDetail id={idFormatter(data?.id)} name={data?.name} />
             <MiddleDetail description={data?.description} price={data?.price} id={data?.id}/>
@@ -192,9 +199,7 @@ async function MiddleDetail({description,price,id}:{description?:string,price?:n
     const Favs = await getFavs();
     return(
         <div className="w-[90%] sm:h-[35%] flex flex-col justify-start items-center xs:h-[30%]">
-            <p className="text-[#8A8A8A] text-sm w-full xs:hidden sm:flex ">{description}</p>
-
-                
+            <p className="text-[#8A8A8A] text-sm w-full xs:hidden sm:flex mb-4 ">{description}</p>
         <h2 className="w-full h-[30%] flex justify-start items-center text-4xl text-thick font-wixMade font-medium mb-4">
             ${price}
         </h2>
@@ -204,11 +209,15 @@ async function MiddleDetail({description,price,id}:{description?:string,price?:n
             Add to Cart
         </PurchaseButton>
 
-
-        <PurchaseButton variant={1} id={id}>
+        <Link className="xs:w-[42%] xs:h-[5vh] sm:h-[5.5vh] flex justify-center items-center" href={'/checkouts'}> 
+        <PurchaseButton Style={{
+            width:"100%",
+            height:"100%"
+        
+        }} variant={1} id={id}>
             Buy Now
         </PurchaseButton>
-
+        </Link>
         <FavoriteButton Status={
             Favs.includes(id || "") ? true : false
         } variant={1} id={id}/>
@@ -248,7 +257,7 @@ async function MiddleDetail({description,price,id}:{description?:string,price?:n
 function Reviews():JSX.Element{
     return(
         <div className="w-full lg:h-[90vh] md:h-[95vh] sm:h-[120vh] xs:h-[135vh] flex justify-center items-center flex-col  ">
-            <h1 className="text-2xl h-[3vh] w-[95%] text-textprimary">Reviews</h1>
+            <h1 className="text-2xl h-[3vh] xs:w-[90%] sm:w-[95%] text-textprimary">Reviews</h1>
             <div className="w-[95%] h-[90%] md:flex md:flex-row xs:flex xs:flex-col-reverse justify-between items-center ">
                 <ReviewSection/>
                 <ExtraWidget/>
@@ -277,7 +286,7 @@ function ReviewSection():JSX.Element{
 
 function ExtraWidget():JSX.Element{
     return(
-        <div className=" xl:w-[19%] md:w-[24%] xs:w-full h-[90%] md:flex md:flex-col md:justify-start xs:justify-center items-center">
+        <div className=" xl:w-[19%] md:w-[24%] xs:w-[95%] xs:h-[25%] sm:h-full md:flex md:flex-col md:justify-start xs:justify-center items-center">
             <RatingSection/>
         </div>  
     )

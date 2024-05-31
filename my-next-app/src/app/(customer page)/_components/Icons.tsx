@@ -1,6 +1,7 @@
 "use client";
 import { ReactNode } from "react"
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export function Icons():JSX.Element{
 
@@ -42,7 +43,7 @@ function Icon({label,delay,src}:{label:string,delay:number,src:string}):JSX.Elem
         transition={{duration:0.4,delay:delay,stiffness:700,damping:30}}
         
         >
-            <img src={src} alt="Heart" className=" mb-2 xs:w-8 xs:h-8 sm:w-10 sm:h-10"/>
+            <Image width={40} height={40} src={src} alt="Heart" className=" mb-2 xs:w-8 xs:h-8 sm:w-10 sm:h-10"/>
             <label className="text-textscondary xs:text-xs sm:text-sm ">{label}</label>
         </motion.div>
     )

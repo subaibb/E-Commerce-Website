@@ -6,14 +6,14 @@ import { Order } from "./_components/Order"
 import db from "@/db/db";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
+import { cache } from "@/lib/cache";
 
-
-const getOrders = async () => {
+const getOrders = cache ( async () => {
     const session = await getServerSession(authConfig);
     if (!session) {
       return [];
-    }
-  
+    }  
 const orders = await db.orders.findMany({
       select: {
         _count: {
@@ -41,11 +41,13 @@ const orders = await db.orders.findMany({
     });
   
     return orders;
-}
+},['/profile','profileorders'],
+{revalidate: 60})
 
 
 
 export default function Home() {
+    revalidatePath('/profile');
     return (
        <div>
             <Header/> 
@@ -84,8 +86,10 @@ async function Orders(){
     const orders = await getOrders();
     return(
         <div className="w-full h-fit  flex flex-col  items-center">
-
-            {orders.map(order =>
+            
+            { orders.length === 0 ? <p className="text-textprimary text-2xl">No Orders</p> : null}
+            {
+            orders.map(order =>
                     <Order data={order} key={order.id}/>
                  )}
         </div>

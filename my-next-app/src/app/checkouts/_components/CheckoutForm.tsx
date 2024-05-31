@@ -28,11 +28,7 @@ type FormInfo = {
 
 export function CheckoutForm({total}:{total:number}):JSX.Element{
 
-    const fileSchema = z.instanceof(File, { message: "Required" })
-        const imageSchema = fileSchema.refine(
-        file => file.size === 0 || file.type.startsWith("image/")
-        )
-
+ 
     const {register,handleSubmit,formState :{ errors }} = useForm<FormInfo>({
         resolver:zodResolver(schema)
       });
@@ -50,7 +46,7 @@ export function CheckoutForm({total}:{total:number}):JSX.Element{
     return(
         <div className="w-[65%] h-full ">
 
-            <form onSubmit={handleSubmit(PassData)} className="w-[95%] h-full  flex flex-col items-center space-y-6 PayForm">
+            <form onSubmit={handleSubmit(PassData)} className="w-[95%] h-full flex flex-col items-center space-y-6 PayForm">
 
                     <div className="w-full h-[2%]"/>    
                     <Carrier>

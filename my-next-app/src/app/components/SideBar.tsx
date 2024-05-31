@@ -26,23 +26,25 @@ export function SideBar({favItems,cartItems}:{favItems:number,cartItems:number})
 
             {
                 session ?
-                 <Link href="/profile">
-                 <Icon variant={1}>
+                
+                <Icon variant={1}>
+                <Notifaction count={0}/>
+                <Link className='flex justify-center items-center w-fit h-fit' href="/profile">
                  <Image width={4} height={4} src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
-                 
                  <label  className='ml-2 relative justify-center items-center hover:text-texthover transition duration-75 cursor-pointer xl:text-base lg:text-sm md:text-xs lg:block xs:hidden '>{session.user.name.slice(0,session.user.name.indexOf(' '))}</label>
-                 
-                 </Icon>
                  </Link>
+                 </Icon>
                     :
-                    <Link href="/login">
+                    
                     <Icon variant={1}>
+                    <Notifaction count={0}/>
+                        <Link className='flex justify-center items-center w-fit h-fit' href="/login">
                     <Image width={4} height={4} src="/Profile.svg" alt="Favs" className="w-6 h-6"/>
                     
                     <label className='ml-2 relative lg:block xs:hidden justify-center items-center hover:text-texthover transition duration-75 cursor-pointer xl:text-base lg:text-sm md:text-xs '>Login</label>
-                    
-                    </Icon>
                     </Link>
+                    </Icon>
+                    
 
 
             }

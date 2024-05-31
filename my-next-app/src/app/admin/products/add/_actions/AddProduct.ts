@@ -11,7 +11,7 @@ import {z,ZodType} from "zod"
 type FormInfo = {
     name:string,
     price:string,
-    available:string,
+    available:string
     productType:string,
     description:string,
     image:File
@@ -56,7 +56,7 @@ export async function AddProduct(prevState: unknown, formData: FormData) {
         data:{
             name:data.name,
             price:parseFloat(data.price),
-            available: data.available === "true" ? true : false,
+            available: data.available === "on" ? true : false,
             productType:data.productType,
             description:data.description,
             imagepath:imagePath,
@@ -66,8 +66,8 @@ export async function AddProduct(prevState: unknown, formData: FormData) {
     });
 
     if (AddProduct){
-        revalidatePath("/admin/products");
-       redirect("/admin/products");
+      revalidatePath('/',"layout");
+      redirect("/admin/products");
     }
   
 }
@@ -88,7 +88,22 @@ export async function DeleteProduct(id:string){
 
       await fs.unlink(`public${DeleteProduct.imagepath}`)
     if (DeleteProduct){
-        revalidatePath("/admin/products");
-        redirect("/admin/products");
+      revalidatePath('/',"layout");
+    }
+}
+
+
+export async function ToggleAvaliable(id:string,available:string){
+  const updateProducts = await db.product.update({
+      where:{
+          id:id
+      },
+      data:{
+          available: available === "true" ? true : false
+      }
+  })
+
+    if (updateProducts){
+      revalidatePath('/',"layout");
     }
 }

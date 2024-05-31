@@ -40,11 +40,11 @@ export function ProductView({children,delay,data,extras,TypeForDelete,Style}:{ch
 
             <div className=" sm:h-[75%] xs:h-1/2 sm:w-[60%] xs:w-full justify-between sm:items-start xs:items-center flex flex-col space-y-3">
                 <div className="w-full h-[20%]  flex sm:justify-between xs:justify-center items-center">
-                <h2 className=" font-wixMade text-textprimary sm:text-base xs:text-sm">{data[0].name}</h2>
-                <DeleteButton type={TypeForDelete} id={data[0].id}  variant={2}/>
+                <h2 className=" font-wixMade text-textprimary sm:text-base xs:text-sm">{data[0]?.name}</h2>
+                <DeleteButton type={TypeForDelete} id={data[0]?.id}  variant={2}/>
                 </div>
                 
-                <h3 className=" font-wixMade font-semibold text-textprimary">${data[0].price}</h3>
+                <h3 className=" font-wixMade font-semibold text-textprimary">${data[0]?.price}</h3>
                 
                 <div className="w-full h-[35%] flex sm:justify-start xs:justify-evenly items-center">
                     {extras}

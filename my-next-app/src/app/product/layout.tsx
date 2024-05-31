@@ -1,10 +1,10 @@
 import { Nav } from "@/app/components/Nav"
-import { SideBarWrapper,FavContextWrapper,CartContextWrapper,ProductContextWrapper } from "@/app/hooks/Contexts"
+import { SideBarWrapper,CartContextWrapper,ProductContextWrapper } from "@/app/hooks/Contexts"
 import { Label,LabelWrapper } from "../components/SideNav"
 import { SideNavigation } from "../components/SideBar"
 export const dynamic = "force-dynamic"
 
-export default function Layout({
+export default function Layout({  
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -13,7 +13,6 @@ export default function Layout({
     <>
     <ProductContextWrapper>
       <CartContextWrapper>
-      <FavContextWrapper>
       <SideBarWrapper >
       <Nav variation={0}>
       </Nav>
@@ -45,7 +44,6 @@ export default function Layout({
       {children}
         </div>
         </SideBarWrapper>
-      </FavContextWrapper>
       </CartContextWrapper>
       </ProductContextWrapper>
        

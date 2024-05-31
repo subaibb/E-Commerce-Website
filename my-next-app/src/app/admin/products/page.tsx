@@ -4,6 +4,7 @@ import { ActionButton } from "./add/_components/actionButton";
 import { cache } from "@/lib/cache";
 import db from "@/db/db";
 import Link from "next/link";
+import { Selection } from "./add/_components/Selection";
 
 //get Products
 
@@ -17,11 +18,15 @@ const GetProducts = cache ( async () => {
       price:true,
       available:true,
       productType:true
+    },
+    orderBy:{
+      createdAt:"desc"
     }
   });
 
   return products;
-},['/admin/products','Products'])
+},['/admin/products','Products'],
+{revalidate: 60})
 
 export default async function Home() {
 
@@ -68,9 +73,9 @@ export default async function Home() {
 
                 <TableData>
                    {
+             
                     Products.length > 0 ?
                       Products.map((product)=>(
-                        
                         <TableRow key={product.id}>
                           <DataCell>
                             {product.name}
@@ -81,12 +86,11 @@ export default async function Home() {
                           </DataCell>
   
                           <DataCell>
-                            {product.price}
+                            ${product.price}
                           </DataCell>
   
                           <DataCell>
-                            {
-                              product.available ? "Available" : "Not Available"}
+                           <Selection selection={product.available?"true":"false"} id={product.id}/>
                           </DataCell>
   
                           <DataCell>

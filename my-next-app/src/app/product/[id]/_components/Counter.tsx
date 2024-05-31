@@ -3,7 +3,7 @@ import {  CSSProperties, useState } from "react"
 import { ReactNode } from "react"
 import { MouseEventHandler } from "react"
 import { incrementCart,decrementCart,AddCart,RemoveCart,RemoveFav } from "@/lib/CustomerActions";
-import { useSideBar,useLoginWarning,useShowCart,useShowFavorite } from "@/app/hooks/Contexts";
+import { useSideBar,useLoginWarning,useShowCart,useShowFavorite,useFavCount } from "@/app/hooks/Contexts";
 import Link from "next/link";
 import cn from "classnames";
 import Image from "next/image";
@@ -62,11 +62,16 @@ function CounterButton({children,OnClick,Style}:{children:ReactNode,OnClick?:Mou
 }
 
 export function DeleteButton ({variant,id,type}:{variant:number,id:string,type:"Fav"|"Cart"}):JSX.Element{
-
+    const {fav,setFav} = useFavCount();
     const DeleteCart = RemoveCart.bind(null,{id:id});
     const DeleteFav = RemoveFav.bind(null,{id:id});
     const handleClick = ()=>{
+        console.log(fav);
         type === "Cart" ? DeleteCart() : DeleteFav();
+        if (type === "Fav"){
+            
+            setFav((prev)=>prev.filter((item:string)=>item !== id));
+        }
     }
 
 

@@ -15,7 +15,7 @@ import {
     return (
         
         <Select disabled={status} defaultValue={role} onValueChange={(newValue) => Update(newValue)}>
-    <SelectTrigger className="w-[180px] bg-default">
+    <SelectTrigger className="w-[180px] bg-default ">
     <SelectValue/>
     </SelectTrigger>
     <SelectContent className=" bg-default">

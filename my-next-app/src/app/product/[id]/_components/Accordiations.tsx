@@ -10,7 +10,6 @@ import {
 
   
 export function BottomDetail({data,info}:{data:{name:string,description:string}[] | undefined,info:string|undefined}):JSX.Element{
-    const {isExtraSmall} = useIsExtraSmallScreen();
     if (!data) return <div>404</div>;
     return(
         <div className="w-[90%] h-[30%] flex flex-col justify-start items-center ">
@@ -19,8 +18,8 @@ export function BottomDetail({data,info}:{data:{name:string,description:string}[
                      <AccordionSection key={accrdation.name} header={accrdation.name} description={accrdation.description}/>
                 ))
            }
-           { !isExtraSmall &&   
-                       <Accordion type="multiple" style={
+           
+                       <Accordion className="sm:hidden xs:block" type="multiple" style={
                         {
                             width: "100%",
                             height: "10vh",
@@ -37,7 +36,7 @@ export function BottomDetail({data,info}:{data:{name:string,description:string}[
                 </AccordionItem>
             </Accordion>
 
-            }
+           
         </div>
     )
 }

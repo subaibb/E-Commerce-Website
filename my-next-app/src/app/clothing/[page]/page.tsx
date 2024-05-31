@@ -33,7 +33,8 @@ const getOils  = cache ( async () => {
         available:true,
     },
   });
-},['/clothing','clothing'])
+},['/clothing','clothing'],
+{revalidate: 60})
 
 
 const getFavs = cache ( async () => {
@@ -54,7 +55,8 @@ const getFavs = cache ( async () => {
     });
   
     return favs.map((fav) => fav.postId);
-  },['/clothing','clothingfav'])
+  },['/clothing','clothingfav'],
+  {revalidate: 60})
 
 
   export default function ShopClothing({ params }: { params: { page: string } }) {
@@ -102,7 +104,9 @@ const getFavs = cache ( async () => {
      
       return(
           <div className="w-fullh-full justify-center grid grid-cols-3 gap-y-6 gap-2 md:grid-cols-2 lg:grid-cols-3 xs:grid-cols-1 relative">
-  
+          {
+            data.length === 0 ? <p>No Products Found</p> : null
+          }
           {data.splice((Page-1)*6,Page*6).map((product) => (
             Favs.includes(product.id) ? 
             <ProductCard key={product.id} favs={true}  data={product} Style={{height:"fit-content"}}>

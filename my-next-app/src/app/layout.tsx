@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Marcellus } from 'next/font/google'
 import AuthProvider from "./hooks/AuthProvider";
-import { LoginWarningContextWrapper,ShowCartContextWrapper,SideBarWrapper,ShowFavoriteContextWrapper } from "./hooks/Contexts";
+import { LoginWarningContextWrapper,ShowCartContextWrapper,SideBarWrapper,ShowFavoriteContextWrapper,FavContextWrapper } from "./hooks/Contexts";
 import { ProductView } from "./product/[id]/_components/SideCart";
 import { CartBar,SideNavigation,FavBar } from "./components/SideBar";
 import { Label,LabelWrapper } from "./components/SideNav";
@@ -72,7 +72,7 @@ import Image from "next/image";
           }
         });
 
-},['/','cart'])
+},['/','maincart'],{revalidate:60})
 
 
   const getFavs = cache ( async () => {
@@ -102,7 +102,7 @@ import Image from "next/image";
     });
   
     return favs.map((fav) => fav.products);
-  },['/','fav'])
+  },['/','mainfav'],{revalidate:60})
 
 
 
@@ -128,14 +128,14 @@ export default async function RootLayout({
           <LoginWarningContextWrapper>
             <ShowCartContextWrapper>
               <ShowFavoriteContextWrapper>
-
+                <FavContextWrapper>
               <SideBarWrapper>
 
 
 
                 {
 
-                    session &&
+                    
 
                     <CartBar total={cart[0]?.total}>
                     {
@@ -166,7 +166,7 @@ export default async function RootLayout({
 
 
               {
-                    session &&
+                   
                   <FavBar>
                   {
                      fav.length > 0 ?
@@ -176,11 +176,11 @@ export default async function RootLayout({
                        
                         <ProductView TypeForDelete="Fav" extras={
                           <>
-                          <AddCartButton id={favItem[0].id}/>
-                          <DeleteButton type="Fav" id={favItem[0].id} variant={1}/>
+                          <AddCartButton id={favItem[0]?.id}/>
+                          <DeleteButton type="Fav" id={favItem[0]?.id} variant={1}/>
                           </>
                         } data={favItem} key={index} delay={index/10}>
-                          <Image width={250} height={250} src={favItem[0].imagepath} alt={favItem[0].name} className="sm:w-[35%] xs:w-[50%] bg-productBackground" />
+                          <Image width={250} height={250} src={favItem[0]?.imagepath} alt={favItem[0]?.name} className="sm:w-[35%] xs:w-[50%] bg-productBackground" />
                         </ProductView>
                       )
                     }):<p className="text-center text-textprimary top-1/2 relative">Your Favorites is Empty</p>
@@ -220,6 +220,7 @@ export default async function RootLayout({
           {children}
 
           </SideBarWrapper>
+          </FavContextWrapper>
           </ShowFavoriteContextWrapper>
           </ShowCartContextWrapper>
           </LoginWarningContextWrapper>

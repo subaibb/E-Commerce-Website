@@ -11,7 +11,7 @@ export async function DeleteCustomer(id:string){
         }
     });
 
-    revalidatePath('/admin/customers');
+    revalidatePath('/',"layout");
 
 }
 
@@ -28,7 +28,7 @@ export async function UpdateCustomer(id:string,role:string){
     });
  
     if (Updateuser){
-        revalidatePath('/admin/customers');
+        revalidatePath('/',"layout");
     }
 
 }

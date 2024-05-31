@@ -3,6 +3,7 @@ import {Table,TableHeader,Label,Seperator,TableData,TableRow,DataCell} from "../
 import db from "@/db/db";
 import { ActionButton } from "./_components/ActionButton";
 import { cache } from "@/lib/cache";
+import { Selection } from "./_components/Selection";
 //get Products
 
 
@@ -83,7 +84,7 @@ export default async function Home() {
                           </DataCell>
   
                           <DataCell>
-                            {order.status}
+                            <Selection id={order.id} selection={order.status}/>
                           </DataCell>
   
                           <DataCell>

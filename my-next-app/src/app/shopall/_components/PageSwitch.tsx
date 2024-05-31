@@ -6,9 +6,10 @@ import { CSSProperties, ReactNode } from "react"
 
 export function PageSwitch({page,CalculatedPages}:{page:string,CalculatedPages:number}):JSX.Element{
     const currentPage = parseInt(page)
-
+    if (CalculatedPages===0) return(<></>)
 
     return(
+      
         <div className="w-1/2 h-[8vh]  flex justify-center items-center">
             <div className="w-fit h-[80%]  flex space-x-6 items-center">
                 <Element Style={{

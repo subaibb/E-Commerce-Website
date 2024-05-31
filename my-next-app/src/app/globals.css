@@ -94,12 +94,11 @@
     pointer-events: auto;
     @apply hover:bg-thick transition
 }
-.addProduct:valid button{
+.addProduct:valid .button{
   background-color: #474241;
   pointer-events: auto;
   @apply hover:bg-thick transition
 }
-
 
 
 .CartItem{

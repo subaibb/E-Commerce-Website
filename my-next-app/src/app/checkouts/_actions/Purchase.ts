@@ -81,9 +81,7 @@ if (NewOrder){
            userId:session.user.id
         }
     });
-    revalidatePath('/');
-    revalidatePath('/checkout');
-    revalidatePath('/shopall');  
+    revalidatePath('/',"layout"); 
     return true;
 }
 return false;

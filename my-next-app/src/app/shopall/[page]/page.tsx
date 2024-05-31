@@ -8,6 +8,7 @@ import { LoginWarning } from "../../components/LoginWarning";
 import { PageSwitch } from "../_components/PageSwitch";
 import db from "@/db/db";
 import Image from "next/image";
+import {cache} from "@/lib/cache";
 
 //DataBaseQueries
 
@@ -19,7 +20,7 @@ type Product = {
   imagepath: string;
 }[];
 
-const getProducts = async () => {
+const getProducts = cache(async () => { 
   return await db.product.findMany({
     select: {
       id: true,
@@ -28,11 +29,14 @@ const getProducts = async () => {
       imagepath: true,
       rating: true,
     },
+    where: {
+      available: true,
+    },
   });
-};
+},['/shopall','mainshopall'],{revalidate:60})
 
 
-const getFavs = async () => {
+const getFavs = cache(async () => { 
   const session = await getServerSession(authConfig);
   if (!session) {
     return [];
@@ -50,7 +54,7 @@ const getFavs = async () => {
   });
 
   return favs.map((fav) => fav.postId);
-}
+},['/shopall','mainshopallfavs'],{revalidate:60})
 
 
 //Components
@@ -76,8 +80,10 @@ export default function ShopAll({ params }: { params: { page: string } }) {
    
     return(
         <div className="w-fullh-full justify-center grid grid-cols-3 gap-y-6 gap-2 md:grid-cols-2 lg:grid-cols-3 xs:grid-cols-1 relative">
-
-        {data.splice((Page-1)*6,Page*6).map((product) => (
+          {
+            data.length === 0 ? <p>No Products Found</p> : null
+          }
+        {data.splice((Page-1)*6,Page+5).map((product) => (
           Favs.includes(product.id) ? 
           <ProductCard key={product.id} favs={true}  data={product} Style={{height:"fit-content"}}>
             <Image width={400} height={400} loading="lazy" src={product.imagepath} alt="" className="w-full object-contain"/>

@@ -8,6 +8,4 @@ export default function ProductPage() {
   useEffect(() => {
     router.push('/shopall');
   }, []);
-
-  
 }

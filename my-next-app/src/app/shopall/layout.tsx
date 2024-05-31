@@ -1,7 +1,8 @@
 import { Nav } from "@/app/components/Nav";
-import { SideBarWrapper,FavContextWrapper,CartContextWrapper } from "@/app/hooks/Contexts"
+import { SideBarWrapper,CartContextWrapper } from "@/app/hooks/Contexts"
 import { Label,LabelWrapper } from "../components/SideNav";
 import { SideNavigation } from "../components/SideBar";
+import { revalidatePath } from "next/cache";
 export const dynamic = "force-dynamic"
 
 export default function Layout({
@@ -12,7 +13,6 @@ export default function Layout({
   return (
     <>
     <CartContextWrapper>
-    <FavContextWrapper>
     <SideBarWrapper >
       <Nav variation={0}>
       </Nav>
@@ -46,7 +46,6 @@ export default function Layout({
       <div className="w-full h-full">
       {children}
         </div>
-     </FavContextWrapper>
     </CartContextWrapper>
        
     </>

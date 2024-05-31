@@ -7,7 +7,6 @@ import { signIn } from "next-auth/react";
 import { z,ZodType } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import {motion} from 'framer-motion';
-
 type FormInfo = {
   email:string,
   password:string

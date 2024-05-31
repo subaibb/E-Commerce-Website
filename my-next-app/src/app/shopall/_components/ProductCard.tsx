@@ -2,12 +2,13 @@
 import {motion,useInView} from "framer-motion";
 import { CSSProperties, ReactNode, useRef } from "react"
 import { Stars,ReviewLabel } from "./Stars";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useLoginWarning,useFavCount,useShowFavorite } from "@/app/hooks/Contexts";
 import { AddFav,RemoveFav } from "../../../lib/CustomerActions";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
+import { set } from "zod";
 
 type Product = {
     id: string;
@@ -26,6 +27,9 @@ export function ProductCard ({children,Style,data,favs}:{children:ReactNode,Styl
     const {setVisible} = useLoginWarning();
     const {status} = useSession();
     const {setShowFavorite} = useShowFavorite();
+    useEffect(() => {
+        setIsFav(favs);
+    },[favs])
     const handleClick = () => {
 
         if (status === "unauthenticated"){
@@ -58,7 +62,7 @@ export function ProductCard ({children,Style,data,favs}:{children:ReactNode,Styl
 
            >
             <div onClick={handleClick} className="w-8 h-8 absolute right-3 top-3 Fav opacity-0 transition duration-150 cursor-pointer active:translate-y-[2px]">
-            <Image width={4} height={4} src={
+            <Image width={40} height={40} src={
                 isFav ? "/FullFav.svg" : "/Favourite.svg"
             } alt="" />
             </div>
