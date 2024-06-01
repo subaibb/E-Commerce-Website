@@ -150,7 +150,7 @@ function ProductContainer({imagePath,name}:{imagePath?:string,name?:string}):JSX
     return(
         <div className=" sm:w-[45%] h-fit flex justify-center items-center xs:w-[95%] ">
         <MainPic name={name}>
-        <Image height={400} width={400} loading="lazy" src={
+        <Image height={600} width={600} loading="lazy" src={
             imagePath || ""
         } alt="" />
         </MainPic>
