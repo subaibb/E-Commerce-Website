@@ -47,6 +47,7 @@ export function FavoriteButton({variant,id,Status}:{variant:number,id?:string,St
     const [isFav,setIsFav] = useState(Status);
     const {setVisible} = useLoginWarning();
     const {setShowFavorite} = useShowFavorite();
+     
     useEffect(() => {
         if (fav.includes(id || "")){
             setIsFav(true);

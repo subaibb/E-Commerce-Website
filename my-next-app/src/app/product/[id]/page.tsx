@@ -14,6 +14,7 @@ import { authConfig } from "@/lib/auth";
 import { cache } from "@/lib/cache";
 import Link from "next/link";
 import db from "@/db/db";
+import Image from "next/image";
 
 type ProductData = {
     id: string;
@@ -149,8 +150,8 @@ function ProductContainer({imagePath,name}:{imagePath?:string,name?:string}):JSX
     return(
         <div className=" sm:w-[45%] h-fit flex justify-center items-center xs:w-[95%] ">
         <MainPic name={name}>
-        <img loading="lazy" src={
-            imagePath
+        <Image height={400} width={400} loading="lazy" src={
+            imagePath || ""
         } alt="" />
         </MainPic>
         </div>
@@ -241,10 +242,10 @@ async function MiddleDetail({description,price,id}:{description?:string,price?:n
                 {RelatedProducts.map((product) => (
                      Favs.includes(product.id) ? 
                         <ProductCard key={product.id} favs={true}  data={product} Style={{height:"fit-content"}}>
-                          <img loading="lazy" src={product.imagepath} alt="" className="w-full object-contain"/>
+                          <Image height={400} width={400} loading="lazy" src={product.imagepath} alt="" className="w-full object-contain"/>
                             </ProductCard>:
                              <ProductCard key={product.id} favs={false}  data={product} Style={{height:"fit-content"}}>
-                         <img loading="lazy" src={product.imagepath} alt="" className="w-full object-contain"/>
+                         <Image height={400} width={400} loading="lazy" src={product.imagepath} alt="" className="w-full object-contain"/>
                          </ProductCard>
                           ))}
 
