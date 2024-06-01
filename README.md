@@ -1,7 +1,7 @@
 # E-Commerece-Website
 FullStack Ecommerce website made with Next.js,Tawilwind,Prisma.<br>
 
-[![Linkedin: Suhaib Rawajbeh](https://img.shields.io/badge/-suhaibrawajbeh-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/subaibbb/)](https://www.linkedin.com/in/suhaib-ْrawajbeh-4527a5303/)
+[![Linkedin: Suhaib Rawajbeh](https://img.shields.io/badge/-suhaibrawajbeh-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/subaibbb/)](https://www.linkedin.com/in/suhaib-ْrawajbeh-4527a5303/) 
 [![GitHub Suhaib](https://img.shields.io/github/followers/ItsLawy?label=follow&style=social)](https://github.com/ItsLawy)
 
 this's the first ever website that i work on , my objective in this project was to make a responsive design , with a few interactions that can be made , make a simple authentication
@@ -13,6 +13,7 @@ hopefully this helps you out in any way , wish me a goodluck in my journey :) .
 <li>Next Js</li>
 <li>TailWind</li>
 <li>Prisma</li>
+<li>PostgreSQL</li>
 <li>Typescript</li>
 
 <h2>Landing Page</h2>
