@@ -17,12 +17,12 @@ hopefully this helps you out in any way , wish me a goodluck in my journey :) .
 
 <h2>Landing Page</h2>
 
-![Screenshot 2024-06-01 140203](https://github.com/ItsLawy/E-Commerece-Website/assets/149022910/13158ca2-8374-4335-bbd3-72b0772228d3)
+![Screenshot 2024-06-01 140203](https://github.com/ItsLawy/E-Commerce-Website/assets/149022910/6c522d5f-33dc-4459-aad9-01a44e9e0e2e)
 
 <h2>Product View</h2>
 
-![adadada](https://github.com/ItsLawy/E-Commerece-Website/assets/149022910/47a4982f-79c4-4109-9835-c7cc0083ade3)
+![adadada](https://github.com/ItsLawy/E-Commerce-Website/assets/149022910/855cc718-3ad4-47e1-8766-1cf701575fee)
 
 <h2>Cart</h2>
 
-![adadadad](https://github.com/ItsLawy/E-Commerece-Website/assets/149022910/eca073d3-890f-4b42-a35b-f527238b7c41)
+![adadadad](https://github.com/ItsLawy/E-Commerce-Website/assets/149022910/b62f2846-05b7-4dfd-8c62-f3f0cf43b72b)
