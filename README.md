@@ -1,5 +1,5 @@
 # E-Commerece-Website
-FullStack Ecommerce website made with Next.js,Tawilwind,Prisma.<br>
+FullStack Responsive Ecommerce Website<br>
 
 [![Linkedin: Suhaib Rawajbeh](https://img.shields.io/badge/-suhaibrawajbeh-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/subaibbb/)](https://www.linkedin.com/in/suhaib-ْrawajbeh-4527a5303/) 
 [![GitHub Suhaib](https://img.shields.io/github/followers/ItsLawy?label=follow&style=social)](https://github.com/ItsLawy)
