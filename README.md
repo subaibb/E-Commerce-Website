@@ -2,7 +2,7 @@
 FullStack Responsive Ecommerce Website<br>
 
 [![Linkedin: Suhaib Rawajbeh](https://img.shields.io/badge/-suhaibrawajbeh-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/subaibbb/)](https://www.linkedin.com/in/suhaib-ْrawajbeh-4527a5303/) 
-[![GitHub Suhaib](https://img.shields.io/github/followers/ItsLawy?label=follow&style=social)](https://github.com/ItsLawy)
+[![GitHub Suhaib](https://img.shields.io/github/followers/ItsLawy?label=follow&style=social)](https://github.com/subaibb)
 
 this's the first ever website that i work on , my objective in this project was to make a responsive design , with a few interactions that can be made , make a simple authentication
 to allow a user login , and make roles for and permissions only for admins , i understand some things are not implemented in the website such as the filters or a search bar , i really didn't want to waste 
